@@ -13,7 +13,7 @@ function AdminOrders() {
 
   const fetchOrders = () => {
     fetch(
-      "${import.meta.env.VITE_API_URL}/orders"
+      `${import.meta.env.VITE_API_URL}/orders`
     )
       .then((res) =>
         res.json()

@@ -17,7 +17,7 @@ function MyOrders() {
       );
 
     fetch(
-      "${import.meta.env.VITE_API_URL}/my-orders",
+      `${import.meta.env.VITE_API_URL}/my-orders`,
       {
         headers: {
           Authorization:

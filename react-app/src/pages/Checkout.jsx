@@ -28,7 +28,7 @@ function Checkout() {
     
 
 fetch(
-  "${import.meta.env.VITE_API_URL}/orders",
+  `${import.meta.env.VITE_API_URL}/orders`,
   {
     method: "POST",
 
