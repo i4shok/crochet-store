@@ -5,7 +5,7 @@ import { CartContext } from "../context/CartContext";
 import { ThemeContext } from "../context/ThemeContext";
 import {
   WishlistContext
-} from "../context/WishlistContext";
+} from "../context/WishListContext";
 import SearchBar
   from "./SearchBar";
 

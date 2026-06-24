@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 
 import {
   WishlistContext,
-} from "../context/WishlistContext";
+} from "../context/WishListContext";
 
 import StarRating from "../components/StarRating";
 

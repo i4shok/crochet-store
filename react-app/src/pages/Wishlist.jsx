@@ -4,7 +4,7 @@ import {
 
 import {
   WishlistContext,
-} from "../context/WishlistContext";
+} from "../context/WishListContext";
 
 function Wishlist() {
   const {
