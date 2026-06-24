@@ -30,7 +30,7 @@ import Register from "./pages/Register";
 import ProtectedRoute
 from "./components/ProtectedRoute";
 import Profile
-from "./pages/Profile";
+from "./pages/profile";
 import "./App.css";
 import MyOrders
 from "./pages/MyOrders";
