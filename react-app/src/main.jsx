@@ -11,7 +11,7 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 
 import WishlistProvider
-from "./context/WishlistContext";
+from "./context/WishListContext";
 
 import AuthProvider
 from "./context/AuthContext";
