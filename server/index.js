@@ -1047,11 +1047,9 @@ app.post(
   (req, res) => {
 
     res.json({
-
-      imageUrl:
-        `http://localhost:5000/uploads/${req.file.filename}`,
-
-    });
+  imageUrl:
+    `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+});
 
   }
 );
