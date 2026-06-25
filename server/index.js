@@ -1056,6 +1056,113 @@ console.log("UPLOAD ROUTE VERSION 2");
   }
 );
 
+app.get(
+  "/wishlist",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        ).populate("wishlist");
+
+      res.json(
+        user.wishlist
+      );
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+
+  }
+);
+
+app.post(
+  "/wishlist/:productId",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      if (
+        !user.wishlist.includes(
+          req.params.productId
+        )
+      ) {
+
+        user.wishlist.push(
+          req.params.productId
+        );
+
+        await user.save();
+
+      }
+
+      res.json(
+        user.wishlist
+      );
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+
+  }
+);
+
+app.delete(
+  "/wishlist/:productId",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      user.wishlist =
+        user.wishlist.filter(
+          (id) =>
+            id.toString() !==
+            req.params.productId
+        );
+
+      await user.save();
+
+      res.json(
+        user.wishlist
+      );
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          error.message,
+      });
+
+    }
+
+  }
+);
+
 app.post(
   "/reviews",
   async (req, res) => {
