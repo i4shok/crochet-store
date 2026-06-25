@@ -31,6 +31,8 @@ const cors = require(
 );
 
 const app = express();
+app.set("trust proxy", 1);
+
 const Product =
   require(
     "./models/Product"
@@ -1048,7 +1050,7 @@ app.post(
 console.log("UPLOAD ROUTE VERSION 2");
     res.json({
   imageUrl:
-    `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+`https://${req.get("host")}/uploads/${req.file.filename}`
 });
 
   }
