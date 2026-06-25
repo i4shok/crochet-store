@@ -1045,7 +1045,7 @@ app.post(
   ),
 
   (req, res) => {
-
+console.log("UPLOAD ROUTE VERSION 2");
     res.json({
   imageUrl:
     `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
