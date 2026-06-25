@@ -113,24 +113,7 @@ function AdminDashboard() {
       )
       .then((data) =>
         setProducts(data)
-      );
-    fetch(
-      `${import.meta.env.VITE_API_URL}/admin/stats`,
-      {
-        headers: {
-          Authorization:
-            localStorage.getItem(
-              "token"
-            ),
-        },
-      }
-    )
-      .then((res) =>
-        res.json()
-      )
-      .then((data) =>
-        setStats(data)
-      );
+      );    
 
   }, []);
 
@@ -266,38 +249,6 @@ function AdminDashboard() {
   const editProduct = (
     product
   ) => {
-
-    if (!name.trim()) {
-
-      alert(
-        "Product name required"
-      );
-
-      return;
-    }
-
-    if (
-      !price ||
-      Number(price) <= 0
-    ) {
-
-      alert(
-        "Valid price required"
-      );
-
-      return;
-    }
-
-    if (
-      stock < 0
-    ) {
-
-      alert(
-        "Stock cannot be negative"
-      );
-
-      return;
-    }
 
     setEditingProduct(
       product._id
@@ -567,7 +518,7 @@ function AdminDashboard() {
           const file =
             e.target.files[0];
 
-          setImage(file);
+          setImageFile(file);
 
           if (file) {
 
