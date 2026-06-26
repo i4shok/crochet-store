@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 function Register() {
 
@@ -12,39 +13,69 @@ function Register() {
     setPassword] =
     useState("");
 
+  const [isRegistering,
+    setIsRegistering] =
+    useState(false);
+
   const handleSubmit =
     async (e) => {
 
       e.preventDefault();
 
-      const res =
-        await fetch(
-          `${import.meta.env.VITE_API_URL}/register`,
-          {
-            method: "POST",
+      setIsRegistering(true);
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
+      try {
 
-            body: JSON.stringify({
-              name,
-              email,
-              password,
-            }),
-          }
+        const res =
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/register`,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+                name,
+                email,
+                password,
+              }),
+            }
+          );
+
+        const data =
+          await res.json();
+
+        if (!res.ok) {
+
+          toast.error(
+            data.message
+          );
+
+          return;
+
+        }
+
+        toast.success(
+          data.message
         );
 
-      const data =
-        await res.json();
+        setName("");
+        setEmail("");
+        setPassword("");
 
-      alert(
-        data.message
-      );
+      } finally {
+
+        setIsRegistering(false);
+
+      }
+
     };
 
   return (
+
     <div className="page">
 
       <h1>
@@ -92,14 +123,21 @@ function Register() {
 
         <button
           type="submit"
+          disabled={isRegistering}
         >
-          Register
+          {
+            isRegistering
+              ? "Registering..."
+              : "Register"
+          }
         </button>
 
       </form>
 
     </div>
+
   );
+
 }
 
 export default Register;

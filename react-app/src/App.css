@@ -459,9 +459,7 @@ nav button {
 
 .dark .home-page {
   background: #121212;
-}
-.dark .home-page {
-  background: #121212;
+
 }
 section {
   padding: 40px;
@@ -592,5 +590,88 @@ section {
 
   color: limegreen;
   font-weight: bold;
+
+}
+/* ---------- Mobile Improvements ---------- */
+
+@media (max-width:768px){
+
+nav{
+
+align-items:center;
+
+}
+
+.search-bar{
+
+width:100%;
+
+display:flex;
+
+justify-content:center;
+
+}
+
+.search-bar input{
+
+width:100%;
+
+max-width:320px;
+
+}
+
+.product-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.categories-grid{
+
+flex-wrap:wrap;
+
+}
+
+.product-card{
+
+width:100%;
+
+}
+
+.product-details>div{
+
+width:100%;
+
+}
+
+button{
+
+width:100%;
+
+}
+
+.view-btn{
+
+display:block;
+
+width:100%;
+
+text-align:center;
+
+}
+
+.checkout-btn,
+
+.success-btn,
+
+.hero-btn{
+
+display:block;
+
+width:100%;
+
+text-align:center;
+
+}
 
 }

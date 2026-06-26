@@ -65,6 +65,10 @@ function AdminDashboard() {
     setStock] =
     useState("");
 
+  const [isAdding,
+     setIsAdding] = 
+     useState(false);
+
   useEffect(() => {
 
     const token =
@@ -113,7 +117,7 @@ function AdminDashboard() {
       )
       .then((data) =>
         setProducts(data)
-      );    
+      );
 
   }, []);
 
@@ -302,12 +306,15 @@ function AdminDashboard() {
       return data.imageUrl;
     };
 
-  const addProduct =
-    async () => {
+  const addProduct = async () => {
+
+    try {
+
+
 
       if (!name.trim()) {
 
-        alert(
+        toast.error(
           "Product name required"
         );
 
@@ -319,7 +326,7 @@ function AdminDashboard() {
         Number(price) <= 0
       ) {
 
-        alert(
+        toast.error(
           "Valid price required"
         );
 
@@ -330,7 +337,7 @@ function AdminDashboard() {
         stock < 0
       ) {
 
-        alert(
+        toast.error(
           "Stock cannot be negative"
         );
 
@@ -338,11 +345,13 @@ function AdminDashboard() {
       }
 
       if (!imageFile) {
-        alert(
+        toast.error(
           "Please select an image"
         );
         return;
       }
+
+      setIsAdding(true);
 
       const token =
         localStorage.getItem(
@@ -395,7 +404,14 @@ function AdminDashboard() {
 
       setImageFile(null);
 
-    };
+
+    } finally {
+
+      setIsAdding(false);
+
+    }
+
+  };
 
   return (
     <div className="page">
@@ -543,8 +559,11 @@ function AdminDashboard() {
       )}
       <button
         onClick={addProduct}
+        disabled={isAdding}
       >
-        Add Product
+        {isAdding
+          ? "Adding Product..."
+          : "Add Product"}
       </button>
 
       <h2>

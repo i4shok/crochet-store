@@ -23,7 +23,7 @@ function Wishlist() {
       {wishlistItems.map(
         (item) => (
         <div
-  key={item.id}
+  key={item._id}
   className="wishlist-item"
 >
   <h3>
@@ -37,7 +37,7 @@ function Wishlist() {
   <button
     onClick={() =>
       removeFromWishlist(
-        item.id
+        item._id
       )
     }
   >

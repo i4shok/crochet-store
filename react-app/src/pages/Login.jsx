@@ -4,6 +4,8 @@ import {
   AuthContext,
 } from "../context/AuthContext";
 
+import { toast } from "react-toastify";
+
 function Login() {
 
   const [email, setEmail] =
@@ -13,6 +15,8 @@ function Login() {
     setPassword] =
     useState("");
 
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
   const { login } =
     useContext(
       AuthContext
@@ -20,37 +24,41 @@ function Login() {
 
   const handleSubmit =
     async (e) => {
-
       e.preventDefault();
+      setIsLoggingIn(true);
 
-      const res =
-        await fetch(
-          `${import.meta.env.VITE_API_URL}/login`,
-          {
-            method: "POST",
+      try {
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
+        const res =
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/login`,
+            {
+              method: "POST",
 
-            body: JSON.stringify({
-              email,
-              password,
-            }),
-          }
-        );
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
 
-      const data =
-        await res.json();
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            }
+          );
 
-      login(data.token);
+        const data =
+          await res.json();
 
-      alert(
-        "Logged In!"
-      );
+        login(data.token);
+
+        toast.success("Logged In!");
+
+      } finally {
+
+        setIsLoggingIn(false);
+      }
     };
-
   return (
     <div className="page">
 
@@ -88,8 +96,9 @@ function Login() {
 
         <button
           type="submit"
+          disabled={isLoggingIn}
         >
-          Login
+          {isLoggingIn ? "Logging In..." : "Login"}
         </button>
 
       </form>

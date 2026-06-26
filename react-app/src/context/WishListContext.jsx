@@ -2,7 +2,12 @@ import {
   createContext,
   useState,
   useEffect,
+  useContext,
 } from "react";
+
+import {
+  AuthContext,
+} from "./AuthContext";
 
 export const WishlistContext =
   createContext();
@@ -10,56 +15,96 @@ export const WishlistContext =
 function WishlistProvider({
   children,
 }) {
-  const [wishlistItems,
-    setWishlistItems] =
-    useState(() => {
-      const saved =
-        localStorage.getItem(
-          "wishlist"
-        );
 
-      return saved
-        ? JSON.parse(saved)
-        : [];
-    });
+  const [
+    wishlistItems,
+    setWishlistItems,
+  ] = useState([]);
+
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    localStorage.setItem(
-      "wishlist",
-      JSON.stringify(
-        wishlistItems
-      )
-    );
-  }, [wishlistItems]);
 
-  const addToWishlist = (
-    product
-  ) => {
-    const exists =
-      wishlistItems.find(
-        (item) =>
-          item.id === product.id
+    if (!token) {
+
+      setWishlistItems([]);
+
+      return;
+
+    }
+
+    fetch(
+      `${import.meta.env.VITE_API_URL}/wishlist`,
+      {
+        headers: {
+          Authorization:
+            token,
+        },
+      }
+    )
+      .then((res) =>
+        res.json()
+      )
+      .then((data) =>
+        setWishlistItems(data)
       );
 
-    if (!exists) {
+  }, [token]);
+
+  const addToWishlist =
+    async (product) => {
+
+      if (!token)
+        return;
+
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/wishlist/${product._id}`,
+        {
+          method: "POST",
+
+          headers: {
+            Authorization:
+              token,
+          },
+        }
+      );
+
       setWishlistItems([
         ...wishlistItems,
         product,
       ]);
-    }
-  };
+
+    };
 
   const removeFromWishlist =
-    (id) => {
+    async (id) => {
+
+      if (!token)
+        return;
+
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/wishlist/${id}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization:
+              token,
+          },
+        }
+      );
+
       setWishlistItems(
         wishlistItems.filter(
           (item) =>
-            item.id !== id
+            item._id !== id
         )
       );
+
     };
 
   return (
+
     <WishlistContext.Provider
       value={{
         wishlistItems,
@@ -67,9 +112,13 @@ function WishlistProvider({
         removeFromWishlist,
       }}
     >
+
       {children}
+
     </WishlistContext.Provider>
+
   );
+
 }
 
 export default WishlistProvider;

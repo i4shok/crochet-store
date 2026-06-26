@@ -138,20 +138,20 @@ app.get(
     try {
 
       const search =
-  req.query.search || "";
+        req.query.search || "";
 
-const products =
-  await Product.find({
+      const products =
+        await Product.find({
 
-    name: {
-      $regex:
-        search,
+          name: {
+            $regex:
+              search,
 
-      $options:
-        "i",
-    },
+            $options:
+              "i",
+          },
 
-  });
+        });
 
       const productsWithRatings =
         await Promise.all(
@@ -659,9 +659,9 @@ app.get(
           "items.product"
         );
 
-        res.json(
-          orders
-        );
+      res.json(
+        orders
+      );
 
     } catch (error) {
 
@@ -725,9 +725,9 @@ app.get(
     try {
 
       const orders =
-  await Order.find()
-    .populate("user","email")
-    .populate("items.product");
+        await Order.find()
+          .populate("user", "email")
+          .populate("items.product");
 
       res.json(
         orders
@@ -1047,11 +1047,11 @@ app.post(
   ),
 
   (req, res) => {
-console.log("UPLOAD ROUTE VERSION 2");
+    console.log("UPLOAD ROUTE VERSION 2");
     res.json({
-  imageUrl:
-`https://${req.get("host")}/uploads/${req.file.filename}`
-});
+      imageUrl:
+        `https://${req.get("host")}/uploads/${req.file.filename}`
+    });
 
   }
 );
@@ -1096,11 +1096,14 @@ app.post(
           req.user.id
         );
 
-      if (
-        !user.wishlist.includes(
-          req.params.productId
-        )
-      ) {
+      const exists =
+        user.wishlist.some(
+          (id) =>
+            id.toString() ===
+            req.params.productId
+        );
+
+      if (!exists) {
 
         user.wishlist.push(
           req.params.productId
