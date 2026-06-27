@@ -1,3 +1,11 @@
+const { v2: cloudinary } = require("cloudinary");
+
+const {
+  CloudinaryStorage,
+} = require(
+  "multer-storage-cloudinary"
+);
+
 const admin =
   require(
     "./middleware/admin"
@@ -20,6 +28,19 @@ const Order = require(
 );
 require("dotenv").config();
 
+cloudinary.config({
+
+  cloud_name:
+    process.env.CLOUDINARY_CLOUD_NAME,
+
+  api_key:
+    process.env.CLOUDINARY_API_KEY,
+
+  api_secret:
+    process.env.CLOUDINARY_API_SECRET,
+
+});
+
 const connectDB =
   require("./db");
 const express = require(
@@ -40,28 +61,13 @@ const Product =
 const multer =
   require("multer");
 
-const path =
-  require("path");
-
-const storage =
-  multer.diskStorage({
-
-    destination:
-      "./uploads",
-
-    filename:
-      (req, file, cb) => {
-
-        cb(
-          null,
-          Date.now() +
-          path.extname(
-            file.originalname
-          )
-        );
-
-      },
-  });
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => ({
+    folder: "crochet-store",
+    resource_type: "image",
+  }),
+});
 
 const upload =
   multer({
@@ -77,13 +83,6 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(
-  "/uploads",
-  express.static(
-    "uploads"
-  )
-);
-
 app.get(
   "/",
   (req, res) => {
@@ -92,44 +91,6 @@ app.get(
     );
   }
 );
-
-const products = [
-  {
-    id: 1,
-    name: "Crochet Teddy",
-    category: "Toys",
-    price: 499,
-    rating: 4.8,
-    description:
-      "A handmade crochet teddy bear.",
-    image:
-      "https://via.placeholder.com/300",
-  },
-
-  {
-    id: 2,
-    name: "Crochet Sunflower",
-    category: "Flowers",
-    price: 299,
-    rating: 4.6,
-    description:
-      "A beautiful crochet sunflower.",
-    image:
-      "https://via.placeholder.com/300",
-  },
-
-  {
-    id: 3,
-    name: "Crochet Keychain",
-    category: "Keychains",
-    price: 199,
-    rating: 4.9,
-    description:
-      "Cute crochet keychain.",
-    image:
-      "https://via.placeholder.com/300",
-  },
-];
 
 app.get(
   "/products",
@@ -410,46 +371,6 @@ app.get(
   }
 );
 
-app.put(
-  "/orders/:id",
-  async (req, res) => {
-    try {
-
-      const order =
-        await Order.findByIdAndUpdate(
-          req.params.id,
-          {
-            status:
-              req.body.status,
-          },
-          {
-            new: true,
-          }
-        );
-
-      if (!order) {
-        return res
-          .status(404)
-          .json({
-            message:
-              "Order not found",
-          });
-      }
-
-      res.json(order);
-
-    } catch (error) {
-
-      res
-        .status(500)
-        .json({
-          message:
-            error.message,
-        });
-    }
-  }
-);
-
 app.delete(
   "/orders/:id",
   async (req, res) => {
@@ -662,48 +583,6 @@ app.get(
       res.json(
         orders
       );
-
-    } catch (error) {
-
-      res.status(500).json({
-        message:
-          error.message,
-      });
-
-    }
-  }
-);
-
-app.get(
-  "/admin/stats",
-  auth,
-  admin,
-  async (req, res) => {
-
-    try {
-
-      const totalUsers =
-        await User.countDocuments();
-
-      const totalOrders =
-        await Order.countDocuments();
-
-      const orders =
-        await Order.find();
-
-      const revenue =
-        orders.reduce(
-          (sum, order) =>
-            sum +
-            order.total,
-          0
-        );
-
-      res.json({
-        totalUsers,
-        totalOrders,
-        revenue,
-      });
 
     } catch (error) {
 
@@ -947,9 +826,6 @@ app.post(
           price:
             req.body.price,
 
-          stock:
-            req.body.stock,
-
           description:
             req.body.description,
 
@@ -1042,15 +918,11 @@ app.post(
   "/upload",
   auth,
   admin,
-  upload.single(
-    "image"
-  ),
+  upload.single("image"),
+  async (req, res) => {
 
-  (req, res) => {
-    console.log("UPLOAD ROUTE VERSION 2");
     res.json({
-      imageUrl:
-        `https://${req.get("host")}/uploads/${req.file.filename}`
+      imageUrl: req.file.path,
     });
 
   }
