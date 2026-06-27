@@ -138,9 +138,23 @@ useEffect(() => {
   );
 
   const newReview =
-    await res.json();
+  await res.json();
 
-  setReviews([
+if (!res.ok) {
+
+  toast.error(
+    newReview.message
+  );
+
+  return;
+
+}
+
+toast.success(
+  "Review Added"
+);
+
+setReviews([
     ...reviews,
     newReview,
   ]);

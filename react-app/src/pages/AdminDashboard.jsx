@@ -66,8 +66,8 @@ function AdminDashboard() {
     useState("");
 
   const [isAdding,
-     setIsAdding] = 
-     useState(false);
+    setIsAdding] =
+    useState(false);
 
   useEffect(() => {
 
@@ -390,6 +390,20 @@ function AdminDashboard() {
 
       const product =
         await res.json();
+
+      if (!res.ok) {
+
+        toast.error(
+          product.message
+        );
+
+        return;
+
+      }
+
+      toast.success(
+        "Product Added"
+      );
 
       setProducts([
         ...products,

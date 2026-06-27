@@ -50,9 +50,21 @@ function Login() {
         const data =
           await res.json();
 
+        if (!res.ok) {
+
+          toast.error(
+            data.message
+          );
+
+          return;
+
+        }
+
         login(data.token);
 
-        toast.success("Logged In!");
+        toast.success(
+          "Logged In!"
+        );
 
       } finally {
 
