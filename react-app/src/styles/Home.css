@@ -1,0 +1,30 @@
+.home-page {
+  min-height: 100vh;
+}
+.featured {
+  padding: 60px 20px;
+
+  text-align: center;
+}
+
+.featured h2 {
+  margin-bottom: 30px;
+
+  font-size: 2rem;
+}
+.categories-grid {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.categories-grid{
+
+flex-wrap:wrap;
+
+}
+.about-section {
+  text-align: center;
+  max-width: 800px;
+  margin: auto;
+}

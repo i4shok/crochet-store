@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 import heroImage from "../assets/hero.jpg";
 
+import "../styles/Hero.css";
+
 function Hero() {
   return (
     <section

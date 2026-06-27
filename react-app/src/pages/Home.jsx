@@ -1,5 +1,6 @@
 import Hero from "../components/Hero";
-import FeaturedProducts from "../components/FeaturedProducts";
+import ProductCarousel
+from "../components/ProductCarousel";
 import Categories from "../components/Categories";
 import AboutSection from "../components/AboutSection";
 import { Link } from "react-router-dom";
@@ -9,7 +10,7 @@ function Home() {
     <div className="home-page">
       <Hero />
 
-      <FeaturedProducts />
+      <ProductCarousel />
 
       <Categories />
 

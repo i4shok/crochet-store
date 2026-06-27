@@ -1,0 +1,101 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 40px;
+
+  background: purple;
+}
+
+nav h2 {
+  color: white;
+}
+
+nav a {
+  color: white;
+
+  text-decoration: none;
+
+  margin-left: 20px;
+
+  font-weight: bold;
+}
+nav button {
+  margin-left: 20px;
+
+  padding: 8px 12px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 18px;
+}
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  nav div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  nav a {
+    margin-left: 0;
+  }
+
+  .shop-page,
+  .cart-page,
+  .page {
+    padding: 20px;
+  }
+
+  .product-details {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .product-details img {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .quantity-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer {
+    padding: 20px;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  .hero {
+    height: 60vh;
+  }
+
+  .hero-overlay {
+    padding: 20px;
+  }
+
+  .hero-overlay h1 {
+    font-size: 2rem;
+  }
+}
+nav{
+
+align-items:center;
+
+}

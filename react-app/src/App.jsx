@@ -32,6 +32,7 @@ from "./components/ProtectedRoute";
 import Profile
 from "./pages/profile";
 import "./App.css";
+import "./styles/Theme.css";
 import MyOrders
 from "./pages/MyOrders";
 import AdminDashboard

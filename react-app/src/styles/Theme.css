@@ -1,0 +1,41 @@
+.dark {
+  min-height: 100vh;
+  background: #121212;
+  color: white;
+}
+
+.dark .product-card {
+  background: #1f1f1f;
+}
+
+.dark nav {
+  background: #181818;
+}
+
+.dark input,
+.dark textarea {
+  background: #222;
+  color: white;
+}
+.dark .home-page,
+.dark .featured,
+.dark .shop-page,
+.dark .cart-page,
+.dark .checkout-page,
+.dark .success-page,
+.dark .page {
+  background: #121212;
+}
+.dark nav button {
+  background: #333;
+  color: white;
+}
+.dark .home-page {
+  background: #121212;
+}
+.dark .review-card {
+  background: #1f1f1f;
+}
+.dark .wishlist-item {
+  background: #1f1f1f;
+}
