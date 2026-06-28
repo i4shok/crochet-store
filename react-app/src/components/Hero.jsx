@@ -1,41 +1,77 @@
 import { Link } from "react-router-dom";
 
-import heroImage from "../assets/hero.jpg";
+import heroImage from "../assets/hero-bouquet.png";
 
 import "../styles/Hero.css";
 
 function Hero() {
+
   return (
-    <section
-      className="hero"
-      style={{
-        backgroundImage:
-          `url(${heroImage})`,
-      }}
-    >
-      <div className="hero-overlay">
 
-        <h1>
-          Handmade Crochet
-          Creations
-        </h1>
+<section className="hero">
 
-        <p>
-          Unique crochet products
-          crafted with creativity,
-          care and attention to detail.
-        </p>
+<div className="hero-content">
 
-        <Link
-          to="/shop"
-          className="hero-btn"
-        >
-          Shop Now
-        </Link>
+<div className="hero-text">
 
-      </div>
-    </section>
+<span className="hero-brand">
+
+🌸 Knot & Bloom
+
+</span>
+
+<h1>
+
+Handmade treasures,
+
+stitched with love.
+
+</h1>
+
+<p>
+
+Every crochet piece is handcrafted
+with patience, creativity and care—
+made to bring warmth to your home
+or become the perfect heartfelt gift.
+
+</p>
+
+<Link
+to="/shop"
+className="hero-btn"
+>
+
+Explore Collection
+
+</Link>
+
+</div>
+
+<div className="hero-image">
+
+<img
+
+src={heroImage}
+
+alt="Crochet Bouquet"
+
+/>
+
+</div>
+
+</div>
+
+<div className="scroll-down">
+
+↓
+
+</div>
+
+</section>
+
   );
+
 }
 
 export default Hero;

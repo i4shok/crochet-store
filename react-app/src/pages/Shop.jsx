@@ -5,10 +5,6 @@ import {
 
 import ProductCard from "../components/ProductCard";
 
-import teddy from "../assets/teddy.jpg";
-import sunflower from "../assets/sunflower.jpg";
-import keychain from "../assets/keychain.jpg";
-
 function Shop() {
 
   const [searchTerm,
@@ -40,45 +36,7 @@ fetch(
       )
       .then((data) => {
 
-        const productsWithImages =
-          data.map((product) => {
-
-            if (
-              product.name ===
-              "Crochet Teddy"
-            ) {
-              return {
-                ...product,
-                image: teddy,
-              };
-            }
-
-            if (
-              product.name ===
-              "Crochet Sunflower"
-            ) {
-              return {
-                ...product,
-                image: sunflower,
-              };
-            }
-
-            if (
-              product.name ===
-              "Crochet Keychain"
-            ) {
-              return {
-                ...product,
-                image: keychain,
-              };
-            }
-
-            return product;
-          });
-
-        setProducts(
-          productsWithImages
-        );
+        setProducts(data);
 
       });
 
@@ -145,8 +103,29 @@ fetch(
   return (
     <section className="shop-page">
 
-      <h1>Shop</h1>
+      <div className="shop-header">
 
+  <span className="section-tag">
+
+    ✨ Handmade Collection
+
+  </span>
+
+  <h1>
+
+    Our Collection
+
+  </h1>
+
+  <p>
+
+    Explore handcrafted crochet creations
+    made with love, care and creativity.
+
+  </p>
+
+</div>
+    <div className="shop-toolbar">
       <input
         type="text"
         placeholder="Search products..."
@@ -228,7 +207,7 @@ fetch(
         </option>
 
       </select>
-
+    </div>
       <div className="product-grid">
 
         {sortedProducts.map(
@@ -245,6 +224,7 @@ fetch(
       </div>
 
     </section>
+  
   );
 }
 

@@ -14,6 +14,8 @@ import {
 
 import StarRating from "../components/StarRating";
 
+import "../styles/ProductDetails.css";
+
 function ProductDetails() {
 
   const { id } =
@@ -27,9 +29,9 @@ function ProductDetails() {
     setReviews] =
     useState([]);
 
-    const [relatedProducts,
-  setRelatedProducts] =
-  useState([]);
+  const [relatedProducts,
+    setRelatedProducts] =
+    useState([]);
 
   const [reviewName,
     setReviewName] =
@@ -39,21 +41,21 @@ function ProductDetails() {
     setReviewText] =
     useState("");
 
-const [searchReview,
-  setSearchReview] =
-  useState("");
+  const [searchReview,
+    setSearchReview] =
+    useState("");
 
   const [sortReviews,
-  setSortReviews] =
-  useState("newest");
+    setSortReviews] =
+    useState("newest");
 
-const [rating,
-  setRating] =
-  useState(5);
+  const [rating,
+    setRating] =
+    useState(5);
 
-const averageRating =
-  reviews.length > 0
-    ? (
+  const averageRating =
+    reviews.length > 0
+      ? (
         reviews.reduce(
           (sum, review) =>
             sum +
@@ -61,9 +63,9 @@ const averageRating =
           0
         ) / reviews.length
       ).toFixed(1)
-    : 0;
+      : 0;
 
-useEffect(() => {
+  useEffect(() => {
 
     fetch(
       `${import.meta.env.VITE_API_URL}/products/${id}`
@@ -73,38 +75,38 @@ useEffect(() => {
       )
       .then((data) => {
 
-  console.log(data);
+        console.log(data);
 
-  setProduct(data);
+        setProduct(data);
 
-});
+      });
   }, [id]);
-useEffect(() => {
-
-  fetch(
-    `${import.meta.env.VITE_API_URL}/products/${id}/related`
-  )
-    .then((res) =>
-      res.json()
-    )
-    .then((data) =>
-      setRelatedProducts(
-        data
-      )
-    );
-
-}, [id]);
   useEffect(() => {
-  fetch(
-  `${import.meta.env.VITE_API_URL}/reviews/${id}`
-  )
-    .then((res) =>
-      res.json()
+
+    fetch(
+      `${import.meta.env.VITE_API_URL}/products/${id}/related`
     )
-    .then((data) =>
-      setReviews(data)
-    );
-}, [id]);
+      .then((res) =>
+        res.json()
+      )
+      .then((data) =>
+        setRelatedProducts(
+          data
+        )
+      );
+
+  }, [id]);
+  useEffect(() => {
+    fetch(
+      `${import.meta.env.VITE_API_URL}/reviews/${id}`
+    )
+      .then((res) =>
+        res.json()
+      )
+      .then((data) =>
+        setReviews(data)
+      );
+  }, [id]);
 
   const { addToCart } =
     useContext(CartContext);
@@ -116,52 +118,52 @@ useEffect(() => {
   );
 
   const handleReviewSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const res = await fetch(
-  `${import.meta.env.VITE_API_URL}/reviews`,
-    {
-      method: "POST",
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/reviews`,
+      {
+        method: "POST",
 
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
 
-      body: JSON.stringify({
-        product: id,
-        name: reviewName,
-        text: reviewText,
-        rating,
-      }),
+        body: JSON.stringify({
+          product: id,
+          name: reviewName,
+          text: reviewText,
+          rating,
+        }),
+      }
+    );
+
+    const newReview =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(
+        newReview.message
+      );
+
+      return;
+
     }
-  );
 
-  const newReview =
-  await res.json();
+    toast.success(
+      "Review Added"
+    );
 
-if (!res.ok) {
+    setReviews([
+      ...reviews,
+      newReview,
+    ]);
 
-  toast.error(
-    newReview.message
-  );
-
-  return;
-
-}
-
-toast.success(
-  "Review Added"
-);
-
-setReviews([
-    ...reviews,
-    newReview,
-  ]);
-
-  setReviewName("");
-  setReviewText("");
-};
+    setReviewName("");
+    setReviewText("");
+  };
 
 
 
@@ -170,265 +172,430 @@ setReviews([
   }
 
   return (
-    <div className="product-details">
+    <div className="product-page">
 
-      <img
-        src={product.image}
-        alt={product.name}
-      />
+      <section className="product-main">
 
-      <div>
+        <div className="product-card">
 
-       <h3>
-  {product.name}
-</h3>
+          <div className="image-gallery">
 
-<p>
-  ⭐ {averageRating}
-  / 5
-  (
-  {reviews.length}
-  reviews)
-</p>
+            <img
+              src={product.image}
+              alt={product.name}
+            />
 
-        <p>
-          {product.description}
-        </p>
+            <div className="image-dots">
 
-        <h2>
-          ₹{product.price}
-        </h2>
-        <p>
-  STOCK VALUE:
-  {String(product.stock)}
-</p>
+              <span className="active"></span>
 
-        <button
-          onClick={() => {
+            </div>
 
-  const added =
-    addToCart(
-      product
-    );
+          </div>
 
-  if (added) {
+          <div className="product-info">
 
-    toast.success(
-      `${product.name} added to cart!`
-    );
+            <span className="category-tag">
 
-  }
+              {product.category}
 
-}}
-        >
-          {
-            product.stock <= 0
-              ? "Out Of Stock"
-              : "Add To Cart"
-          }
-        </button>
+            </span>
 
-<button
-  onClick={() =>
-    addToWishlist(
-      product
-    )
-  }
->
-  ❤️ Save
-</button>
-          
-      </div>
+            <h3>
+              {product.name}
+            </h3>
 
-      <section className="reviews">
+            <div className="product-rating">
 
-        <h2>
-          Reviews
-        </h2>
+              <StarRating
+                rating={Number(averageRating)}
+              />
 
-        <input
-  type="text"
-  placeholder="Search reviews..."
-  value={searchReview}
-  onChange={(e) =>
-    setSearchReview(
-      e.target.value
-    )
-  }
-/>
+              <span>
 
-<select
-  value={sortReviews}
-  onChange={(e) =>
-    setSortReviews(
-      e.target.value
-    )
-  }
->
+                {averageRating}
 
-  <option value="newest">
-    Newest First
-  </option>
+                ({reviews.length} Reviews)
 
-  <option value="oldest">
-    Oldest First
-  </option>
+              </span>
 
-  <option value="highest">
-    Highest Rated
-  </option>
+            </div>
 
-  <option value="lowest">
-    Lowest Rated
-  </option>
+            <p>
+              {product.description}
+            </p>
 
-</select>
+            <h2>
+              ₹{product.price}
+            </h2>
 
-        <form
-          onSubmit={
-            handleReviewSubmit
-          }
-        >
-<select
-  value={rating}
-  onChange={(e) =>
-    setRating(
-      Number(
-        e.target.value
-      )
-    )
-  }
->
+            <div className="stock-info">
 
-  <option value={5}>
-    5 Stars
-  </option>
+              {
+                product.stock > 0
+                  ? (
+                    <>
+                      🟢 In Stock
 
-  <option value={4}>
-    4 Stars
-  </option>
+                      <span>
 
-  <option value={3}>
-    3 Stars
-  </option>
+                        Only {product.stock} left
 
-  <option value={2}>
-    2 Stars
-  </option>
+                      </span>
+                    </>
+                  )
+                  : (
+                    <>
+                      🔴 Out Of Stock
+                    </>
+                  )
+              }
 
-  <option value={1}>
-    1 Star
-  </option>
+            </div>
 
-</select>
-          <input
-            type="text"
-            placeholder="Your Name"
-            value={reviewName}
-            onChange={(e) =>
-              setReviewName(
-                e.target.value
-              )
-            }
-          />
+            <hr className="divider" />
 
-          <textarea
-            placeholder="Write a review"
-            value={reviewText}
-            onChange={(e) =>
-              setReviewText(
-                e.target.value
-              )
-            }
-          />
+            <div className="quantity-box">
 
-          <button
-            type="submit"
-          >
-            Submit Review
-          </button>
+              <p>
 
-        </form>
+                Quantity
 
-        <div className="review-list">
+              </p>
 
-{reviews
-  .filter(
-    (review) =>
-      review.text
-        .toLowerCase()
-        .includes(
-          searchReview.toLowerCase()
-        )
-  )
-  .sort((a, b) => {
+              <div className="quantity-selector">
 
-    if (
-      sortReviews ===
-      "highest"
-    ) {
-      return (
-        b.rating -
-        a.rating
-      );
-    }
+                <button>
 
-    if (
-      sortReviews ===
-      "lowest"
-    ) {
-      return (
-        a.rating -
-        b.rating
-      );
-    }
+                  −
 
-    if (
-      sortReviews ===
-      "oldest"
-    ) {
-      return (
-        new Date(
-          a.createdAt
-        ) -
-        new Date(
-          b.createdAt
-        )
-      );
-    }
+                </button>
 
-    return (
-      new Date(
-        b.createdAt
-      ) -
-      new Date(
-        a.createdAt
-      )
-    );
+                <span>
 
-  })
-  .map(
-            (
-              review,
-              index
-            ) => (
+                  1
 
-              <div
-                key={index}
-                className="review-card"
+                </span>
+
+                <button>
+
+                  +
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <button
+              onClick={() => {
+
+                const added =
+                  addToCart(
+                    product
+                  );
+
+                if (added) {
+
+                  toast.success(
+                    `${product.name} added to cart!`
+                  );
+
+                }
+
+              }}
+            >
+              {
+                product.stock <= 0
+                  ? "Out Of Stock"
+                  : "Add To Cart"
+              }
+            </button>
+
+            <button
+              onClick={() =>
+                addToWishlist(
+                  product
+                )
+              }
+            >
+              ♡ Save to Wishlist
+            </button>
+
+          </div>
+
+        </div>
+
+        <aside className="review-panel">
+
+          <section className="reviews">
+
+            <h2>
+              Reviews
+            </h2>
+
+            <input
+              type="text"
+              placeholder="Search reviews..."
+              value={searchReview}
+              onChange={(e) =>
+                setSearchReview(
+                  e.target.value
+                )
+              }
+            />
+
+            <select
+              value={sortReviews}
+              onChange={(e) =>
+                setSortReviews(
+                  e.target.value
+                )
+              }
+            >
+
+              <option value="newest">
+                Newest First
+              </option>
+
+              <option value="oldest">
+                Oldest First
+              </option>
+
+              <option value="highest">
+                Highest Rated
+              </option>
+
+              <option value="lowest">
+                Lowest Rated
+              </option>
+
+            </select>
+
+            <form
+              onSubmit={
+                handleReviewSubmit
+              }
+            >
+              <select
+                value={rating}
+                onChange={(e) =>
+                  setRating(
+                    Number(
+                      e.target.value
+                    )
+                  )
+                }
               >
 
+                <option value={5}>
+                  5 Stars
+                </option>
+
+                <option value={4}>
+                  4 Stars
+                </option>
+
+                <option value={3}>
+                  3 Stars
+                </option>
+
+                <option value={2}>
+                  2 Stars
+                </option>
+
+                <option value={1}>
+                  1 Star
+                </option>
+
+              </select>
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={reviewName}
+                onChange={(e) =>
+                  setReviewName(
+                    e.target.value
+                  )
+                }
+              />
+
+              <textarea
+                placeholder="Write a review"
+                value={reviewText}
+                onChange={(e) =>
+                  setReviewText(
+                    e.target.value
+                  )
+                }
+              />
+
+              <button
+                type="submit"
+              >
+                Submit Review
+              </button>
+
+            </form>
+
+            <div className="review-list">
+
+              {reviews
+                .filter(
+                  (review) =>
+                    review.text
+                      .toLowerCase()
+                      .includes(
+                        searchReview.toLowerCase()
+                      )
+                )
+                .sort((a, b) => {
+
+                  if (
+                    sortReviews ===
+                    "highest"
+                  ) {
+                    return (
+                      b.rating -
+                      a.rating
+                    );
+                  }
+
+                  if (
+                    sortReviews ===
+                    "lowest"
+                  ) {
+                    return (
+                      a.rating -
+                      b.rating
+                    );
+                  }
+
+                  if (
+                    sortReviews ===
+                    "oldest"
+                  ) {
+                    return (
+                      new Date(
+                        a.createdAt
+                      ) -
+                      new Date(
+                        b.createdAt
+                      )
+                    );
+                  }
+
+                  return (
+                    new Date(
+                      b.createdAt
+                    ) -
+                    new Date(
+                      a.createdAt
+                    )
+                  );
+
+                })
+                .map(
+                  (
+                    review,
+                    index
+                  ) => (
+
+                    <div
+                      key={index}
+                      className="review-card"
+                    >
+
+                      <h4>
+                        {review.name}
+                      </h4>
+
+                      <p>
+                        ⭐ {review.rating}/5
+                      </p>
+
+                      <p>
+                        {review.text}
+                      </p>
+
+                    </div>
+
+                  )
+                )}
+
+            </div>
+
+          </section>
+
+        </aside>
+
+      </section>
+
+      <section className="related-products">
+
+        <h2>
+
+          You May Also Like
+
+        </h2>
+
+        <div className="product-grid">
+
+          {relatedProducts.map(
+            (product) => (
+
+              <div
+                key={product._id}
+                className="product-card"
+              >
+
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  width="120"
+                />
+
                 <h4>
-  {review.name}
-</h4>
+                  {product.name}
+                </h4>
 
-<p>
-  ⭐ {review.rating}/5
-</p>
+                <p>
+                  ₹{product.price}
+                </p>
 
-<p>
-  {review.text}
-</p>
+                <p>
+                  Stock:
+                  {product.stock}
+                </p>
+
+                <button
+                  disabled={
+                    product.stock <= 0
+                  }
+                  onClick={() => {
+
+                    addToCart(product);
+
+                    toast.success(
+                      `${product.name} added to cart!`
+                    );
+
+                  }}
+                >
+                  {
+                    product.stock <= 0
+                      ? "Out Of Stock"
+                      : "Add To Cart"
+                  }
+                </button>
+
+                <button
+                  onClick={() =>
+                    addToWishlist(product)
+                  }
+                >
+                  ❤️ Save
+                </button>
 
               </div>
 
@@ -438,76 +605,7 @@ setReviews([
         </div>
 
       </section>
-<h2>
-  You May Also Like
-</h2>
 
-<div
-  className="product-grid"
->
-
-  {relatedProducts.map(
-    (product) => (
-
-      <div
-        key={product._id}
-        className="product-card"
-      >
-
-        <img
-          src={product.image}
-          alt={product.name}
-          width="120"
-        />
-
-        <h4>
-          {product.name}
-        </h4>
-
-        <p>
-          ₹{product.price}
-        </p>
-
-        <p>
-          Stock:
-          {product.stock}
-        </p>
-
-        <button
-  disabled={
-    product.stock <= 0
-  }
-  onClick={() => {
-
-    addToCart(product);
-
-    toast.success(
-      `${product.name} added to cart!`
-    );
-
-  }}
->
-  {
-    product.stock <= 0
-      ? "Out Of Stock"
-      : "Add To Cart"
-  }
-</button>
-
-<button
-  onClick={() =>
-    addToWishlist(product)
-  }
->
-  ❤️ Save
-</button>
-
-      </div>
-
-    )
-  )}
-
-</div>
     </div>
   );
 }

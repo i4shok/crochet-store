@@ -1,9 +1,6 @@
 import Hero from "../components/Hero";
-import ProductCarousel
-from "../components/ProductCarousel";
-import Categories from "../components/Categories";
-import AboutSection from "../components/AboutSection";
-import { Link } from "react-router-dom";
+import ProductCarousel from "../components/ProductCarousel";
+import WhyChooseUs from "../components/WhyChooseUs";
 
 function Home() {
   return (
@@ -12,9 +9,7 @@ function Home() {
 
       <ProductCarousel />
 
-      <Categories />
-
-      <AboutSection />
+      <WhyChooseUs />
     </div>
   );
 }

@@ -3,80 +3,118 @@ import {
   useState,
 } from "react";
 
-import { Link } from "react-router-dom";
+import {
+  Link,
+} from "react-router-dom";
 
-function FeaturedProducts() {
+import "../styles/ProductCarousel.css";
 
-  const [products,
-    setProducts] =
-    useState([]);
+function ProductCarousel() {
+
+  const [
+    products,
+    setProducts,
+  ] = useState([]);
 
   useEffect(() => {
 
     fetch(
       `${import.meta.env.VITE_API_URL}/products`
     )
-      .then((res) =>
-        res.json()
-      )
+      .then((res) => res.json())
       .then((data) =>
         setProducts(data)
       );
 
   }, []);
 
-  const featuredProducts =
-    products.slice(0, 3);
-
   return (
 
-    <section className="featured">
+<section className="collection">
 
-      <h2>
-        Featured Products
-      </h2>
+<div className="collection-header">
 
-      <div className="product-grid">
+<div>
 
-        {featuredProducts.map(
-          (product) => (
+<h2>
 
-            <div
-              key={product._id}
-              className="product-card"
-            >
+Our Collection
 
-              <img
-                src={product.image}
-                alt={product.name}
-              />
+</h2>
 
-              <h3>
-                {product.name}
-              </h3>
+<p>
 
-              <p>
-                ₹{product.price}
-              </p>
+Handcrafted creations made
+with love and care.
 
-              <Link
-                to={`/product/${product._id}`}
-                className="view-btn"
-              >
-                View Product
-              </Link>
+</p>
 
-            </div>
+</div>
 
-          )
-        )}
+<Link
+to="/shop"
+className="shop-all-btn"
+>
 
-      </div>
+Shop All →
 
-    </section>
+</Link>
+
+</div>
+
+<div className="collection-row">
+
+{products.map(
+(product)=>(
+
+<div
+key={product._id}
+className="collection-card"
+>
+
+<div
+className="collection-image"
+>
+
+<img
+src={product.image}
+alt={product.name}
+/>
+
+</div>
+
+<h3>
+
+{product.name}
+
+</h3>
+
+<p>
+
+₹{product.price}
+
+</p>
+
+<Link
+to={`/product/${product._id}`}
+className="view-btn"
+>
+
+View Details
+
+</Link>
+
+</div>
+
+)
+)}
+
+</div>
+
+</section>
 
   );
 
 }
 
-export default FeaturedProducts;
+export default ProductCarousel;
