@@ -12,6 +12,11 @@ import {
   WishlistContext,
 } from "../context/WishListContext";
 
+import ProductGallery from "../components/ProductGallery";
+import ProductInfo from "../components/ProductInfo";
+import ReviewPanel from "../components/ReviewPanel";
+import RelatedProducts from "../components/RelatedProducts";
+
 import StarRating from "../components/StarRating";
 
 import "../styles/ProductDetails.css";
@@ -32,6 +37,11 @@ function ProductDetails() {
   const [relatedProducts,
     setRelatedProducts] =
     useState([]);
+
+  const [selectedImage, setSelectedImage] =
+    useState("");
+
+  const [quantity, setQuantity] = useState(1);
 
   const [reviewName,
     setReviewName] =
@@ -78,6 +88,8 @@ function ProductDetails() {
         console.log(data);
 
         setProduct(data);
+
+        setSelectedImage(data.image);
 
       });
   }, [id]);
@@ -172,441 +184,52 @@ function ProductDetails() {
   }
 
   return (
+
     <div className="product-page">
 
       <section className="product-main">
 
-        <div className="product-card">
+        <div className="product-details-card">
 
-          <div className="image-gallery">
+          <ProductGallery
+            product={product}
+          />
 
-            <img
-              src={product.image}
-              alt={product.name}
-            />
-
-            <div className="image-dots">
-
-              <span className="active"></span>
-
-            </div>
-
-          </div>
-
-          <div className="product-info">
-
-            <span className="category-tag">
-
-              {product.category}
-
-            </span>
-
-            <h3>
-              {product.name}
-            </h3>
-
-            <div className="product-rating">
-
-              <StarRating
-                rating={Number(averageRating)}
-              />
-
-              <span>
-
-                {averageRating}
-
-                ({reviews.length} Reviews)
-
-              </span>
-
-            </div>
-
-            <p>
-              {product.description}
-            </p>
-
-            <h2>
-              ₹{product.price}
-            </h2>
-
-            <div className="stock-info">
-
-              {
-                product.stock > 0
-                  ? (
-                    <>
-                      🟢 In Stock
-
-                      <span>
-
-                        Only {product.stock} left
-
-                      </span>
-                    </>
-                  )
-                  : (
-                    <>
-                      🔴 Out Of Stock
-                    </>
-                  )
-              }
-
-            </div>
-
-            <hr className="divider" />
-
-            <div className="quantity-box">
-
-              <p>
-
-                Quantity
-
-              </p>
-
-              <div className="quantity-selector">
-
-                <button>
-
-                  −
-
-                </button>
-
-                <span>
-
-                  1
-
-                </span>
-
-                <button>
-
-                  +
-
-                </button>
-
-              </div>
-
-            </div>
-
-            <button
-              onClick={() => {
-
-                const added =
-                  addToCart(
-                    product
-                  );
-
-                if (added) {
-
-                  toast.success(
-                    `${product.name} added to cart!`
-                  );
-
-                }
-
-              }}
-            >
-              {
-                product.stock <= 0
-                  ? "Out Of Stock"
-                  : "Add To Cart"
-              }
-            </button>
-
-            <button
-              onClick={() =>
-                addToWishlist(
-                  product
-                )
-              }
-            >
-              ♡ Save to Wishlist
-            </button>
-
-          </div>
+          <ProductInfo
+            product={product}
+            averageRating={averageRating}
+            reviews={reviews}
+            addToCart={addToCart}
+            addToWishlist={addToWishlist}
+          />
 
         </div>
 
-        <aside className="review-panel">
-
-          <section className="reviews">
-
-            <h2>
-              Reviews
-            </h2>
-
-            <input
-              type="text"
-              placeholder="Search reviews..."
-              value={searchReview}
-              onChange={(e) =>
-                setSearchReview(
-                  e.target.value
-                )
-              }
-            />
-
-            <select
-              value={sortReviews}
-              onChange={(e) =>
-                setSortReviews(
-                  e.target.value
-                )
-              }
-            >
-
-              <option value="newest">
-                Newest First
-              </option>
-
-              <option value="oldest">
-                Oldest First
-              </option>
-
-              <option value="highest">
-                Highest Rated
-              </option>
-
-              <option value="lowest">
-                Lowest Rated
-              </option>
-
-            </select>
-
-            <form
-              onSubmit={
-                handleReviewSubmit
-              }
-            >
-              <select
-                value={rating}
-                onChange={(e) =>
-                  setRating(
-                    Number(
-                      e.target.value
-                    )
-                  )
-                }
-              >
-
-                <option value={5}>
-                  5 Stars
-                </option>
-
-                <option value={4}>
-                  4 Stars
-                </option>
-
-                <option value={3}>
-                  3 Stars
-                </option>
-
-                <option value={2}>
-                  2 Stars
-                </option>
-
-                <option value={1}>
-                  1 Star
-                </option>
-
-              </select>
-              <input
-                type="text"
-                placeholder="Your Name"
-                value={reviewName}
-                onChange={(e) =>
-                  setReviewName(
-                    e.target.value
-                  )
-                }
-              />
-
-              <textarea
-                placeholder="Write a review"
-                value={reviewText}
-                onChange={(e) =>
-                  setReviewText(
-                    e.target.value
-                  )
-                }
-              />
-
-              <button
-                type="submit"
-              >
-                Submit Review
-              </button>
-
-            </form>
-
-            <div className="review-list">
-
-              {reviews
-                .filter(
-                  (review) =>
-                    review.text
-                      .toLowerCase()
-                      .includes(
-                        searchReview.toLowerCase()
-                      )
-                )
-                .sort((a, b) => {
-
-                  if (
-                    sortReviews ===
-                    "highest"
-                  ) {
-                    return (
-                      b.rating -
-                      a.rating
-                    );
-                  }
-
-                  if (
-                    sortReviews ===
-                    "lowest"
-                  ) {
-                    return (
-                      a.rating -
-                      b.rating
-                    );
-                  }
-
-                  if (
-                    sortReviews ===
-                    "oldest"
-                  ) {
-                    return (
-                      new Date(
-                        a.createdAt
-                      ) -
-                      new Date(
-                        b.createdAt
-                      )
-                    );
-                  }
-
-                  return (
-                    new Date(
-                      b.createdAt
-                    ) -
-                    new Date(
-                      a.createdAt
-                    )
-                  );
-
-                })
-                .map(
-                  (
-                    review,
-                    index
-                  ) => (
-
-                    <div
-                      key={index}
-                      className="review-card"
-                    >
-
-                      <h4>
-                        {review.name}
-                      </h4>
-
-                      <p>
-                        ⭐ {review.rating}/5
-                      </p>
-
-                      <p>
-                        {review.text}
-                      </p>
-
-                    </div>
-
-                  )
-                )}
-
-            </div>
-
-          </section>
-
-        </aside>
+        <ReviewPanel
+          reviews={reviews}
+          searchReview={searchReview}
+          setSearchReview={setSearchReview}
+          sortReviews={sortReviews}
+          setSortReviews={setSortReviews}
+          rating={rating}
+          setRating={setRating}
+          reviewName={reviewName}
+          setReviewName={setReviewName}
+          reviewText={reviewText}
+          setReviewText={setReviewText}
+          handleReviewSubmit={handleReviewSubmit}
+        />
 
       </section>
 
-      <section className="related-products">
-
-        <h2>
-
-          You May Also Like
-
-        </h2>
-
-        <div className="product-grid">
-
-          {relatedProducts.map(
-            (product) => (
-
-              <div
-                key={product._id}
-                className="product-card"
-              >
-
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  width="120"
-                />
-
-                <h4>
-                  {product.name}
-                </h4>
-
-                <p>
-                  ₹{product.price}
-                </p>
-
-                <p>
-                  Stock:
-                  {product.stock}
-                </p>
-
-                <button
-                  disabled={
-                    product.stock <= 0
-                  }
-                  onClick={() => {
-
-                    addToCart(product);
-
-                    toast.success(
-                      `${product.name} added to cart!`
-                    );
-
-                  }}
-                >
-                  {
-                    product.stock <= 0
-                      ? "Out Of Stock"
-                      : "Add To Cart"
-                  }
-                </button>
-
-                <button
-                  onClick={() =>
-                    addToWishlist(product)
-                  }
-                >
-                  ❤️ Save
-                </button>
-
-              </div>
-
-            )
-          )}
-
-        </div>
-
-      </section>
+      <RelatedProducts
+        relatedProducts={relatedProducts}
+        addToCart={addToCart}
+        addToWishlist={addToWishlist}
+      />
 
     </div>
+
   );
 }
 
