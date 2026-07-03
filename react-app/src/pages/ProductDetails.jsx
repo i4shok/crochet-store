@@ -206,6 +206,8 @@ function ProductDetails() {
         </div>
 
         <ReviewPanel
+
+          averageRating={averageRating}
           reviews={reviews}
           searchReview={searchReview}
           setSearchReview={setSearchReview}

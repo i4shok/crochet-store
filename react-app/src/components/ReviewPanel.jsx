@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 function ReviewPanel({
+  averageRating,
   reviews,
   searchReview,
   setSearchReview,
@@ -16,6 +17,99 @@ function ReviewPanel({
 }) {
   return (
     <aside className="review-panel">
+
+      {/* Rating Summary */}
+
+      <div className="rating-summary">
+
+        <div className="rating-score">
+
+          <h1>
+
+            {averageRating}
+
+          </h1>
+
+          <div className="summary-stars">
+
+            {"★".repeat(
+              Math.round(averageRating)
+            )}
+
+            {"☆".repeat(
+              5 - Math.round(averageRating)
+            )}
+
+          </div>
+
+          <p>
+
+            {reviews.length} Reviews
+
+          </p>
+
+        </div>
+
+        <div className="rating-bars">
+
+          {[5, 4, 3, 2, 1].map((star) => {
+
+            const count =
+              reviews.filter(
+                r => r.rating === star
+              ).length;
+
+            const percent =
+              reviews.length
+                ?
+                (count / reviews.length) * 100
+                :
+                0;
+
+            return (
+
+              <div
+                key={star}
+                className="rating-row"
+              >
+
+                <span>
+
+                  {star}★
+
+                </span>
+
+                <div
+                  className="rating-bar"
+                >
+
+                  <div
+
+                    className="rating-fill"
+
+                    style={{
+                      width: `${percent}%`
+                    }}
+
+                  />
+
+                </div>
+
+                <span>
+
+                  {count}
+
+                </span>
+
+              </div>
+
+            );
+
+          })}
+
+        </div>
+
+      </div>
 
       <h2>Reviews</h2>
 
@@ -108,6 +202,7 @@ function ReviewPanel({
             );
 
           })
+
           .map((review) => (
 
             <div
@@ -115,23 +210,53 @@ function ReviewPanel({
               className="review-card"
             >
 
-              <div className="review-header">
+              <div className="review-top">
 
-                <strong>
-                  {review.name}
-                </strong>
+                <div className="review-avatar">
 
-                <span>
-                  ⭐ {review.rating}/5
+                  {review.name.charAt(0).toUpperCase()}
+
+                </div>
+
+                <div className="review-user">
+
+                  <h4>{review.name}</h4>
+
+                  <span className="verified">
+
+                    ✔ Verified Purchase
+
+                  </span>
+
+                </div>
+
+                <span className="review-date">
+
+                  {new Date(review.createdAt).toLocaleDateString()}
+
                 </span>
 
               </div>
 
-              <p>{review.text}</p>
+              <div className="review-stars">
+
+                {"★".repeat(review.rating)}
+
+                {"☆".repeat(5 - review.rating)}
+
+              </div>
+
+              <p className="review-text">
+
+                {review.text}
+
+              </p>
 
             </div>
 
-          ))}
+          ))
+
+        }
 
       </div>
 
