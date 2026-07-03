@@ -37,9 +37,15 @@ function ProductCard({ product }) {
 
           </h3>
 
-          <StarRating
-            rating={product.rating || 5}
-          />
+          <div className="card-rating">
+
+            <StarRating rating={product.rating || 5} />
+
+            <span>
+              ({product.reviewCount || 0})
+            </span>
+
+          </div>
 
           <h4>
 
