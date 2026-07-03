@@ -22,77 +22,77 @@ import {
   ThemeContext
 } from "./context/ThemeContext";
 import Wishlist
-from "./pages/Wishlist";
+  from "./pages/Wishlist";
 import AdminOrders
-from "./pages/AdminOrders";
+  from "./pages/AdminOrders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute
-from "./components/ProtectedRoute";
+  from "./components/ProtectedRoute";
 import Profile
-from "./pages/profile";
+  from "./pages/profile";
 import "./App.css";
 import "./styles/Theme.css";
 import MyOrders
-from "./pages/MyOrders";
+  from "./pages/MyOrders";
 import AdminDashboard
-from "./pages/AdminDashboard";
+  from "./pages/AdminDashboard";
 import AdminRoute
-from "./components/AdminRoute";
+  from "./components/AdminRoute";
 
 function App() {
   const { darkMode } =
-  useContext(ThemeContext);
+    useContext(ThemeContext);
   return (
-  <div
-    className={
-      darkMode
-        ? "app dark"
-        : "app"
-    }
-  >
-    <BrowserRouter>
-      <Navbar />
+    <div
+      className={
+        darkMode
+          ? "app dark"
+          : "app"
+      }
+    >
+      <BrowserRouter>
+        <Navbar />
 
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={<Home />}
+          />
 
-        <Route
-          path="/shop"
-          element={<Shop />}
-        />
+          <Route
+            path="/shop"
+            element={<Shop />}
+          />
 
-        <Route
-          path="/product/:id"
-          element={<ProductDetails />}
-        />
+          <Route
+            path="/product/:id"
+            element={<ProductDetails />}
+          />
 
-        <Route
-          path="/cart"
-          element={<Cart />}
-        />
+          <Route
+            path="/cart"
+            element={<Cart />}
+          />
 
-        <Route
-          path="/about"
-          element={<About />}
-        />
+          <Route
+            path="/about"
+            element={<About />}
+          />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
-        <Route
-          path="/checkout"
-          element={<Checkout />}
-        />
-        <Route
-          path="/order-success"
-          element={<OrderSuccess />}
-        />
-       <Route
+          <Route
+            path="/contact"
+            element={<Contact />}
+          />
+          <Route
+            path="/checkout"
+            element={<Checkout />}
+          />
+          <Route
+            path="/order-success"
+            element={<OrderSuccess />}
+          />
+          <Route
             path="/wishlist"
             element={
               <ProtectedRoute>
@@ -132,22 +132,22 @@ function App() {
               </ProtectedRoute>
             }
           />
-<Route
-  path="/admin"
-  element={
-    <AdminRoute>
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
 
-      <AdminDashboard />
+                <AdminDashboard />
 
-    </AdminRoute>
-  }
-/>
-      </Routes>
+              </AdminRoute>
+            }
+          />
+        </Routes>
 
-      <Footer />
-    </BrowserRouter>
-  </div>
-);
+        <Footer />
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

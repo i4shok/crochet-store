@@ -3,6 +3,8 @@ import {
   useEffect,
 } from "react";
 
+import ProductQuickView from "../components/ProductQuickView";
+
 import ProductCard from "../components/ProductCard";
 
 function Shop() {
@@ -25,12 +27,18 @@ function Shop() {
     setProducts] =
     useState([]);
 
+  const [selectedProduct, setSelectedProduct] =
+    useState(null);
+
+  const [showQuickView, setShowQuickView] =
+    useState(false);
+
 
   useEffect(() => {
 
-fetch(
-  `${import.meta.env.VITE_API_URL}/products`
-)
+    fetch(
+      `${import.meta.env.VITE_API_URL}/products`
+    )
       .then((res) =>
         res.json()
       )
@@ -40,14 +48,14 @@ fetch(
 
       });
 
-}, []);
+  }, []);
 
   const filteredProducts =
     products.filter((product) => {
 
-     const matchesSearch =
-  (product.name || "")
-    .toLowerCase()
+      const matchesSearch =
+        (product.name || "")
+          .toLowerCase()
           .includes(
             searchTerm.toLowerCase()
           );
@@ -55,7 +63,7 @@ fetch(
       const matchesCategory =
         selectedCategory === "All" ||
         product.category ===
-          selectedCategory;
+        selectedCategory;
 
       return (
         matchesSearch &&
@@ -105,126 +113,191 @@ fetch(
 
       <div className="shop-header">
 
-  <span className="section-tag">
+        <span className="section-tag">
 
-    ✨ Handmade Collection
+          ✨ Handmade Collection
 
-  </span>
+        </span>
 
-  <h1>
+        <h1>
 
-    Our Collection
+          Our Collection
 
-  </h1>
+        </h1>
 
-  <p>
+        <p>
 
-    Explore handcrafted crochet creations
-    made with love, care and creativity.
+          Explore handcrafted crochet creations
+          made with love, care and creativity.
 
-  </p>
-
-</div>
-    <div className="shop-toolbar">
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={searchTerm}
-        onChange={(e) =>
-          setSearchTerm(
-            e.target.value
-          )
-        }
-      />
-
-      <div className="filters">
-
-        <button
-          onClick={() =>
-            setSelectedCategory(
-              "All"
-            )
-          }
-        >
-          All
-        </button>
-
-        <button
-          onClick={() =>
-            setSelectedCategory(
-              "Toys"
-            )
-          }
-        >
-          Toys
-        </button>
-
-        <button
-          onClick={() =>
-            setSelectedCategory(
-              "Flowers"
-            )
-          }
-        >
-          Flowers
-        </button>
-
-        <button
-          onClick={() =>
-            setSelectedCategory(
-              "Keychains"
-            )
-          }
-        >
-          Keychains
-        </button>
+        </p>
 
       </div>
+      <div className="shop-toolbar">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) =>
+            setSearchTerm(
+              e.target.value
+            )
+          }
+        />
 
-      <select
-        value={sortOption}
-        onChange={(e) =>
-          setSortOption(
-            e.target.value
-          )
-        }
-      >
+        <div className="filters">
 
-        <option value="default">
-          Sort By
-        </option>
+          <button
+            className={
+              selectedCategory === "All"
+                ? "active-filter"
+                : ""
+            }
+            onClick={() =>
+              setSelectedCategory("All")
+            }
+          >
+            All
+          </button>
 
-        <option value="low-high">
-          Price: Low → High
-        </option>
+          <button
+            className={
+              selectedCategory === "Toys"
+                ? "active-filter"
+                : ""
+            }
+            onClick={() =>
+              setSelectedCategory(
+                "Toys"
+              )
+            }
+          >
+            Toys
+          </button>
 
-        <option value="high-low">
-          Price: High → Low
-        </option>
+          <button
+            onClick={() =>
+              setSelectedCategory(
+                "Flowers"
+              )
+            }
+          >
+            Flowers
+          </button>
 
-        <option value="a-z">
-          Name: A → Z
-        </option>
+          <button
+            onClick={() =>
+              setSelectedCategory(
+                "Keychains"
+              )
+            }
+          >
+            Keychains
+          </button>
 
-      </select>
-    </div>
+        </div>
+
+        <select
+          value={sortOption}
+          onChange={(e) =>
+            setSortOption(
+              e.target.value
+            )
+          }
+        >
+
+          <option value="default">
+            Sort By
+          </option>
+
+          <option value="low-high">
+            Price: Low → High
+          </option>
+
+          <option value="high-low">
+            Price: High → Low
+          </option>
+
+          <option value="a-z">
+            Name: A → Z
+          </option>
+
+        </select>
+      </div>
       <div className="product-grid">
 
-        {sortedProducts.map(
-          (product) => (
+        {sortedProducts.length === 0 ? (
+
+          <div className="empty-search">
+
+            <h2>
+
+              🔍 No products found
+
+            </h2>
+
+            <p>
+
+              Try another search or browse a different category.
+
+            </p>
+
+            <button
+              onClick={() => {
+
+                setSearchTerm("");
+
+                setSelectedCategory("All");
+
+              }}
+            >
+
+              Clear Filters
+
+            </button>
+
+          </div>
+
+        ) : (
+
+          sortedProducts.map(product => (
 
             <ProductCard
               key={product._id}
               product={product}
+              onQuickView={() => {
+
+                setSelectedProduct(product);
+
+                setShowQuickView(true);
+
+              }}
             />
 
-          )
+          ))
+
         )}
 
       </div>
 
+      <ProductQuickView
+
+        product={selectedProduct}
+
+        isOpen={showQuickView}
+
+        onClose={() => {
+
+          setShowQuickView(false);
+
+          setSelectedProduct(null);
+
+        }}
+
+      />
+
     </section>
-  
+
   );
 }
 

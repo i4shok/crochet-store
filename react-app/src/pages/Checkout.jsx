@@ -13,6 +13,8 @@ import {
   toast,
 } from "react-toastify";
 
+import "../styles/Checkout.css";
+
 function Checkout() {
 
   const navigate =
@@ -35,7 +37,7 @@ function Checkout() {
       (total, item) =>
         total +
         item.price *
-          item.quantity,
+        item.quantity,
       0
     );
 
@@ -121,47 +123,142 @@ function Checkout() {
         Checkout
       </h1>
 
-      <form
-        className="checkout-form"
-        onSubmit={
-          handleOrder
-        }
-      >
+      <div className="checkout-layout">
 
-        <input
-          type="text"
-          placeholder="Full Name"
-        />
+        <div className="checkout-left">
 
-        <input
-          type="text"
-          placeholder="Phone Number"
-        />
+          <h2>
 
-        <textarea
-          placeholder="Shipping Address"
-        />
+            Shipping Information
 
-        <h2>
-          Order Total:
-          ₹{totalPrice}
-        </h2>
+          </h2>
 
-        <button
-          type="submit"
-          disabled={
-            isPlacingOrder
-          }
-        >
+          <form
+            id="checkoutForm"
+            className="checkout-form"
+            onSubmit={handleOrder}
+          >
+
+            <input
+              type="text"
+              placeholder="Full Name"
+              required
+            />
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Phone Number"
+              required
+            />
+
+            <textarea
+              placeholder="Shipping Address"
+              required
+            />
+
+            <div className="checkout-row">
+
+              <input
+                type="text"
+                placeholder="City"
+                required
+              />
+
+              <input
+                type="text"
+                placeholder="Postal Code"
+                required
+              />
+
+            </div>
+
+          </form>
+
+        </div>
+
+        <aside className="checkout-summary">
+
+          <h2>
+
+            Order Summary
+
+          </h2>
+
           {
-            isPlacingOrder
-              ? "Placing Order..."
-              : "Place Order"
+            cartItems.map(item => (
+
+              <div
+                key={item._id}
+                className="summary-item"
+              >
+
+                <span>
+
+                  {item.name}
+
+                  × {item.quantity}
+
+                </span>
+
+                <span>
+
+                  ₹{item.price * item.quantity}
+
+                </span>
+
+              </div>
+
+            ))
           }
-        </button>
 
-      </form>
+          <hr />
 
+          <div className="summary-total">
+
+            <span>
+
+              Total
+
+            </span>
+
+            <span>
+
+              ₹{totalPrice}
+
+            </span>
+
+          </div>
+
+          <div className="secure-checkout">
+
+            🔒 Secure Checkout
+
+          </div>
+
+          <button
+            type="submit"
+            form="checkoutForm"
+            disabled={isPlacingOrder}
+            className="place-order-btn"
+          >
+
+            {
+              isPlacingOrder
+                ? "Placing Order..."
+                : "Place Order →"
+            }
+
+          </button>
+
+        </aside>
+
+      </div>
     </div>
 
   );

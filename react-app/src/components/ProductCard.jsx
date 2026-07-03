@@ -3,7 +3,13 @@ import StarRating from "./StarRating";
 
 import "../styles/ProductCard.css";
 
-function ProductCard({ product }) {
+function ProductCard({
+
+    product,
+
+    onQuickView,
+
+}) {
 
   return (
 
@@ -26,6 +32,30 @@ function ProductCard({ product }) {
             {product.category}
 
           </span>
+
+          <div className="image-overlay">
+
+            <button
+
+              className="quick-view-btn"
+
+              onClick={(e) => {
+
+                e.preventDefault();
+
+                e.stopPropagation();
+
+                onQuickView();
+
+              }}
+
+            >
+
+              👁 Quick View
+
+            </button>
+
+          </div>
 
         </div>
 

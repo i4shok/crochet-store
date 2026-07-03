@@ -3,6 +3,8 @@ import {
   useState,
 } from "react";
 
+import "../styles/MyOrders.css";
+
 function MyOrders() {
 
   const [orders,
@@ -35,97 +37,184 @@ function MyOrders() {
   }, []);
 
   return (
-    <div className="page">
+
+  <div className="orders-page">
+
+    <div className="orders-header">
 
       <h1>
+
         My Orders
+
       </h1>
 
-      {orders.length === 0 && (
-        <p>
-          No Orders Yet
-        </p>
-      )}
+      <p>
 
-      {orders.map(
-        (order) => (
+        Track all your handmade purchases in one place.
 
-          <div
-            key={order._id}
-            className="order-card"
-          >
+      </p>
 
-            <h3>
-              Order
-            </h3>
+    </div>
 
-            <p>
-              Status:
-              {order.status}
-            </p>
+    {
 
-            <p>
+      orders.length === 0 ?
 
-              {
-                order.status ===
-                  "Pending"
+      (
 
-                  ? "🟡 Pending"
+        <div className="empty-orders">
 
-                  : order.status ===
-                    "Shipped"
+          <h2>
 
-                    ? "🚚 Shipped"
+            No Orders Yet
 
-                    : "✅ Delivered"
+          </h2>
 
-              }
+          <p>
 
-            </p>
+            Looks like you haven't placed an order yet.
 
-            <p>
-              Total:
-              ₹{order.total}
-            </p>
+          </p>
 
-            <p>
-              Items:
-              {order.items.length}
-            </p>
+        </div>
 
-            {order.items.map(
-              (item, index) => (
+      )
 
-                <div
-                  key={index}
-                >
+      :
 
-                  <p>
-                    Product:
+      (
+
+        <div className="orders-list">
+
+          {
+
+            orders.map(order => (
+
+              <div
+                key={order._id}
+                className="order-card"
+              >
+
+                <div className="order-top">
+
+                  <div>
+
+                    <h3>
+
+                      Order #
+
+                      {order._id.slice(-6).toUpperCase()}
+
+                    </h3>
+
+                    <span>
+
+                      {new Date(order.createdAt).toLocaleDateString()}
+
+                    </span>
+
+                  </div>
+
+                  <div
+                    className={`status ${order.status.toLowerCase()}`}
+                  >
+
                     {
-                      item.product
-                        ?.name
-                    }
-                  </p>
 
-                  <p>
-                    Qty:
-                    {
-                      item.quantity
+                      order.status === "Pending"
+
+                      ? "🟡 Pending"
+
+                      :
+
+                      order.status === "Shipped"
+
+                      ? "🚚 Shipped"
+
+                      :
+
+                      "✅ Delivered"
+
                     }
-                  </p>
+
+                  </div>
 
                 </div>
 
-              )
-            )}
+                <div className="order-items">
 
-          </div>
-        )
-      )}
+                  {
 
-    </div>
-  );
+                    order.items.map((item,index)=>(
+
+                      <div
+                        key={index}
+                        className="order-item"
+                      >
+
+                        <div>
+
+                          <strong>
+
+                            {item.product?.name}
+
+                          </strong>
+
+                          <p>
+
+                            Qty × {item.quantity}
+
+                          </p>
+
+                        </div>
+
+                        <span>
+
+                          ₹
+
+                          {(item.product?.price || 0) * item.quantity}
+
+                        </span>
+
+                      </div>
+
+                    ))
+
+                  }
+
+                </div>
+
+                <div className="order-footer">
+
+                  <strong>
+
+                    Total
+
+                  </strong>
+
+                  <strong>
+
+                    ₹{order.total}
+
+                  </strong>
+
+                </div>
+
+              </div>
+
+            ))
+
+          }
+
+        </div>
+
+      )
+
+    }
+
+  </div>
+
+);
 }
 
 export default MyOrders;

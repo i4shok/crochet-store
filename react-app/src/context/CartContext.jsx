@@ -5,7 +5,7 @@ import {
 } from "react";
 
 import { toast }
-from "react-toastify";
+  from "react-toastify";
 
 export const CartContext = createContext();
 
@@ -19,146 +19,159 @@ function CartProvider({ children }) {
       : [];
   });
 
-const addToCart = (
-  product,
-  quantity = 1
-) => {
+  const addToCart = (
+    product,
+    quantity = 1
+  ) => {
 
-const existingItem =
-  cartItems.find(
-    (item) =>
-      item._id ===
-      product._id
-  );
-
-if (
-  product.stock <= 0
-) {
-
-    toast.error(
-      "Out of stock!"
-    );
-
-    return false;
-
-  }
-
-if (
-  existingItem &&
-  existingItem.quantity + quantity >
-    product.stock
-)  {
-
-    toast.error(
-      "Not enough stock!"
-    );
-
-    return false;
-
-  }
-
-
-  if (existingItem) {
-
-    setCartItems(
-      cartItems.map(
+    const existingItem =
+      cartItems.find(
         (item) =>
-
           item._id ===
           product._id
+      );
 
-            ? {
+    if (
+      product.stock <= 0
+    ) {
+
+      toast.error(
+        "Out of stock!"
+      );
+
+      return false;
+
+    }
+
+    if (
+      existingItem &&
+      existingItem.quantity + quantity >
+      product.stock
+    ) {
+
+      toast.error(
+        "Not enough stock!"
+      );
+
+      return false;
+
+    }
+
+
+    if (existingItem) {
+
+      setCartItems(
+        cartItems.map(
+          (item) =>
+
+            item._id ===
+              product._id
+
+              ? {
                 ...item,
                 quantity:
-  item.quantity +
-  quantity,
+                  item.quantity +
+                  quantity,
               }
 
-            : item
-      )
-    );
-  return true;
-  } else {
+              : item
+        )
+      );
+      return true;
+    } else {
 
-    setCartItems([
-      ...cartItems,
-      {
-        ...product,
-quantity: quantity,
-      },
-    ]);
-  return true;
-  }
+      setCartItems([
+        ...cartItems,
+        {
+          ...product,
+          quantity: quantity,
+        },
+      ]);
+      return true;
+    }
 
-};
+  };
 
   const removeItem = (id) => {
+
     setCartItems(
+
       cartItems.filter(
-        (item) => item.id !== id
+
+        (item) => item._id !== id
+
       )
+
     );
+
   };
 
   const clearCart = () => {
-  setCartItems([]);
+    setCartItems([]);
   };
-  
-const increaseQuantity = (
-  id
-) => {
 
-  setCartItems(
-    cartItems.map(
-      (item) => {
+  const increaseQuantity = (
+    id
+  ) => {
 
-        if (
-          item._id === id
-        ) {
+    setCartItems(
+      cartItems.map(
+        (item) => {
 
           if (
-            item.quantity >=
-            item.stock
+            item._id === id
           ) {
 
-            alert(
-              "Stock limit reached"
-            );
+            if (
+              item.quantity >=
+              item.stock
+            ) {
 
-            return item;
-          }
+              alert(
+                "Stock limit reached"
+              );
 
-          return {
-            ...item,
-            quantity:
-              item.quantity + 1,
-          };
+              return item;
+            }
 
-        }
-
-        return item;
-
-      }
-    )
-  );
-
-};
-
-  const decreaseQuantity = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id &&
-        item.quantity > 1
-          ? {
+            return {
               ...item,
               quantity:
-                item.quantity - 1,
-            }
-          : item
+                item.quantity + 1,
+            };
+
+          }
+
+          return item;
+
+        }
       )
     );
+
   };
-  
+
+  const decreaseQuantity = (id) => {
+
+    setCartItems(
+
+      cartItems.map((item) =>
+
+        item._id === id &&
+          item.quantity > 1
+
+          ? {
+            ...item,
+            quantity: item.quantity - 1,
+          }
+
+          : item
+
+      )
+
+    );
+
+  };
+
 
   useEffect(() => {
     localStorage.setItem(
@@ -169,14 +182,14 @@ const increaseQuantity = (
 
   return (
     <CartContext.Provider
-    value={{
-      cartItems,
-      addToCart,
-      removeItem,
-      clearCart,
-      increaseQuantity,
-      decreaseQuantity,
-    }}
+      value={{
+        cartItems,
+        addToCart,
+        removeItem,
+        clearCart,
+        increaseQuantity,
+        decreaseQuantity,
+      }}
     >
       {children}
     </CartContext.Provider>
