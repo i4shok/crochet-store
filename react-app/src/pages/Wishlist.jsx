@@ -6,47 +6,172 @@ import {
   WishlistContext,
 } from "../context/WishListContext";
 
+import {
+  CartContext,
+} from "../context/CartContext";
+
+import { toast } from "react-toastify";
+
+import "../styles/Wishlist.css";
+
 function Wishlist() {
   const {
-  wishlistItems,
-  removeFromWishlist,
-} = useContext(
-  WishlistContext
-);
-
+    wishlistItems,
+    removeFromWishlist,
+  } = useContext(
+    WishlistContext
+  );
+  const {
+    addToCart,
+  } = useContext(
+    CartContext
+  );
   return (
-    <div className="page">
-      <h1>
-        Wishlist
-      </h1>
 
-      {wishlistItems.map(
-        (item) => (
-        <div
-  key={item._id}
-  className="wishlist-item"
->
-  <h3>
-    {item.name}
-  </h3>
+    <div className="wishlist-page">
 
-  <p>
-    ₹{item.price}
-  </p>
+      <div className="wishlist-header">
 
-  <button
-    onClick={() =>
-      removeFromWishlist(
-        item._id
-      )
-    }
-  >
-    Remove
-  </button>
-</div>
-        )
-      )}
+        <h1>
+
+          My Wishlist
+
+        </h1>
+
+        <p>
+
+          Save your favorite handmade creations for later ❤️
+
+        </p>
+
+      </div>
+
+      {
+
+        wishlistItems.length === 0 ?
+
+          (
+
+            <div className="empty-wishlist">
+
+              <h2>
+
+                Your wishlist is empty
+
+              </h2>
+
+              <p>
+
+                Start exploring beautiful crochet creations.
+
+              </p>
+
+            </div>
+
+          )
+
+          :
+
+          (
+
+            <div className="wishlist-grid">
+
+              {
+
+                wishlistItems.map(item => (
+
+                  <div
+                    key={item._id}
+                    className="wishlist-card"
+                  >
+
+                    <div className="wishlist-image">
+
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                      />
+
+                    </div>
+
+                    <div className="wishlist-info">
+
+                      <span className="wishlist-category">
+                        {item.category}
+                      </span>
+
+                      <h3>
+                        {item.name}
+                      </h3>
+
+                      <p className="wishlist-price">
+                        ₹{item.price}
+                      </p>
+
+                      <div className="wishlist-stock">
+                        {item.stock > 0 ? "🟢 In Stock" : "🔴 Out of Stock"}
+                      </div>
+
+                      <div className="wishlist-features">
+
+                        <span>🧶 Handmade</span>
+
+                        <span>🎁 Gift Ready</span>
+
+                        <span>🌱 Eco Friendly</span>
+
+                      </div>
+
+                      <div className="wishlist-actions">
+
+                        <button
+                          className="wishlist-cart-btn"
+                          onClick={() => {
+
+                            const added = addToCart(item);
+
+                            if (added) {
+
+                              removeFromWishlist(item._id);
+
+                              toast.success(
+                                `${item.name} moved to cart!`
+                              );
+
+                            }
+
+                          }}
+                        >
+                          Add To Cart
+                        </button>
+
+                        <button
+                          className="wishlist-remove-btn"
+                          onClick={() =>
+                            removeFromWishlist(item._id)
+                          }
+                        >
+                          Remove
+                        </button>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                ))
+
+              }
+
+            </div>
+
+          )
+
+      }
+
     </div>
+
   );
 }
 
