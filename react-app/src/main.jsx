@@ -16,30 +16,23 @@ from "./context/WishListContext";
 import AuthProvider
 from "./context/AuthContext";
 
+import { BrowserRouter } from "react-router-dom";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
   <React.StrictMode>
-
-    <AuthProvider>
-
-      <ThemeProvider>
-
-        <WishlistProvider>
-
-          <CartProvider>
-
-            <App />
-
-            <ToastContainer />
-
-          </CartProvider>
-
-        </WishlistProvider>
-
-      </ThemeProvider>
-
-    </AuthProvider>
-
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <App />
+              <ToastContainer />
+            </CartProvider>
+          </WishlistProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

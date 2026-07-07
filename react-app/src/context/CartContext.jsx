@@ -2,183 +2,403 @@ import {
   createContext,
   useState,
   useEffect,
+  useContext,
 } from "react";
+
+  import {
+  AuthContext,
+} from "./AuthContext";
 
 import { toast }
   from "react-toastify";
 
+
+
 export const CartContext = createContext();
 
 function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart =
-      localStorage.getItem("cart");
+  const [cartItems, setCartItems] = useState([]);
 
-    return savedCart
-      ? JSON.parse(savedCart)
-      : [];
-  });
+  const {
+  token,
+} = useContext(
+  AuthContext);
 
-  const addToCart = (
-    product,
-    quantity = 1
-  ) => {
+  const fetchCart = async () => {
 
-    const existingItem =
-      cartItems.find(
-        (item) =>
-          item._id ===
-          product._id
-      );
+  if (!token) {
 
-    if (
-      product.stock <= 0
-    ) {
+    setCartItems([]);
+    return;
 
-      toast.error(
-        "Out of stock!"
-      );
+  }
 
-      return false;
+  try {
 
-    }
-
-    if (
-      existingItem &&
-      existingItem.quantity + quantity >
-      product.stock
-    ) {
-
-      toast.error(
-        "Not enough stock!"
-      );
-
-      return false;
-
-    }
-
-
-    if (existingItem) {
-
-      setCartItems(
-        cartItems.map(
-          (item) =>
-
-            item._id ===
-              product._id
-
-              ? {
-                ...item,
-                quantity:
-                  item.quantity +
-                  quantity,
-              }
-
-              : item
-        )
-      );
-      return true;
-    } else {
-
-      setCartItems([
-        ...cartItems,
-        {
-          ...product,
-          quantity: quantity,
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/cart`,
+      {
+        headers: {
+          Authorization: token,
         },
-      ]);
-      return true;
-    }
-
-  };
-
-  const removeItem = (id) => {
-
-    setCartItems(
-
-      cartItems.filter(
-
-        (item) => item._id !== id
-
-      )
-
+      }
     );
 
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  const increaseQuantity = (
-    id
-  ) => {
+    const data = await res.json();
 
     setCartItems(
-      cartItems.map(
-        (item) => {
 
-          if (
-            item._id === id
-          ) {
+  data.map(item => ({
 
-            if (
-              item.quantity >=
-              item.stock
-            ) {
+    ...item.product,
 
-              alert(
-                "Stock limit reached"
-              );
+    quantity: item.quantity,
 
-              return item;
-            }
+  }))
 
-            return {
-              ...item,
-              quantity:
-                item.quantity + 1,
-            };
+);
 
-          }
+  } catch (err) {
 
-          return item;
+    console.error(err);
+
+  }
+
+};
+
+ const addToCart = async (
+  product,
+  quantity = 1
+) => {
+
+  if (!token) {
+
+    toast.error(
+      "Please login first"
+    );
+
+    return false;
+
+  }
+
+  try {
+
+    const res =
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cart`,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              token,
+
+          },
+
+          body: JSON.stringify({
+
+            productId:
+              product._id,
+
+            quantity,
+
+          }),
 
         }
-      )
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(
+        data.message
+      );
+
+      return false;
+
+    }
+
+    await fetchCart();
+
+    return true;
+
+  } catch (err) {
+
+    console.error(err);
+
+    toast.error(
+      "Failed to add to cart"
     );
 
-  };
+    return false;
 
-  const decreaseQuantity = (id) => {
+  }
 
-    setCartItems(
+};
 
-      cartItems.map((item) =>
+const removeItem = async (id) => {
 
-        item._id === id &&
-          item.quantity > 1
+  console.log("🗑 removeItem called:", id);
 
-          ? {
-            ...item,
-            quantity: item.quantity - 1,
-          }
+  console.log("Token:", token);
 
-          : item
+ if (!token) {
 
-      )
+  setCartItems([]);
 
+  return;
+
+}
+
+  try {
+
+    const res =
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cart/${id}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
+    console.log("Status:", res.status);
+
+    const data =
+      await res.json();
+
+    console.log(data);
+
+    if (!res.ok) {
+
+      toast.error(data.message);
+
+      return;
+
+    }
+
+    await fetchCart();
+
+    toast.success("Product removed from cart");
+
+  } catch (err) {
+
+    console.error(err);
+
+    toast.error("Failed to remove product");
+
+  }
+
+};
+
+  const clearCart = async () => {
+
+  if (!token) {
+
+    setCartItems([]);
+
+    return;
+
+  }
+
+  try {
+
+    const res =
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cart`,
+        {
+
+          method: "DELETE",
+
+          headers: {
+            Authorization:
+              token,
+          },
+
+        }
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(
+        data.message
+      );
+
+      return;
+
+    }
+
+    await fetchCart();
+
+  } catch (err) {
+
+    console.error(err);
+
+    toast.error(
+      "Failed to clear cart"
     );
 
-  };
+  }
 
+};
+
+  const increaseQuantity = async (id) => {
+
+  const item =
+    cartItems.find(
+      item => item._id === id
+    );
+
+  if (!item) return;
+
+  if (item.quantity >= item.stock) {
+
+    toast.error(
+      "Stock limit reached"
+    );
+
+    return;
+
+  }
+
+  try {
+
+    const res =
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cart/${id}`,
+        {
+
+          method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              token,
+
+          },
+
+          body: JSON.stringify({
+
+            quantity:
+              item.quantity + 1,
+
+          }),
+
+        }
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(
+        data.message
+      );
+
+      return;
+
+    }
+
+    await fetchCart();
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+};
+
+  const decreaseQuantity = async (id) => {
+
+  const item =
+    cartItems.find(
+      item => item._id === id
+    );
+
+  if (!item) return;
+
+  if (item.quantity <= 1) {
+
+    removeItem(id);
+
+    return;
+
+  }
+
+  try {
+
+    const res =
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/cart/${id}`,
+        {
+
+          method: "PUT",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              token,
+
+          },
+
+          body: JSON.stringify({
+
+            quantity:
+              item.quantity - 1,
+
+          }),
+
+        }
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(
+        data.message
+      );
+
+      return;
+
+    }
+
+    await fetchCart();
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+};
 
   useEffect(() => {
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(cartItems)
-    );
-  }, [cartItems]);
+
+  fetchCart();
+
+}, [token]);
 
   return (
     <CartContext.Provider

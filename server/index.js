@@ -715,46 +715,6 @@ app.put(
   }
 );
 
-app.put(
-  "/admin/orders/:id",
-  auth,
-  admin,
-  async (req, res) => {
-
-    try {
-
-      const order =
-        await Order.findById(
-          req.params.id
-        );
-
-      if (!order) {
-        return res
-          .status(404)
-          .json({
-            message:
-              "Order not found",
-          });
-      }
-
-      order.status =
-        req.body.status;
-
-      await order.save();
-
-      res.json(order);
-
-    } catch (error) {
-
-      res.status(500).json({
-        message:
-          error.message,
-      });
-
-    }
-  }
-);
-
 app.post(
   "/seed-products",
   async (req, res) => {
@@ -949,6 +909,198 @@ app.get(
       res.status(500).json({
         message:
           error.message,
+      });
+
+    }
+
+  }
+);
+
+app.get(
+  "/cart",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        ).populate("cart.product");
+
+      res.json(user.cart);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+
+  }
+);
+
+app.post(
+  "/cart",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const {
+        productId,
+        quantity = 1,
+      } = req.body;
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      const existingItem =
+        user.cart.find(
+          item =>
+            item.product.toString() === productId
+        );
+
+      if (existingItem) {
+
+        existingItem.quantity += quantity;
+
+      } else {
+
+        user.cart.push({
+          product: productId,
+          quantity,
+        });
+
+      }
+
+      await user.save();
+
+      await user.populate("cart.product");
+
+      res.json(user.cart);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+
+  }
+);
+
+app.put(
+  "/cart/:productId",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      const item =
+        user.cart.find(
+          item =>
+            item.product.toString() ===
+            req.params.productId
+        );
+
+      if (!item) {
+
+        return res.status(404).json({
+          message: "Item not found in cart",
+        });
+
+      }
+
+      item.quantity =
+        req.body.quantity;
+
+      await user.save();
+
+      await user.populate("cart.product");
+
+      res.json(user.cart);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+
+  }
+);
+
+app.delete(
+  "/cart/:productId",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      user.cart =
+        user.cart.filter(
+          item =>
+            item.product.toString() !==
+            req.params.productId
+        );
+
+      await user.save();
+
+      await user.populate("cart.product");
+
+      res.json(user.cart);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+
+  }
+);
+
+app.delete(
+  "/cart",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      user.cart = [];
+
+      await user.save();
+
+      res.json({
+        message: "Cart cleared",
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
       });
 
     }

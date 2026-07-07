@@ -126,16 +126,6 @@ margin-top:35px;
   padding: 40px;
 }
 
-form {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-
-  max-width: 500px;
-}
-
 input,
 textarea {
   padding: 10px;

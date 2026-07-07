@@ -1,7 +1,7 @@
 import {
-  BrowserRouter,
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -14,35 +14,29 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
-import {
-  useContext
-} from "react";
+import {useContext} from "react";
 
-import {
-  ThemeContext
-} from "./context/ThemeContext";
-import Wishlist
-  from "./pages/Wishlist";
-import AdminOrders
-  from "./pages/AdminOrders";
+import {ThemeContext} from "./context/ThemeContext";
+import Wishlist from "./pages/Wishlist";
+import AdminOrders from "./pages/AdminOrders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute
-  from "./components/ProtectedRoute";
-import Profile
-  from "./pages/profile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./pages/profile";
 import "./App.css";
 import "./styles/Theme.css";
-import MyOrders
-  from "./pages/MyOrders";
-import AdminDashboard
-  from "./pages/AdminDashboard";
-import AdminRoute
-  from "./components/AdminRoute";
+import MyOrders from "./pages/MyOrders";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminRoute from "./components/AdminRoute";
+
 
 function App() {
   const { darkMode } =
     useContext(ThemeContext);
+    const location = useLocation();
+
+  const isAdmin =
+    location.pathname.startsWith("/admin");
   return (
     <div
       className={
@@ -51,8 +45,8 @@ function App() {
           : "app"
       }
     >
-      <BrowserRouter>
-        <Navbar />
+
+      {!isAdmin && <Navbar />}
 
         <Routes>
           <Route
@@ -144,8 +138,8 @@ function App() {
           />
         </Routes>
 
-        <Footer />
-      </BrowserRouter>
+        {!isAdmin && <Footer />}
+
     </div>
   );
 }

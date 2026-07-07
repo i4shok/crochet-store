@@ -2,6 +2,18 @@ import {
   useEffect,
   useState,
 } from "react";
+import DashboardStats from "../components/admin/DashboardStats";
+import AddProductForm from "../components/admin/AddProductForm";
+import ProductManager from "../components/admin/ProductManager";
+import OrderManager from "../components/admin/OrderManager";
+import "../styles/AdminDashboard.css";
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  PlusCircle,
+} from "lucide-react";
+import { toast } from "react-toastify";
 
 function AdminDashboard() {
 
@@ -69,14 +81,27 @@ function AdminDashboard() {
     setIsAdding] =
     useState(false);
 
+  const [activeTab, setActiveTab] =
+    useState("dashboard");
+
+  const fetchProducts = async () => {
+
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/products`
+    );
+
+    const data = await res.json();
+
+    setProducts(data);
+
+  };
+
   useEffect(() => {
 
     const token =
       localStorage.getItem(
         "token"
       );
-
-
 
     fetch(
       `${import.meta.env.VITE_API_URL}/admin/stats`,
@@ -219,6 +244,10 @@ function AdminDashboard() {
       setEditingProduct(
         null
       );
+      toast.success("Product updated");
+
+      fetchProducts();
+
     };
 
   const deleteProduct =
@@ -248,6 +277,8 @@ function AdminDashboard() {
             product._id !== id
         )
       );
+      toast.success("Product deleted");
+      fetchProducts();
     };
 
   const editProduct = (
@@ -268,49 +299,45 @@ function AdminDashboard() {
 
   };
 
-  const uploadImage =
-    async () => {
+  const uploadImage = async () => {
 
-      const token =
-        localStorage.getItem(
-          "token"
-        );
+    console.log("1 - uploadImage started");
 
-      const formData =
-        new FormData();
+    const token = localStorage.getItem("token");
 
-      formData.append(
-        "image",
-        imageFile
-      );
+    const formData = new FormData();
 
-      const res =
-        await fetch(
-          `${import.meta.env.VITE_API_URL}/upload`,
-          {
-            method: "POST",
+    formData.append("image", imageFile);
 
-            headers: {
-              Authorization:
-                token,
-            },
+    console.log("2 - sending upload request");
 
-            body:
-              formData,
-          }
-        );
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/upload`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: token,
+        },
+        body: formData,
+      }
+    );
 
-      const data =
-        await res.json();
+    console.log("3 - upload response", res.status);
 
-      return data.imageUrl;
-    };
+    const data = await res.json();
 
-  const addProduct = async () => {
+    console.log("4 - upload data", data);
+
+    return data.imageUrl;
+  };
+
+  const addProduct = async (e) => {
+
+    e.preventDefault();
+
+    console.log("🔥 addProduct called");
 
     try {
-
-
 
       if (!name.trim()) {
 
@@ -388,8 +415,11 @@ function AdminDashboard() {
           }
         );
 
-      const product =
-        await res.json();
+      console.log("Status:", res.status);
+
+      const product = await res.json();
+
+      console.log(product);
 
       if (!res.ok) {
 
@@ -404,11 +434,7 @@ function AdminDashboard() {
       toast.success(
         "Product Added"
       );
-
-      setProducts([
-        ...products,
-        product,
-      ]);
+      fetchProducts();
 
       setName("");
       setCategory("");
@@ -417,6 +443,13 @@ function AdminDashboard() {
       setDescription("");
 
       setImageFile(null);
+      setImagePreview("");
+
+    } catch (err) {
+
+      console.error(err);
+
+      toast.error("Failed to add product");
 
 
     } finally {
@@ -428,495 +461,238 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="page">
+    <div className="admin-page">
 
-      <h1>
-        Admin Dashboard
-      </h1>
+      <aside className="admin-sidebar">
 
-      {stats && (
+        <div className="admin-logo">
 
-        <div
-          className="stats-grid"
-        >
+          <div className="admin-logo-icon">
 
-          <div>
-            Products:
-            {
-              stats.totalProducts
-            }
+            🧶
+
           </div>
 
           <div>
-            Orders:
-            {
-              stats.totalOrders
-            }
-          </div>
 
-          <div>
-            Revenue:
-            ₹{
-              stats.totalRevenue
-            }
-          </div>
+            <h2>
 
-          <div>
-            Pending:
-            {
-              stats.pendingOrders
-            }
+              Knot & Bloom
+
+            </h2>
+
+            <span>
+
+              Admin Panel
+
+            </span>
+
           </div>
 
         </div>
 
-      )}
+        <nav>
 
-      <h2>
-        Users:
-        {stats.totalUsers}
-      </h2>
+          <div className="admin-sidebar-footer">
 
-      <h2>
-        Orders:
-        {stats.totalOrders}
-      </h2>
+            <div className="admin-user">
 
-      <h2>
-        Revenue:
-        ₹{stats.revenue}
-      </h2>
+              <div className="admin-avatar">
 
-      <h2>
-        Add Product
-      </h2>
+                A
 
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e) =>
-          setName(
-            e.target.value
-          )
-        }
-      />
+              </div>
 
-      <input
-        placeholder="Category"
-        value={category}
-        onChange={(e) =>
-          setCategory(
-            e.target.value
-          )
-        }
-      />
+              <div>
 
-      <input
-        placeholder="Price"
-        value={price}
-        onChange={(e) =>
-          setPrice(
-            e.target.value
-          )
-        }
-      />
+                <strong>
 
-      <input
-        placeholder="Stock"
-        value={stock}
-        onChange={(e) =>
-          setStock(
-            e.target.value
-          )
-        }
-      />
+                  Admin
 
-      <input
-        placeholder="Description"
-        value={description}
-        onChange={(e) =>
-          setDescription(
-            e.target.value
-          )
-        }
-      />
-
-      <input
-        type="file"
-        onChange={(e) => {
-
-          const file =
-            e.target.files[0];
-
-          setImageFile(file);
-
-          if (file) {
-
-            setImagePreview(
-              URL.createObjectURL(
-                file
-              )
-            );
-
-          }
-
-        }}
-      />
-      {imagePreview && (
-
-        <img
-          src={imagePreview}
-          alt="Preview"
-          width="150"
-        />
-
-      )}
-      <button
-        onClick={addProduct}
-        disabled={isAdding}
-      >
-        {isAdding
-          ? "Adding Product..."
-          : "Add Product"}
-      </button>
-
-      <h2>
-        Products
-      </h2>
-
-      {products.map(
-        (product) => (
-
-          <div
-            key={product._id}
-            className="product-card"
-          >
-
-            <img
-              src={product.image}
-              alt={product.name}
-              width="120"
-            />
-
-            <p>
-              {product.name}
-            </p>
-
-            {editingProduct ===
-              product._id ? (
-
-              <>
-
-                <label>
-                  Price
-                </label>
-
-                <input
-                  type="number"
-                  placeholder="Enter Price"
-                  value={editPrice}
-                  onChange={(e) =>
-                    setEditPrice(
-                      e.target.value
-                    )
-                  }
-                />
-
-                <label>
-                  Stock
-                </label>
-
-                <input
-                  type="number"
-                  placeholder="Enter Stock"
-                  value={editStock}
-                  onChange={(e) =>
-                    setEditStock(
-                      e.target.value
-                    )
-                  }
-                />
-
-                <button
-                  onClick={() =>
-                    saveProduct(
-                      product._id
-                    )
-                  }
-                >
-                  Save Changes
-                </button>
-
-              </>
-
-            ) : (
-
-              <>
+                </strong>
 
                 <p>
-                  ₹{product.price}
+
+                  Administrator
+
                 </p>
 
-                <p>
-                  Stock:
-                  {product.stock}
-                </p>
+              </div>
 
-              </>
-
-            )}
-
-            <p>
-              Stock:
-              {product.stock}
-            </p>
+            </div>
 
             <button
-              onClick={() =>
-                editProduct(product)
-              }
+              className="logout-btn"
             >
-              Edit
-            </button>
 
-            <button
-              onClick={() =>
-                deleteProduct(
-                  product._id
-                )
-              }
-            >
-              Delete
+              Logout
+
             </button>
 
           </div>
 
-        )
-      )}
+          <button
 
-      <h2>
-        Recent Orders
-      </h2>
+            className={
+              activeTab === "dashboard"
+                ? "sidebar-active"
+                : ""
+            }
 
-      <select
-        value={statusFilter}
-        onChange={(e) =>
-          setStatusFilter(
-            e.target.value
-          )
-        }
-      >
+            onClick={() =>
+              setActiveTab("dashboard")
+            }
 
-        <option>
-          All
-        </option>
+          >
 
-        <option>
-          Pending
-        </option>
+            <LayoutDashboard size={20} />
 
-        <option>
-          Shipped
-        </option>
+            Dashboard
 
-        <option>
-          Delivered
-        </option>
+          </button>
 
-      </select>
+          <button
 
-      <input
-        type="text"
-        placeholder="Search customer email..."
-        value={orderSearch}
-        onChange={(e) =>
-          setOrderSearch(
-            e.target.value
-          )
-        }
-      />
+            className={
+              activeTab === "products"
+                ? "sidebar-active"
+                : ""
+            }
 
-      {orders
-        .filter(
-          (order) => {
+            onClick={() =>
+              setActiveTab("products")
+            }
 
-            const matchesSearch =
-              order.user?.email
-                ?.toLowerCase()
-                .includes(
-                  orderSearch.toLowerCase()
-                );
+          >
 
-            const matchesStatus =
-              statusFilter ===
-              "All" ||
+            <Package size={20} />
 
-              order.status ===
-              statusFilter;
+            Products
 
-            return (
-              matchesSearch &&
-              matchesStatus
-            );
+          </button>
 
-          }
-        )
-        .map(
-          (order) => (
+          <button
 
-            <div
-              key={order._id}
-              className="order-card"
-            >
+            className={
+              activeTab === "orders"
+                ? "sidebar-active"
+                : ""
+            }
 
-              <p>
-                User:
-                {order.user?.email}
-              </p>
+            onClick={() =>
+              setActiveTab("orders")
+            }
 
-              <select
-                className={
-                  order.status ===
-                    "Delivered"
+          >
 
-                    ? "status-delivered"
+            <ShoppingCart size={20} />
 
-                    : order.status ===
-                      "Shipped"
+            Orders
 
-                      ? "status-shipped"
+          </button>
 
-                      : "status-pending"
-                }
+        </nav>
 
-                value={
-                  order.status
-                }
+      </aside>
 
-                onChange={async (
-                  e
-                ) => {
+      <main className="admin-content">
 
-                  const token =
-                    localStorage.getItem(
-                      "token"
-                    );
+        <div className="admin-header">
 
-                  const res =
-                    await fetch(
-                      `${import.meta.env.VITE_API_URL}/admin/orders/${order._id}`,
-                      {
-                        method:
-                          "PUT",
+          <div>
 
-                        headers: {
-                          "Content-Type":
-                            "application/json",
+            <h1>
 
-                          Authorization:
-                            token,
-                        },
+              {
+                activeTab === "dashboard"
+                  ? "Dashboard"
+                  : activeTab === "products"
+                    ? "Products"
+                    : "Orders"
+              }
 
-                        body:
-                          JSON.stringify({
-                            status:
-                              e.target.value,
-                          }),
-                      }
-                    );
+            </h1>
 
-                  const updated =
-                    await res.json();
+            <p>
 
-                  setOrders(
-                    orders.map(
-                      (o) =>
-                        o._id ===
-                          updated._id
-                          ? updated
-                          : o
-                    )
-                  );
+              {
+                activeTab === "dashboard"
+                  ? "Welcome back. Here's what's happening today."
 
-                }}
-              >
+                  : activeTab === "products"
+                    ? "Manage your crochet collection."
 
-                <option>
-                  Pending
-                </option>
+                    : "Manage customer orders."
+              }
 
-                <option>
-                  Shipped
-                </option>
+            </p>
 
-                <option>
-                  Delivered
-                </option>
+          </div>
 
-              </select>
+        </div>
 
-              {order.items.map(
-                (
-                  item,
-                  index
-                ) => (
+        {activeTab === "dashboard" && (
 
-                  <div
-                    key={index}
-                  >
+          <DashboardStats
+            stats={stats}
+          />
 
-                    <p>
-                      Product:
-                      {
-                        item.product
-                          ?.name
-                      }
-                    </p>
-
-                    <p>
-                      Qty:
-                      {
-                        item.quantity
-                      }
-                    </p>
-
-                  </div>
-
-                )
-              )}
-
-              <button
-                onClick={() =>
-                  updateStatus(
-                    order._id,
-                    "Shipped"
-                  )
-                }
-              >
-                Ship
-              </button>
-
-              <button
-                onClick={() =>
-                  updateStatus(
-                    order._id,
-                    "Delivered"
-                  )
-                }
-              >
-                Deliver
-              </button>
-
-
-
-              <p>
-                Total:
-                ₹{order.total}
-              </p>
-
-            </div>
-          )
         )}
+
+        {activeTab === "products" && (
+
+          <>
+            <section id="add-product">
+              <AddProductForm
+                name={name}
+                setName={setName}
+                category={category}
+                setCategory={setCategory}
+                price={price}
+                setPrice={setPrice}
+                stock={stock}
+                setStock={setStock}
+                description={description}
+                setDescription={setDescription}
+                imageFile={imageFile}
+                setImageFile={setImageFile}
+                imagePreview={imagePreview}
+                setImagePreview={setImagePreview}
+                addProduct={addProduct}
+                isAdding={isAdding}
+              />
+            </section>
+
+            <section id="products">
+              <ProductManager
+                products={products}
+                editingProduct={editingProduct}
+                editPrice={editPrice}
+                setEditPrice={setEditPrice}
+                editStock={editStock}
+                setEditStock={setEditStock}
+                editProduct={editProduct}
+                saveProduct={saveProduct}
+                deleteProduct={deleteProduct}
+              />
+            </section>
+          </>
+        )}
+
+        {activeTab === "orders" && (
+          <section id="orders">
+            <OrderManager
+              orders={orders}
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              orderSearch={orderSearch}
+              setOrderSearch={setOrderSearch}
+              updateStatus={updateStatus}
+              setOrders={setOrders}
+            />
+          </section>
+        )}
+      </main>
 
     </div>
   );
