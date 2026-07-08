@@ -520,8 +520,12 @@ app.post(
           }
         );
 
+        console.log("LOGIN ROUTE UPDATED");
+console.log("Role:", user.role);
+
       res.json({
         token,
+        role: user.role,
       });
 
     } catch (error) {
