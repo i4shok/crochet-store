@@ -60,7 +60,10 @@ function Login() {
 
         }
 
-        login(data.token);
+        login(
+          data.token,
+          data.role
+        );
 
         toast.success(
           "Logged In!"

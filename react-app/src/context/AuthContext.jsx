@@ -18,8 +18,17 @@ function AuthProvider({
       )
     );
 
+  const [role,
+    setRole] =
+    useState(
+      localStorage.getItem(
+        "role"
+      )
+    );
+
   const login = (
-    newToken
+    newToken,
+    newRole
   ) => {
 
     localStorage.setItem(
@@ -27,9 +36,19 @@ function AuthProvider({
       newToken
     );
 
+    localStorage.setItem(
+      "role",
+      newRole
+    );
+
     setToken(
       newToken
     );
+
+    setRole(
+      newRole
+    );
+
   };
 
   const logout = () => {
@@ -38,7 +57,15 @@ function AuthProvider({
       "token"
     );
 
+    localStorage.removeItem(
+      "role"
+    );
+
     setToken(
+      null
+    );
+
+    setRole(
       null
     );
   };
@@ -47,6 +74,7 @@ function AuthProvider({
     <AuthContext.Provider
       value={{
         token,
+        role,
         login,
         logout,
       }}

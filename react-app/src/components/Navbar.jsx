@@ -31,11 +31,11 @@ function Navbar() {
 
   const {
     token,
+    role,
     logout,
   } = useContext(
     AuthContext
   );
-
 
   return (
 
@@ -78,6 +78,14 @@ function Navbar() {
         <NavLink to="/my-orders">
           Orders
         </NavLink>
+
+        {role === "admin" && (
+
+          <NavLink to="/admin">
+            Admin Dashboard
+          </NavLink>
+
+        )}
 
       </div>
 

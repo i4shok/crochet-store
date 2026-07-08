@@ -10,25 +10,29 @@ function AdminRoute({ children }) {
     return <Navigate to="/login" />;
   }
 
-let decoded;
+  let decoded;
 
-try {
+  try {
 
-  decoded =
-    jwtDecode(token);
+    decoded =
+      jwtDecode(token);
 
-} catch {
+  } catch {
 
-  localStorage.removeItem(
-    "token"
-  );
+    localStorage.removeItem(
+      "token"
+    );
 
-  return (
-    <Navigate
-      to="/login"
-    />
-  );
-}
+    localStorage.removeItem(
+      "role"
+    );
+
+    return (
+      <Navigate
+        to="/login"
+      />
+    );
+  }
 
   console.log(decoded);
 
