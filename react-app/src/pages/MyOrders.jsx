@@ -3,6 +3,10 @@ import {
   useState,
 } from "react";
 
+import StatusBadge from "../components/StatusBadge";
+
+import { Link } from "react-router-dom";
+
 import "../styles/MyOrders.css";
 
 function MyOrders() {
@@ -38,183 +42,147 @@ function MyOrders() {
 
   return (
 
-  <div className="orders-page">
+    <div className="orders-page">
 
-    <div className="orders-header">
+      <div className="orders-header">
 
-      <h1>
+        <h1>
 
-        My Orders
+          My Orders
 
-      </h1>
+        </h1>
 
-      <p>
+        <p>
 
-        Track all your handmade purchases in one place.
+          Track all your handmade purchases in one place.
 
-      </p>
+        </p>
+
+      </div>
+
+      {
+
+        orders.length === 0 ?
+
+          (
+
+            <div className="empty-orders">
+
+              <h2>
+
+                No Orders Yet
+
+              </h2>
+
+              <p>
+
+                Looks like you haven't placed an order yet.
+
+              </p>
+
+            </div>
+
+          )
+
+          :
+
+          (
+
+            <div className="orders-list">
+
+              {
+
+                orders.map((order) => {
+
+                  const isSingleProduct =
+                    order.items.length === 1;
+
+                  const previewProducts =
+                    order.items.slice(0, 4);
+
+                  return (
+
+                    <div
+                      key={order._id}
+                      className="order-card"
+                    >
+
+                      {
+                        isSingleProduct ? (
+
+                          <div className="single-order-card">
+
+                            <img
+                              src={order.items[0].product?.image}
+                              alt={order.items[0].product?.name}
+                              className="order-product-image"
+                            />
+
+                            <div className="order-info">
+
+                              <h2>
+
+                                {order.items[0].product?.name}
+
+                              </h2>
+
+                              <p className="order-date">
+
+                                Ordered on{" "}
+
+                                {new Date(
+                                  order.createdAt
+                                ).toLocaleDateString()}
+
+                              </p>
+
+                              <StatusBadge
+                                status={order.status}
+                              />
+
+                              <Link
+                                to={`/orders/${order._id}`}
+                                className="view-order-btn"
+                              >
+
+                                View Order →
+
+                              </Link>
+
+                            </div>
+
+                          </div>
+
+                        ) : (
+
+                          <div className="multi-order-placeholder">
+
+                            Multi Product Card
+                            <br />
+                            (Coming in Sprint 1 - Step 4)
+
+                          </div>
+
+                        )
+                      }
+
+                    </div>
+
+                  );
+
+                })
+
+              }
+
+            </div>
+
+          )
+
+      }
 
     </div>
 
-    {
-
-      orders.length === 0 ?
-
-      (
-
-        <div className="empty-orders">
-
-          <h2>
-
-            No Orders Yet
-
-          </h2>
-
-          <p>
-
-            Looks like you haven't placed an order yet.
-
-          </p>
-
-        </div>
-
-      )
-
-      :
-
-      (
-
-        <div className="orders-list">
-
-          {
-
-            orders.map(order => (
-
-              <div
-                key={order._id}
-                className="order-card"
-              >
-
-                <div className="order-top">
-
-                  <div>
-
-                    <h3>
-
-                      Order #
-
-                      {order._id.slice(-6).toUpperCase()}
-
-                    </h3>
-
-                    <span>
-
-                      {new Date(order.createdAt).toLocaleDateString()}
-
-                    </span>
-
-                  </div>
-
-                  <div
-                    className={`status ${order.status.toLowerCase()}`}
-                  >
-
-                    {
-
-                      order.status === "Pending"
-
-                      ? "🟡 Pending"
-
-                      :
-
-                      order.status === "Shipped"
-
-                      ? "🚚 Shipped"
-
-                      :
-
-                      "✅ Delivered"
-
-                    }
-
-                  </div>
-
-                </div>
-
-                <div className="order-items">
-
-                  {
-
-                    order.items.map((item,index)=>(
-
-                      <div
-                        key={index}
-                        className="order-item"
-                      >
-
-                        <div>
-
-                          <strong>
-
-                            {item.product?.name}
-
-                          </strong>
-
-                          <p>
-
-                            Qty × {item.quantity}
-
-                          </p>
-
-                        </div>
-
-                        <span>
-
-                          ₹
-
-                          {(item.product?.price || 0) * item.quantity}
-
-                        </span>
-
-                      </div>
-
-                    ))
-
-                  }
-
-                </div>
-
-                <div className="order-footer">
-
-                  <strong>
-
-                    Total
-
-                  </strong>
-
-                  <strong>
-
-                    ₹{order.total}
-
-                  </strong>
-
-                </div>
-
-              </div>
-
-            ))
-
-          }
-
-        </div>
-
-      )
-
-    }
-
-  </div>
-
-);
+  );
 }
 
 export default MyOrders;

@@ -310,19 +310,19 @@ app.post(
         );
 
       }
+      const mappedItems = req.body.items.map((item) => ({
+        product: item._id,
+        quantity: item.quantity,
+      }));
 
-      const order =
-        await Order.create({
+      console.log("MAPPED ITEMS:");
+      console.dir(mappedItems, { depth: null });
 
-          user:
-            req.user.id,
-
-          items:
-            req.body.items,
-
-          total:
-            req.body.total,
-        });
+      const order = await Order.create({
+        user: req.user.id,
+        items: mappedItems,
+        total: req.body.total,
+      });
 
       console.log(
         "ORDER SAVED:",
@@ -520,8 +520,8 @@ app.post(
           }
         );
 
-        console.log("LOGIN ROUTE UPDATED");
-console.log("Role:", user.role);
+      console.log("LOGIN ROUTE UPDATED");
+      console.log("Role:", user.role);
 
       res.json({
         token,
@@ -596,6 +596,51 @@ app.get(
       });
 
     }
+  }
+);
+
+app.get(
+  "/orders/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const order =
+        await Order.findOne({
+
+          _id: req.params.id,
+
+          user: req.user.id,
+
+        }).populate(
+          "items.product"
+        );
+
+      if (!order) {
+
+        return res
+          .status(404)
+          .json({
+            message:
+              "Order not found",
+          });
+
+      }
+
+      res.json(order);
+
+    } catch (error) {
+
+      res
+        .status(500)
+        .json({
+          message:
+            error.message,
+        });
+
+    }
+
   }
 );
 

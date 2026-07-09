@@ -14,9 +14,9 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
-import {useContext} from "react";
+import { useContext } from "react";
 
-import {ThemeContext} from "./context/ThemeContext";
+import { ThemeContext } from "./context/ThemeContext";
 import Wishlist from "./pages/Wishlist";
 import AdminOrders from "./pages/AdminOrders";
 import Login from "./pages/Login";
@@ -28,12 +28,13 @@ import "./styles/Theme.css";
 import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
+import OrderDetails from "./pages/OrderDetails";
 
 
 function App() {
   const { darkMode } =
     useContext(ThemeContext);
-    const location = useLocation();
+  const location = useLocation();
 
   const isAdmin =
     location.pathname.startsWith("/admin");
@@ -48,97 +49,101 @@ function App() {
 
       {!isAdmin && <Navbar />}
 
-        <Routes>
-          <Route
-            path="/"
-            element={<Home />}
-          />
+      <Routes>
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-          <Route
-            path="/shop"
-            element={<Shop />}
-          />
+        <Route
+          path="/shop"
+          element={<Shop />}
+        />
 
-          <Route
-            path="/product/:id"
-            element={<ProductDetails />}
-          />
+        <Route
+          path="/product/:id"
+          element={<ProductDetails />}
+        />
 
-          <Route
-            path="/cart"
-            element={<Cart />}
-          />
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
 
-          <Route
-            path="/about"
-            element={<About />}
-          />
+        <Route
+          path="/about"
+          element={<About />}
+        />
 
-          <Route
-            path="/contact"
-            element={<Contact />}
-          />
-          <Route
-            path="/checkout"
-            element={<Checkout />}
-          />
-          <Route
-            path="/order-success"
-            element={<OrderSuccess />}
-          />
-          <Route
-            path="/wishlist"
-            element={
-              <ProtectedRoute>
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+        <Route
+          path="/checkout"
+          element={<Checkout />}
+        />
+        <Route
+          path="/order-success"
+          element={<OrderSuccess />}
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
 
-                <Wishlist />
+              <Wishlist />
 
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={<AdminOrders />}
-          />
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-          <Route
-            path="/register"
-            element={<Register />}
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/my-orders"
-            element={
-              <ProtectedRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={<AdminOrders />}
+        />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-orders"
+          element={
+            <ProtectedRoute>
 
-                <MyOrders />
+              <MyOrders />
 
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders/:id"
+          element={<OrderDetails />}
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
 
-                <AdminDashboard />
+              <AdminDashboard />
 
-              </AdminRoute>
-            }
-          />
-        </Routes>
+            </AdminRoute>
+          }
+        />
+      </Routes>
 
-        {!isAdmin && <Footer />}
+      {!isAdmin && <Footer />}
 
     </div>
   );

@@ -57,33 +57,24 @@ function Checkout() {
             "token"
           );
 
-        const res =
-          await fetch(
-            `${import.meta.env.VITE_API_URL}/orders`,
-            {
-              method: "POST",
+        console.log("Cart Items:", cartItems);
+        
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/orders`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+            body: JSON.stringify({
+              items: cartItems,
+              total: totalPrice,
+            }),
+          }
+        );
 
-              headers: {
-                "Content-Type":
-                  "application/json",
-
-                Authorization:
-                  token,
-              },
-
-              body:
-                JSON.stringify({
-                  items:
-                    cartItems,
-
-                  total:
-                    totalPrice,
-                }),
-            }
-          );
-
-        const data =
-          await res.json();
+        const data = await res.json();
 
         if (!res.ok) {
 
