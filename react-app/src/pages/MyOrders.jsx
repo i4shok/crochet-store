@@ -3,6 +3,8 @@ import {
   useState,
 } from "react";
 
+import OrderCard from "../components/OrderCard";
+
 import StatusBadge from "../components/StatusBadge";
 
 import { Link } from "react-router-dom";
@@ -92,85 +94,17 @@ function MyOrders() {
 
               {
 
-                orders.map((order) => {
+                orders.map((order) => (
 
-                  const isSingleProduct =
-                    order.items.length === 1;
+                  <OrderCard
 
-                  const previewProducts =
-                    order.items.slice(0, 4);
+                    key={order._id}
 
-                  return (
+                    order={order}
 
-                    <div
-                      key={order._id}
-                      className="order-card"
-                    >
+                  />
 
-                      {
-                        isSingleProduct ? (
-
-                          <div className="single-order-card">
-
-                            <img
-                              src={order.items[0].product?.image}
-                              alt={order.items[0].product?.name}
-                              className="order-product-image"
-                            />
-
-                            <div className="order-info">
-
-                              <h2>
-
-                                {order.items[0].product?.name}
-
-                              </h2>
-
-                              <p className="order-date">
-
-                                Ordered on{" "}
-
-                                {new Date(
-                                  order.createdAt
-                                ).toLocaleDateString()}
-
-                              </p>
-
-                              <StatusBadge
-                                status={order.status}
-                              />
-
-                              <Link
-                                to={`/orders/${order._id}`}
-                                className="view-order-btn"
-                              >
-
-                                View Order →
-
-                              </Link>
-
-                            </div>
-
-                          </div>
-
-                        ) : (
-
-                          <div className="multi-order-placeholder">
-
-                            Multi Product Card
-                            <br />
-                            (Coming in Sprint 1 - Step 4)
-
-                          </div>
-
-                        )
-                      }
-
-                    </div>
-
-                  );
-
-                })
+                ))
 
               }
 
