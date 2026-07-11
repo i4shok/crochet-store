@@ -16,6 +16,14 @@ function ProductManager({
 
     deleteProduct,
 
+    productSearch,
+
+    setProductSearch,
+
+    stockFilter,
+
+    setStockFilter,
+
 }) {
 
     return (
@@ -27,6 +35,72 @@ function ProductManager({
                 Products
 
             </h2>
+
+            <div className="product-toolbar">
+
+                <input
+
+                    type="text"
+
+                    placeholder="Search products..."
+
+                    value={productSearch}
+
+                    onChange={(e) =>
+
+                        setProductSearch(
+
+                            e.target.value
+
+                        )
+
+                    }
+
+                />
+
+                <select
+
+                    value={stockFilter}
+
+                    onChange={(e) =>
+
+                        setStockFilter(
+
+                            e.target.value
+
+                        )
+
+                    }
+
+                >
+
+                    <option>
+
+                        All
+
+                    </option>
+
+                    <option>
+
+                        In Stock
+
+                    </option>
+
+                    <option>
+
+                        Low Stock
+
+                    </option>
+
+                    <option>
+
+                        Out of Stock
+
+                    </option>
+
+                </select>
+
+            </div>
 
             {
 
@@ -48,113 +122,197 @@ function ProductManager({
 
                     {
 
-                        products.map(product => (
+                        products
 
-                            <div
+                            .filter(product => {
 
-                                key={product._id}
+                                const matchesSearch =
 
-                                className="table-row"
+                                    product.name
 
-                            >
+                                        .toLowerCase()
 
-                                <img
+                                        .includes(
 
-                                    src={product.image}
+                                            productSearch.toLowerCase()
 
-                                    alt={product.name}
+                                        );
 
-                                />
+                                const matchesStock =
 
-                                <div>
+                                    stockFilter === "All"
 
-                                    <strong>
+                                    ||
 
-                                        {product.name}
+                                    (stockFilter === "In Stock"
 
-                                    </strong>
+                                        && product.stock > 5)
 
-                                    <p>
+                                    ||
 
-                                        {product.category}
+                                    (stockFilter === "Low Stock"
 
-                                    </p>
+                                        && product.stock > 0
 
-                                </div>
+                                        && product.stock <= 5)
 
-                                {
-                                    editingProduct === product._id
-                                        ? (
-                                            <input
-                                                type="number"
-                                                value={editPrice}
-                                                onChange={(e) =>
-                                                    setEditPrice(e.target.value)
-                                                }
-                                            />
-                                        )
-                                        : (
-                                            <span>
-                                                ₹{product.price}
-                                            </span>
-                                        )
-                                }
+                                    ||
 
-                                {
-                                    editingProduct === product._id
-                                        ? (
-                                            <input
-                                                type="number"
-                                                value={editStock}
-                                                onChange={(e) =>
-                                                    setEditStock(e.target.value)
-                                                }
-                                            />
-                                        )
-                                        : (
-                                            <span>
-                                                {product.stock}
-                                            </span>
-                                        )
-                                }
+                                    (stockFilter === "Out of Stock"
 
-                                <div className="table-actions">
+                                        && product.stock === 0);
+
+                                return matchesSearch
+
+                                    && matchesStock;
+
+                            })
+
+                            .map((product) => (
+
+                                <div
+
+                                    key={product._id}
+
+                                    className="table-row"
+
+                                >
+
+                                    <img
+
+                                        src={product.image}
+
+                                        alt={product.name}
+
+                                    />
+
+                                    <div>
+
+                                        <strong>
+
+                                            {product.name}
+
+                                        </strong>
+
+                                        <p>
+
+                                            {product.category}
+
+                                        </p>
+
+                                    </div>
 
                                     {
                                         editingProduct === product._id
                                             ? (
-                                                <button
-                                                    onClick={() =>
-                                                        saveProduct(product._id)
+                                                <input
+                                                    type="number"
+                                                    value={editPrice}
+                                                    onChange={(e) =>
+                                                        setEditPrice(e.target.value)
                                                     }
-                                                >
-                                                    Save
-                                                </button>
+                                                />
                                             )
                                             : (
-                                                <button
-                                                    onClick={() =>
-                                                        editProduct(product)
-                                                    }
-                                                >
-                                                    Edit
-                                                </button>
+                                                <span>
+                                                    ₹{product.price}
+                                                </span>
                                             )
                                     }
 
-                                    <button
-                                        onClick={() =>
-                                            deleteProduct(product._id)
+                                    {
+                                        editingProduct === product._id
+                                            ? (
+                                                <input
+                                                    type="number"
+                                                    value={editStock}
+                                                    onChange={(e) =>
+                                                        setEditStock(e.target.value)
+                                                    }
+                                                />
+                                            )
+                                            : (
+                                                <div className="stock-info">
+
+                                                    <span>
+
+                                                        {product.stock}
+
+                                                    </span>
+
+                                                    <div
+
+                                                        className={`stock-badge ${product.stock === 0
+
+                                                            ? "out"
+
+                                                            : product.stock <= 5
+
+                                                                ? "low"
+
+                                                                : "available"
+
+                                                            }`}
+
+                                                    >
+
+                                                        {
+
+                                                            product.stock === 0
+
+                                                                ? "Out of Stock"
+
+                                                                : product.stock <= 5
+
+                                                                    ? "Low Stock"
+
+                                                                    : "In Stock"
+
+                                                        }
+
+                                                    </div>
+
+                                                </div>
+                                            )
+                                    }
+
+                                    <div className="table-actions">
+
+                                        {
+                                            editingProduct === product._id
+                                                ? (
+                                                    <button
+                                                        onClick={() =>
+                                                            saveProduct(product._id)
+                                                        }
+                                                    >
+                                                        Save
+                                                    </button>
+                                                )
+                                                : (
+                                                    <button
+                                                        onClick={() =>
+                                                            editProduct(product)
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )
                                         }
-                                    >
-                                        Delete
-                                    </button>
+
+                                        <button
+                                            onClick={() =>
+                                                deleteProduct(product._id)
+                                            }
+                                        >
+                                            Delete
+                                        </button>
+
+                                    </div>
 
                                 </div>
 
-                            </div>
-
-                        ))
+                            ))
 
                     }
 

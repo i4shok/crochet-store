@@ -43,10 +43,6 @@ function ProductDetails() {
 
   const [quantity, setQuantity] = useState(1);
 
-  const [reviewName,
-    setReviewName] =
-    useState("");
-
   const [reviewText,
     setReviewText] =
     useState("");
@@ -62,6 +58,10 @@ function ProductDetails() {
   const [rating,
     setRating] =
     useState(5);
+
+  const [editingReview,
+    setEditingReview] =
+    useState(null);
 
   const averageRating =
     reviews.length > 0
@@ -132,24 +132,65 @@ function ProductDetails() {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/reviews`,
-      {
-        method: "POST",
+    const token =
+      localStorage.getItem("token");
 
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
+    if (!token) {
 
-        body: JSON.stringify({
-          product: id,
-          name: reviewName,
-          text: reviewText,
-          rating,
-        }),
-      }
-    );
+      toast.error(
+
+        "Please login to leave a review."
+
+      );
+
+      return;
+
+    }
+
+    const endpoint =
+      editingReview
+
+        ? `${import.meta.env.VITE_API_URL}/reviews/${editingReview}`
+
+        : `${import.meta.env.VITE_API_URL}/reviews`;
+
+    const method =
+      editingReview
+
+        ? "PUT"
+
+        : "POST";
+
+    const res =
+      await fetch(
+
+        endpoint,
+
+        {
+
+          method,
+
+          headers: {
+
+            "Content-Type": "application/json",
+
+            Authorization: token,
+
+          },
+
+          body: JSON.stringify({
+
+            product: id,
+
+            text: reviewText,
+
+            rating,
+
+          }),
+
+        }
+
+      );
 
     const newReview =
       await res.json();
@@ -177,7 +218,60 @@ function ProductDetails() {
     setReviewText("");
   };
 
+  const handleDeleteReview = async (reviewId) => {
 
+    const token =
+      localStorage.getItem("token");
+
+    const res =
+      await fetch(
+
+        `${import.meta.env.VITE_API_URL}/reviews/${reviewId}`,
+
+        {
+
+          method: "DELETE",
+
+          headers: {
+
+            Authorization: token,
+
+          },
+
+        }
+
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      toast.error(data.message);
+
+      return;
+
+    }
+
+    setReviews(
+
+      reviews.filter(
+
+        review =>
+
+          review._id !== reviewId
+
+      )
+
+    );
+
+    toast.success(
+
+      "Review deleted."
+
+    );
+
+  };
 
   if (!product) {
     return <h2>Loading...</h2>;
@@ -215,11 +309,13 @@ function ProductDetails() {
           setSortReviews={setSortReviews}
           rating={rating}
           setRating={setRating}
-          reviewName={reviewName}
-          setReviewName={setReviewName}
           reviewText={reviewText}
           setReviewText={setReviewText}
           handleReviewSubmit={handleReviewSubmit}
+          editingReview={editingReview}
+          setEditingReview={setEditingReview}
+          handleDeleteReview={handleDeleteReview}
+          
         />
 
       </section>

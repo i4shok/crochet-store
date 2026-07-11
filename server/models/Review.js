@@ -5,6 +5,15 @@ const reviewSchema =
   new mongoose.Schema({
 
     product: {
+      user: {
+
+        type: mongoose.Schema.Types.ObjectId,
+
+        ref: "User",
+
+        required: true,
+
+      },
       type:
         mongoose.Schema.Types.ObjectId,
       ref: "Product",
@@ -19,10 +28,10 @@ const reviewSchema =
       default: Date.now,
     },
 
-rating: {
-  type: Number,
-  required: true,
-},
+    rating: {
+      type: Number,
+      required: true,
+    },
 
   });
 

@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import StarRating from "./StarRating";
 
 import "../styles/ProductCard.css";
+import RatingStars from "./RatingStars";
 
 function ProductCard({
 
-    product,
+  product,
 
-    onQuickView,
+  onQuickView,
 
 }) {
 
@@ -67,6 +68,13 @@ function ProductCard({
 
           </h3>
 
+          <RatingStars
+
+            rating={product.rating}
+
+            reviewCount={product.reviewCount}
+
+          />
           <div className="card-rating">
 
             <StarRating rating={product.rating || 5} />

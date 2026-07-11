@@ -9,11 +9,12 @@ function ReviewPanel({
   setSortReviews,
   rating,
   setRating,
-  reviewName,
-  setReviewName,
   reviewText,
   setReviewText,
   handleReviewSubmit,
+  editingReview,
+  setEditingReview,
+  handleDeleteReview,
 }) {
   return (
     <aside className="review-panel">
@@ -111,16 +112,7 @@ function ReviewPanel({
 
       </div>
 
-      <h2>Reviews</h2>
-
-      <input
-        type="text"
-        placeholder="Search reviews..."
-        value={searchReview}
-        onChange={(e) =>
-          setSearchReview(e.target.value)
-        }
-      />
+      <h2>Reviews</h2>``
 
       <select
         value={sortReviews}
@@ -152,7 +144,6 @@ function ReviewPanel({
         <input
           type="text"
           placeholder="Your Name"
-          value={reviewName}
           onChange={(e) =>
             setReviewName(e.target.value)
           }
@@ -167,7 +158,19 @@ function ReviewPanel({
         />
 
         <button type="submit">
-          Submit Review
+          {
+
+            editingReview
+
+              ?
+
+              "Update Review"
+
+              :
+
+              "Submit Review"
+
+          }
         </button>
 
       </form>
@@ -251,6 +254,68 @@ function ReviewPanel({
                 {review.text}
 
               </p>
+
+              {
+
+                review.user?._id ===
+
+                localStorage.getItem("userId")
+
+                &&
+
+                <button
+
+                  className="edit-review-btn"
+
+                  onClick={() => {
+
+                    setEditingReview(
+
+                      review._id
+
+                    );
+
+                    setRating(
+
+                      review.rating
+
+                    );
+
+                    setReviewText(
+
+                      review.text
+
+                    );
+
+                  }}
+
+                >
+
+                  Edit Review
+
+                </button>
+
+              }
+
+              <button
+
+                className="delete-review-btn"
+
+                onClick={() =>
+
+                  handleDeleteReview(
+
+                    review._id
+
+                  )
+
+                }
+
+              >
+
+                Delete
+
+              </button>
 
             </div>
 

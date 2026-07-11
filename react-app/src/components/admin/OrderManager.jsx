@@ -28,7 +28,7 @@ function OrderManager({
 
                 value={statusFilter}
 
-                onChange={(e)=>
+                onChange={(e) =>
 
                     setStatusFilter(
 
@@ -44,6 +44,10 @@ function OrderManager({
 
                 <option>Pending</option>
 
+                <option>Processing</option>
+
+                <option>Packed</option>
+
                 <option>Shipped</option>
 
                 <option>Delivered</option>
@@ -58,7 +62,7 @@ function OrderManager({
 
                 value={orderSearch}
 
-                onChange={(e)=>
+                onChange={(e) =>
 
                     setOrderSearch(
 
@@ -74,147 +78,194 @@ function OrderManager({
 
                 orders
 
-                .filter(order=>{
+                    .filter(order => {
 
-                    const matchesSearch=
+                        const matchesSearch =
 
-                    order.user?.email
+                            order.user?.email
 
-                    ?.toLowerCase()
+                                ?.toLowerCase()
 
-                    .includes(
+                                .includes(
 
-                        orderSearch.toLowerCase()
+                                    orderSearch.toLowerCase()
 
-                    );
+                                );
 
-                    const matchesStatus=
+                        const matchesStatus =
 
-                    statusFilter==="All"
+                            statusFilter === "All"
 
-                    ||
+                            ||
 
-                    order.status===statusFilter;
+                            order.status === statusFilter;
 
-                    return matchesSearch && matchesStatus;
+                        return matchesSearch && matchesStatus;
 
-                })
+                    })
 
-                .map(order=>(
+                    .map(order => (
 
-                    <div
+                        <div
 
-                        key={order._id}
+                            key={order._id}
 
-                        className="order-card"
-
-                    >
-
-                        <p>
-
-                            User:
-
-                            {order.user?.email}
-
-                        </p>
-
-                        <select
-
-                            className={
-
-                                order.status==="Delivered"
-
-                                ? "status-delivered"
-
-                                : order.status==="Shipped"
-
-                                ? "status-shipped"
-
-                                : "status-pending"
-
-                            }
-
-                            value={order.status}
-
-                            onChange={(e)=>
-
-                                updateStatus(order._id, e.target.value  , setOrders)
-
-                            }
+                            className="order-card"
 
                         >
+                            <div className="admin-order-header">
 
-                            <option>
+                                <div>
 
-                                Pending
+                                    <h3>
 
-                            </option>
+                                        Order #
 
-                            <option>
+                                        {order._id.slice(-6).toUpperCase()}
 
-                                Shipped
+                                    </h3>
 
-                            </option>
+                                    <p>
 
-                            <option>
+                                        👤 {order.user?.email}
 
-                                Delivered
+                                    </p>
 
-                            </option>
+                                    <p>
 
-                        </select>
+                                        📅 {
 
-                        {
+                                            new Date(order.createdAt)
 
-                            order.items.map(
+                                                .toLocaleDateString(
 
-                                (item,index)=>(
+                                                    "en-GB",
 
-                                    <div key={index}>
+                                                    {
 
-                                        <p>
+                                                        day: "numeric",
 
-                                            Product:
+                                                        month: "short",
 
-                                            {
+                                                        year: "numeric",
 
-                                                item.product?.name
+                                                    }
 
-                                            }
+                                                )
 
-                                        </p>
+                                        }
 
-                                        <p>
+                                    </p>
 
-                                            Qty:
+                                </div>
 
-                                            {
+                                <div>
 
-                                                item.quantity
+                                    <strong>
 
-                                            }
+                                        ₹{order.total}
 
-                                        </p>
+                                    </strong>
 
-                                    </div>
+                                </div>
 
-                                )
+                            </div>
 
-                            )
+                            <div className="admin-order-products">
 
-                        }
+                                {
 
-                        <p>
+                                    order.items.map((item, index) => (
 
-                            Total:
+                                        <div
 
-                            ₹{order.total}
+                                            key={index}
 
-                        </p>
+                                            className="admin-order-product"
 
-                    </div>
+                                        >
 
-                ))
+                                            <img
+
+                                                src={item.product?.image}
+
+                                                alt={item.product?.name}
+
+                                            />
+
+                                            <div>
+
+                                                <strong>
+
+                                                    {item.product?.name}
+
+                                                </strong>
+
+                                                <p>
+
+                                                    Qty × {item.quantity}
+
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    ))
+
+                                }
+
+                            </div>
+
+                            <div className="admin-order-footer">
+
+                                <select
+
+                                    className={
+
+                                        order.status === "Delivered"
+
+                                            ? "status-delivered"
+
+                                            : order.status === "Shipped"
+
+                                                ? "status-shipped"
+
+                                                : "status-pending"
+
+                                    }
+
+                                    value={order.status}
+
+                                    onChange={(e) =>
+
+                                        updateStatus(
+
+                                            order._id,
+
+                                            e.target.value,
+
+                                            setOrders
+
+                                        )
+
+                                    }
+
+                                >
+
+                                    <option>Pending</option>
+
+                                    <option>Shipped</option>
+
+                                    <option>Delivered</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    ))
 
             }
 

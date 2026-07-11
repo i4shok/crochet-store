@@ -27,9 +27,25 @@ const orderSchema =
     total: Number,
 
     status: {
+
       type: String,
 
+      enum: [
+
+        "Pending",
+
+        "Processing",
+
+        "Packed",
+
+        "Shipped",
+
+        "Delivered"
+
+      ],
+
       default: "Pending",
+
     },
 
     createdAt: {

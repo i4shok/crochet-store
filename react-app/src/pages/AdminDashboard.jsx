@@ -37,6 +37,14 @@ function AdminDashboard() {
     setProducts] =
     useState([]);
 
+  const [productSearch,
+    setProductSearch] =
+    useState("");
+
+  const [stockFilter,
+    setStockFilter] =
+    useState("All");
+
   const [name,
     setName] =
     useState("");
@@ -80,6 +88,11 @@ function AdminDashboard() {
   const [isAdding,
     setIsAdding] =
     useState(false);
+
+  const [
+    bestSelling,
+    setBestSelling,
+  ] = useState([]);
 
   const [activeTab, setActiveTab] =
     useState("dashboard");
@@ -142,6 +155,20 @@ function AdminDashboard() {
       )
       .then((data) =>
         setProducts(data)
+      );
+    fetch(
+      `${import.meta.env.VITE_API_URL}/admin/best-selling`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    )
+      .then((res) =>
+        res.json()
+      )
+      .then((data) =>
+        setBestSelling(data)
       );
 
   }, []);
@@ -633,9 +660,237 @@ function AdminDashboard() {
 
         {activeTab === "dashboard" && (
 
-          <DashboardStats
-            stats={stats}
-          />
+          <>
+
+            <DashboardStats
+              stats={stats}
+            />
+
+            <section className="quick-actions">
+
+              <h2>
+
+                Quick Actions
+
+              </h2>
+
+              <section className="low-stock-section">
+
+                <h2>
+
+                  ⚠ Low Stock Products
+
+                </h2>
+
+                <div className="low-stock-list">
+
+                  {
+
+                    products
+
+                      .filter(product => product.stock <= 5)
+
+                      .slice(0, 5)
+
+                      .map(product => (
+
+                        <div
+
+                          key={product._id}
+
+                          className="low-stock-item"
+
+                        >
+
+                          <img
+
+                            src={product.image}
+
+                            alt={product.name}
+
+                          />
+
+                          <div>
+
+                            <strong>
+
+                              {product.name}
+
+                            </strong>
+
+                            <p>
+
+                              {product.stock} remaining
+
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      ))
+
+                  }
+
+                </div>
+
+              </section>
+
+              <section className="recent-orders-widget">
+
+                <h2>
+
+                  Recent Orders
+
+                </h2>
+
+                <div className="recent-orders-table">
+
+                  {
+
+                    orders
+
+                      .slice(0, 5)
+
+                      .map(order => (
+
+                        <div
+
+                          key={order._id}
+
+                          className="recent-order-row"
+
+                        >
+
+                          <span>
+
+                            #
+
+                            {order._id.slice(-6).toUpperCase()}
+
+                          </span>
+
+                          <span>
+
+                            {order.user?.email}
+
+                          </span>
+
+                          <span>
+
+                            ₹{order.total}
+
+                          </span>
+
+                          <span>
+
+                            {order.status}
+
+                          </span>
+
+                        </div>
+
+                      ))
+
+                  }
+
+                </div>
+
+              </section>
+
+              <section className="best-selling-widget">
+
+                <h2>
+
+                  🏆 Best Sellers
+
+                </h2>
+
+                <div className="best-selling-list">
+
+                  {
+
+                    bestSelling.map(item => (
+
+                      <div
+
+                        key={item._id}
+
+                        className="best-selling-row"
+
+                      >
+
+                        <img
+
+                          src={item.product.image}
+
+                          alt={item.product.name}
+
+                        />
+
+                        <div>
+
+                          <strong>
+
+                            {item.product.name}
+
+                          </strong>
+
+                          <p>
+
+                            Sold: {item.sold}
+
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    ))
+
+                  }
+
+                </div>
+
+              </section>
+
+              <div className="quick-actions-grid">
+
+                <button
+                  onClick={() =>
+                    setActiveTab("products")
+                  }
+                >
+
+                  ➕ Add Product
+
+                </button>
+
+                <button
+                  onClick={() =>
+                    setActiveTab("products")
+                  }
+                >
+
+                  🛍 Manage Products
+
+                </button>
+
+                <button
+                  onClick={() =>
+                    setActiveTab("orders")
+                  }
+                >
+
+                  📦 Manage Orders
+
+                </button>
+
+              </div>
+
+            </section>
+
+          </>
 
         )}
 
@@ -674,6 +929,10 @@ function AdminDashboard() {
                 editProduct={editProduct}
                 saveProduct={saveProduct}
                 deleteProduct={deleteProduct}
+                productSearch={productSearch}
+                setProductSearch={setProductSearch}
+                stockFilter={stockFilter}
+                setStockFilter={setStockFilter}
               />
             </section>
           </>

@@ -14,9 +14,9 @@ const productSchema =
     price: Number,
 
     stock: {
-  type: Number,
-  default: 0,
-},
+      type: Number,
+      default: 0,
+    },
 
     rating: {
       type: Number,
@@ -26,6 +26,22 @@ const productSchema =
     description: String,
 
     image: String,
+
+    rating: {
+
+      type: Number,
+
+      default: 0,
+
+    },
+
+    reviewCount: {
+
+      type: Number,
+
+      default: 0,
+
+    },
 
   });
 

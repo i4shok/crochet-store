@@ -1,219 +1,245 @@
-.collection{
+.collection {
 
-padding:90px 60px;
+    padding: 90px 60px;
 
-background:#F8F4EF;
-
-}
-
-.collection-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:end;
-
-margin-bottom:40px;
+    background: #F8F4EF;
 
 }
 
-.collection-header h2{
+.collection-header {
 
-font-family:"Poppins";
+    display: flex;
 
-font-size:2.5rem;
+    justify-content: space-between;
 
-color:#4A3F35;
+    align-items: end;
 
-}
-
-.collection-header p{
-
-font-family:"Nunito";
-
-margin-top:10px;
-
-color:#6b5d52;
+    margin-bottom: 40px;
 
 }
 
-.shop-all-btn{
+.collection-header h2 {
 
-text-decoration:none;
+    font-family: "Poppins";
 
-padding:14px 24px;
+    font-size: 2.5rem;
 
-background:#7A9E7E;
-
-color:white;
-
-border-radius:16px;
-
-font-weight:700;
-
-transition:.3s;
+    color: #4A3F35;
 
 }
 
-.shop-all-btn:hover{
+.collection-header p {
 
-background:#67856b;
+    font-family: "Nunito";
 
-}
+    margin-top: 10px;
 
-.collection-row{
-
-display:flex;
-
-gap:30px;
-
-overflow-x:auto;
-
-padding-bottom:20px;
-
-scroll-behavior:smooth;
+    color: #6b5d52;
 
 }
 
-.collection-row::-webkit-scrollbar{
+.shop-all-btn {
 
-height:8px;
+    text-decoration: none;
 
-}
+    padding: 14px 24px;
 
-.collection-row::-webkit-scrollbar-thumb{
+    background: #7A9E7E;
 
-background:#d8d8d8;
+    color: white;
 
-border-radius:20px;
+    border-radius: 16px;
 
-}
+    font-weight: 700;
 
-.collection-card{
-
-min-width:280px;
-
-background:white;
-
-border-radius:20px;
-
-padding:20px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-transition:.35s;
-
-flex-shrink:0;
+    transition: .3s;
 
 }
 
-.collection-card:hover{
+.shop-all-btn:hover {
 
-transform:translateY(-8px);
-
-box-shadow:0 20px 40px rgba(0,0,0,.12);
+    background: #67856b;
 
 }
 
-.collection-image{
+.collection-row {
 
-height:250px;
+    display: flex;
 
-overflow:hidden;
+    gap: 30px;
 
-border-radius:16px;
+    overflow-x: auto;
 
-margin-bottom:18px;
+    padding-bottom: 20px;
 
-}
-
-.collection-image img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-transition:.4s;
+    scroll-behavior: smooth;
 
 }
 
-.collection-card:hover img{
+.collection-row::-webkit-scrollbar {
 
-transform:scale(1.08);
-
-}
-
-.collection-card h3{
-
-font-family:"Poppins";
-
-margin-bottom:10px;
-
-color:#4A3F35;
+    height: 8px;
 
 }
 
-.collection-card p{
+.collection-row::-webkit-scrollbar-thumb {
 
-font-family:"Nunito";
+    background: #d8d8d8;
 
-margin-bottom:20px;
-
-font-size:1.1rem;
+    border-radius: 20px;
 
 }
 
-.view-btn{
+.collection-card {
 
-display:inline-block;
+    min-width: 280px;
 
-padding:12px 18px;
+    background: white;
 
-border-radius:14px;
+    border-radius: 20px;
 
-background:#7A9E7E;
+    padding: 20px;
 
-color:white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
 
-text-decoration:none;
+    transition: .35s;
 
-font-weight:700;
-
-transition:.3s;
+    flex-shrink: 0;
 
 }
 
-.view-btn:hover{
+.collection-card:hover {
 
-background:#67856b;
+    transform: translateY(-8px);
 
-}
-
-@media(max-width:900px){
-
-.collection{
-
-padding:70px 25px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .12);
 
 }
 
-.collection-header{
+.collection-image {
 
-flex-direction:column;
+    height: 250px;
 
-align-items:flex-start;
+    overflow: hidden;
 
-gap:20px;
+    border-radius: 16px;
+
+    margin-bottom: 18px;
+
+}
+
+.collection-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: .4s;
 
 }
 
-.collection-card{
+.collection-card:hover img {
 
-min-width:240px;
+    transform: scale(1.08);
 
 }
+
+.collection-card h3 {
+
+    font-family: "Poppins";
+
+    margin-bottom: 10px;
+
+    color: #4A3F35;
+
+}
+
+.collection-card p {
+
+    font-family: "Nunito";
+
+    margin-bottom: 20px;
+
+    font-size: 1.1rem;
+
+}
+
+.view-btn {
+
+    display: inline-block;
+
+    padding: 12px 18px;
+
+    border-radius: 14px;
+
+    background: #7A9E7E;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: .3s;
+
+}
+
+.view-btn:hover {
+
+    background: #67856b;
+
+}
+
+@media(max-width:900px) {
+
+    .collection {
+
+        padding: 70px 25px;
+
+    }
+
+    .collection-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+
+    }
+
+    .collection-card {
+
+        min-width: 240px;
+
+    }
+
+}
+
+.collection-rating {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 8px 0 14px;
+
+    color: #F4B400;
+
+    font-size: .95rem;
+
+}
+
+.collection-rating small {
+
+    color: #777;
+
+    font-size: .82rem;
+
+    font-weight: 600;
 
 }

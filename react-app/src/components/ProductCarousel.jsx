@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import "../styles/ProductCarousel.css";
+import RatingStars from "./RatingStars";
 
 function ProductCarousel() {
 
@@ -30,88 +31,96 @@ function ProductCarousel() {
 
   return (
 
-<section className="collection">
+    <section className="collection">
 
-<div className="collection-header">
+      <div className="collection-header">
 
-<div>
+        <div>
 
-<h2>
+          <h2>
 
-Our Collection
+            Our Collection
 
-</h2>
+          </h2>
 
-<p>
+          <p>
 
-Handcrafted creations made
-with love and care.
+            Handcrafted creations made
+            with love and care.
 
-</p>
+          </p>
 
-</div>
+        </div>
 
-<Link
-to="/shop"
-className="shop-all-btn"
->
+        <Link
+          to="/shop"
+          className="shop-all-btn"
+        >
 
-Shop All →
+          Shop All →
 
-</Link>
+        </Link>
 
-</div>
+      </div>
 
-<div className="collection-row">
+      <div className="collection-row">
 
-{products.map(
-(product)=>(
+        {products.map(
+          (product) => (
 
-<div
-key={product._id}
-className="collection-card"
->
+            <div
+              key={product._id}
+              className="collection-card"
+            >
 
-<div
-className="collection-image"
->
+              <div
+                className="collection-image"
+              >
 
-<img
-src={product.image}
-alt={product.name}
-/>
+                <img
+                  src={product.image}
+                  alt={product.name}
+                />
 
-</div>
+              </div>
 
-<h3>
+              <h3>
 
-{product.name}
+                {product.name}
 
-</h3>
+              </h3>
 
-<p>
+              <RatingStars
 
-₹{product.price}
+                rating={product.rating}
 
-</p>
+                reviewCount={product.reviewCount}
 
-<Link
-to={`/product/${product._id}`}
-className="view-btn"
->
+              />
 
-View Details
+              <p>
 
-</Link>
+                ₹{product.price}
 
-</div>
+              </p>
 
-)
-)}
+              <Link
+                to={`/product/${product._id}`}
+                className="view-btn"
+              >
 
-</div>
+                View Details
 
-</section>
+              </Link>
+
+            </div>
+
+          )
+        )}
+
+      </div>
+
+    </section>
 
   );
 

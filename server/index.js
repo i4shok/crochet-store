@@ -1241,16 +1241,146 @@ app.delete(
 
 app.post(
   "/reviews",
+  auth,
   async (req, res) => {
 
     try {
 
-      const review =
-        await Review.create(
-          req.body
+      const user =
+        await User.findById(
+          req.user.id
         );
 
+      const purchased = await Order.findOne({
+
+        user: req.user.id,
+
+        "items.product": req.body.product,
+
+      });
+
+      const existingReview =
+        await Review.findOne({
+
+          user: req.user.id,
+
+          product: req.body.product,
+
+        });
+
+      if (existingReview) {
+
+        return res.status(400).json({
+
+          message:
+
+            "You have already reviewed this product.",
+
+        });
+
+      }
+
+      if (!purchased) {
+
+        return res.status(403).json({
+
+          message:
+
+            "You can only review products you've purchased.",
+
+        });
+
+      }
+
+      const review =
+        await Review.create({
+
+          product:
+            req.body.product,
+
+          user:
+            req.user.id,
+
+          name:
+            user.name,
+
+          text:
+            req.body.text,
+
+          rating:
+            req.body.rating,
+
+        });
+
+      const productReviews =
+        await Review.find({
+
+          product: req.body.product,
+
+        });
+
+      const average =
+
+        productReviews.reduce(
+
+          (sum, review) =>
+
+            sum + review.rating,
+
+          0
+
+        )
+
+        / productReviews.length;
+
+      await Product.findByIdAndUpdate(
+
+        req.body.product,
+
+        {
+
+          rating: average,
+
+          reviewCount:
+
+            productReviews.length,
+
+        }
+
+      );
+
       res.json(review);
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message:
+          error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.get(
+  "/reviews/:productId",
+  async (req, res) => {
+
+    try {
+
+      const reviews =
+        await Review.find({
+
+          product: req.params.productId,
+
+        });
+
+      console.log(reviews);
+
+      res.json(reviews);
 
     } catch (error) {
 
@@ -1264,27 +1394,219 @@ app.post(
 );
 
 app.get(
-  "/reviews/:productId",
+  "/admin/best-selling",
+  auth,
+  admin,
   async (req, res) => {
 
     try {
 
-      const reviews =
-        await Review.find({
-          product:
-            req.params.productId,
-        });
+      const bestSelling =
+        await Order.aggregate([
 
-      res.json(reviews);
+          { $unwind: "$items" },
+
+          {
+
+            $group: {
+
+              _id: "$items.product",
+
+              sold: {
+
+                $sum: "$items.quantity",
+
+              },
+
+            },
+
+          },
+
+          {
+
+            $sort: {
+
+              sold: -1,
+
+            },
+
+          },
+
+          {
+
+            $limit: 5,
+
+          },
+
+          {
+
+            $lookup: {
+
+              from: "products",
+
+              localField: "_id",
+
+              foreignField: "_id",
+
+              as: "product",
+
+            },
+
+          },
+
+          {
+
+            $unwind: "$product",
+
+          },
+
+        ]);
+
+      res.json(bestSelling);
+
+    }
+
+    catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.put(
+  "/reviews/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const review =
+        await Review.findById(
+          req.params.id
+        );
+
+      if (!review) {
+
+        return res
+          .status(404)
+          .json({
+
+            message:
+              "Review not found",
+
+          });
+
+      }
+
+      if (
+
+        review.user.toString() !==
+        req.user.id
+
+      ) {
+
+        return res
+          .status(403)
+          .json({
+
+            message:
+              "You can only edit your own review.",
+
+          });
+
+      }
+
+      review.text =
+        req.body.text;
+
+      review.rating =
+        req.body.rating;
+
+      await review.save();
+
+      res.json(review);
 
     } catch (error) {
 
       res.status(500).json({
+
         message:
           error.message,
+
       });
 
     }
+
+  }
+);
+
+app.delete(
+  "/reviews/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const review =
+        await Review.findById(
+          req.params.id
+        );
+
+      if (!review) {
+
+        return res.status(404).json({
+
+          message:
+            "Review not found",
+
+        });
+
+      }
+
+      if (
+
+        review.user.toString() !==
+        req.user.id
+
+      ) {
+
+        return res.status(403).json({
+
+          message:
+            "You can only delete your own review.",
+
+        });
+
+      }
+
+      await review.deleteOne();
+
+      res.json({
+
+        message:
+          "Review deleted.",
+
+      });
+
+    }
+
+    catch (error) {
+
+      res.status(500).json({
+
+        message:
+          error.message,
+
+      });
+
+    }
+
   }
 );
 
