@@ -6,6 +6,7 @@ import {
 import ProductQuickView from "../components/ProductQuickView";
 
 import ProductCard from "../components/ProductCard";
+import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 
 function Shop() {
 
@@ -224,60 +225,47 @@ function Shop() {
 
         </select>
       </div>
+
       <div className="product-grid">
+        {
 
-        {sortedProducts.length === 0 ? (
+          products.length === 0
 
-          <div className="empty-search">
+            ?
 
-            <h2>
+            <ProductCardSkeleton
 
-              🔍 No products found
+              count={8}
 
-            </h2>
-
-            <p>
-
-              Try another search or browse a different category.
-
-            </p>
-
-            <button
-              onClick={() => {
-
-                setSearchTerm("");
-
-                setSelectedCategory("All");
-
-              }}
-            >
-
-              Clear Filters
-
-            </button>
-
-          </div>
-
-        ) : (
-
-          sortedProducts.map(product => (
-
-            <ProductCard
-              key={product._id}
-              product={product}
-              onQuickView={() => {
-
-                setSelectedProduct(product);
-
-                setShowQuickView(true);
-
-              }}
             />
 
-          ))
+            :
 
-        )}
+            sortedProducts.map(
 
+              (product) => (
+
+                <ProductCard
+
+                  key={product._id}
+
+                  product={product}
+
+                  onQuickView={() => {
+
+                    setSelectedProduct(product);
+
+                    setShowQuickView(true);
+
+                  }}
+
+                />
+
+              )
+
+            )
+
+        }
       </div>
 
       <ProductQuickView

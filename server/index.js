@@ -524,8 +524,13 @@ app.post(
       console.log("Role:", user.role);
 
       res.json({
+
         token,
+
         role: user.role,
+
+        userId: user._id,
+
       });
 
     } catch (error) {
@@ -1376,9 +1381,14 @@ app.get(
 
           product: req.params.productId,
 
-        });
+        })
+          .populate(
 
-      console.log(reviews);
+            "user",
+
+            "_id name"
+
+          );
 
       res.json(reviews);
 

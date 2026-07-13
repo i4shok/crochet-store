@@ -61,8 +61,13 @@ function Login() {
         }
 
         login(
+
           data.token,
-          data.role
+
+          data.role,
+
+          data.userId
+
         );
 
         toast.success(

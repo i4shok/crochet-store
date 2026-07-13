@@ -67,7 +67,13 @@ function App() {
 
         <Route
           path="/cart"
-          element={<Cart />}
+          element={
+            <ProtectedRoute>
+
+              <Cart />
+
+            </ProtectedRoute>
+          }
         />
 
         <Route
@@ -81,7 +87,13 @@ function App() {
         />
         <Route
           path="/checkout"
-          element={<Checkout />}
+          element={
+            <ProtectedRoute>
+
+              <Checkout />
+
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/order-success"
@@ -129,7 +141,13 @@ function App() {
         />
         <Route
           path="/orders/:id"
-          element={<OrderDetails />}
+          element={
+            <ProtectedRoute>
+
+              <OrderDetails />
+
+            </ProtectedRoute>
+          }
         />
         <Route
           path="/admin"

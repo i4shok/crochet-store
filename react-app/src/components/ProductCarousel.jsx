@@ -7,6 +7,8 @@ import {
   Link,
 } from "react-router-dom";
 
+import ProductCardSkeleton from "./skeletons/ProductCardSkeleton";
+
 import "../styles/ProductCarousel.css";
 import RatingStars from "./RatingStars";
 
@@ -64,60 +66,76 @@ function ProductCarousel() {
       </div>
 
       <div className="collection-row">
+        {
 
-        {products.map(
-          (product) => (
+          products.length === 0
 
-            <div
-              key={product._id}
-              className="collection-card"
-            >
+            ?
 
-              <div
-                className="collection-image"
-              >
+            <ProductCardSkeleton
 
-                <img
-                  src={product.image}
-                  alt={product.name}
-                />
+              count={4}
 
-              </div>
+            />
 
-              <h3>
+            :
 
-                {product.name}
+            products.map(
 
-              </h3>
+              (product) => (
 
-              <RatingStars
+                <div
+                  key={product._id}
+                  className="collection-card"
+                >
 
-                rating={product.rating}
+                  <div
+                    className="collection-image"
+                  >
 
-                reviewCount={product.reviewCount}
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                    />
 
-              />
+                  </div>
 
-              <p>
+                  <h3>
 
-                ₹{product.price}
+                    {product.name}
 
-              </p>
+                  </h3>
 
-              <Link
-                to={`/product/${product._id}`}
-                className="view-btn"
-              >
+                  <RatingStars
 
-                View Details
+                    rating={product.rating}
 
-              </Link>
+                    reviewCount={product.reviewCount}
 
-            </div>
+                  />
 
-          )
-        )}
+                  <p>
 
+                    ₹{product.price}
+
+                  </p>
+
+                  <Link
+                    to={`/product/${product._id}`}
+                    className="view-btn"
+                  >
+
+                    View Details
+
+                  </Link>
+
+                </div>
+
+              )
+
+            )
+
+        }
       </div>
 
     </section>

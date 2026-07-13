@@ -5,18 +5,25 @@ const reviewSchema =
   new mongoose.Schema({
 
     product: {
-      user: {
 
-        type: mongoose.Schema.Types.ObjectId,
-
-        ref: "User",
-
-        required: true,
-
-      },
       type:
         mongoose.Schema.Types.ObjectId,
+
       ref: "Product",
+
+      required: true,
+
+    },
+
+    user: {
+
+      type:
+        mongoose.Schema.Types.ObjectId,
+
+      ref: "User",
+
+      required: true,
+
     },
 
     name: String,

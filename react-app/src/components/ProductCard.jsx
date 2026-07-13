@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import StarRating from "./StarRating";
-
 import "../styles/ProductCard.css";
 import RatingStars from "./RatingStars";
 
@@ -8,7 +6,9 @@ function ProductCard({
 
   product,
 
-  onQuickView,
+  onQuickView = () => { },
+
+  showQuickView = true,
 
 }) {
 
@@ -34,29 +34,35 @@ function ProductCard({
 
           </span>
 
-          <div className="image-overlay">
+          {
 
-            <button
+            showQuickView &&
 
-              className="quick-view-btn"
+            <div className="image-overlay">
 
-              onClick={(e) => {
+              <button
 
-                e.preventDefault();
+                className="quick-view-btn"
 
-                e.stopPropagation();
+                onClick={(e) => {
 
-                onQuickView();
+                  e.preventDefault();
 
-              }}
+                  e.stopPropagation();
 
-            >
+                  onQuickView();
 
-              👁 Quick View
+                }}
 
-            </button>
+              >
 
-          </div>
+                👁 Quick View
+
+              </button>
+
+            </div>
+
+          }
 
         </div>
 
@@ -75,15 +81,6 @@ function ProductCard({
             reviewCount={product.reviewCount}
 
           />
-          <div className="card-rating">
-
-            <StarRating rating={product.rating || 5} />
-
-            <span>
-              ({product.reviewCount || 0})
-            </span>
-
-          </div>
 
           <h4>
 

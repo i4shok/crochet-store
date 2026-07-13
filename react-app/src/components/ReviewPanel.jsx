@@ -141,14 +141,6 @@ function ReviewPanel({
           <option value={1}>★☆☆☆☆</option>
         </select>
 
-        <input
-          type="text"
-          placeholder="Your Name"
-          onChange={(e) =>
-            setReviewName(e.target.value)
-          }
-        />
-
         <textarea
           placeholder="Write your review..."
           value={reviewText}
@@ -217,13 +209,25 @@ function ReviewPanel({
 
                 <div className="review-avatar">
 
-                  {review.name.charAt(0).toUpperCase()}
+                  {
+
+                    (review.user?.name || review.name || "?")
+
+                      .charAt(0)
+
+                      .toUpperCase()
+
+                  }
 
                 </div>
 
                 <div className="review-user">
 
-                  <h4>{review.name}</h4>
+                  <h4>
+
+                    {review.user?.name || review.name}
+
+                  </h4>
 
                   <span className="verified">
 
@@ -297,25 +301,47 @@ function ReviewPanel({
 
               }
 
-              <button
+              {
 
-                className="delete-review-btn"
+                review.user?._id ===
 
-                onClick={() =>
+                localStorage.getItem("userId")
 
-                  handleDeleteReview(
+                &&
 
-                    review._id
+                <button
 
-                  )
+                  className="delete-review-btn"
 
-                }
+                  onClick={() => {
 
-              >
+                    if (
 
-                Delete
+                      window.confirm(
 
-              </button>
+                        "Delete this review?"
+
+                      )
+
+                    ) {
+
+                      handleDeleteReview(
+
+                        review._id
+
+                      );
+
+                    }
+
+                  }}
+
+                >
+
+                  Delete
+
+                </button>
+
+              }
 
             </div>
 

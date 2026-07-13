@@ -69,10 +69,33 @@ function WishlistProvider({
         }
       );
 
-      setWishlistItems([
-        ...wishlistItems,
-        product,
-      ]);
+      setWishlistItems((prev) => {
+
+        const alreadyExists =
+
+          prev.some(
+
+            (item) =>
+
+              item._id === product._id
+
+          );
+
+        if (alreadyExists) {
+
+          return prev;
+
+        }
+
+        return [
+
+          ...prev,
+
+          product,
+
+        ];
+
+      });
 
     };
 

@@ -27,8 +27,13 @@ function AuthProvider({
     );
 
   const login = (
+
     newToken,
-    newRole
+
+    newRole,
+
+    userId
+
   ) => {
 
     localStorage.setItem(
@@ -39,6 +44,14 @@ function AuthProvider({
     localStorage.setItem(
       "role",
       newRole
+    );
+
+    localStorage.setItem(
+
+      "userId",
+
+      userId
+
     );
 
     setToken(
@@ -59,6 +72,11 @@ function AuthProvider({
 
     localStorage.removeItem(
       "role"
+    );
+    localStorage.removeItem(
+
+      "userId"
+
     );
 
     setToken(
