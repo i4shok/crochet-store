@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
-
+import {
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import "../styles/Navbar.css";
 
 import {
@@ -10,12 +13,14 @@ import {
   Moon,
   Sun,
   LogOut,
+  House,
+  Store,
+  Package,
 } from "lucide-react";
 
 import { CartContext } from "../context/CartContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { WishlistContext } from "../context/WishListContext";
-import SearchBar from "./SearchBar";
 import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
@@ -37,46 +42,135 @@ function Navbar() {
     AuthContext
   );
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+
+    const handleScroll = () => {
+
+      setIsScrolled(window.scrollY > 60);
+
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () =>
+
+      window.removeEventListener("scroll", handleScroll);
+
+  }, []);
+
   return (
 
-    <header className="navbar">
+    <header
+      className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
 
-      <div className="logo">
+      <NavLink
 
-        🧶
+        to="/"
+
+        className={({ isActive }) =>
+
+          isActive
+
+            ?
+
+            "logo active"
+
+            :
+
+            "logo"
+
+        }
+
+      >
+
+        <div className="logo-placeholder">
+
+          KB
+
+        </div>
 
         <span>
+
           Knot & Bloom
+
         </span>
 
-      </div>
+      </NavLink>
 
       <div className="nav-center">
 
-        <NavLink to="/">
-          Home
+        <NavLink
+          to="/"
+          className="nav-icon"
+        >
+
+          <House size={20} />
+
         </NavLink>
 
-        <NavLink to="/shop">
-          Shop
+        <NavLink
+
+          to="/shop"
+
+          className={({ isActive }) =>
+
+            isActive
+
+              ?
+
+              "nav-icon active"
+
+              :
+
+              "nav-icon"
+
+          }
+
+        >
+
+          <Store size={20} />
+
         </NavLink>
 
         {token && (
 
-          <NavLink to="/wishlist">
+          <NavLink
 
-            <Heart size={18} />
+            to="/wishlist"
 
-            <span>
-              {wishlistItems.length}
-            </span>
+            className="icon-badge"
+
+          >
+
+            <Heart size={20} />
+
+            {
+
+              wishlistItems.length > 0 && (
+
+                <span className="badge">
+
+                  {wishlistItems.length}
+
+                </span>
+
+              )
+
+            }
 
           </NavLink>
 
         )}
 
-        <NavLink to="/my-orders">
-          Orders
+        <NavLink
+          to="/my-orders"
+          className="nav-icon"
+        >
+
+          <Package size={20} />
+
         </NavLink>
 
         {role === "admin" && (
@@ -90,8 +184,6 @@ function Navbar() {
       </div>
 
       <div className="nav-actions">
-
-        <SearchBar />
 
         <button
           onClick={toggleTheme}
@@ -114,17 +206,28 @@ function Navbar() {
         {token && (
 
           <NavLink
+
             to="/cart"
-            className="cart-link"
+
+            className="icon-badge"
+
           >
 
-            <ShoppingCart
-              size={20}
-            />
+            <ShoppingCart size={20} />
 
-            <span>
-              {cartItems.length}
-            </span>
+            {
+
+              cartItems.length > 0 && (
+
+                <span className="badge">
+
+                  {cartItems.length}
+
+                </span>
+
+              )
+
+            }
 
           </NavLink>
 

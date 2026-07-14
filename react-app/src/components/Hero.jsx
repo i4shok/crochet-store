@@ -1,74 +1,113 @@
 import { Link } from "react-router-dom";
 
-import heroImage from "../assets/hero-bouquet.png";
-
 import "../styles/Hero.css";
 
 function Hero() {
 
   return (
 
-<section className="hero">
+    <section className="hero">
 
-<div className="hero-content">
+      <div className="hero-content">
 
-<div className="hero-text">
+        <div className="hero-text">
 
-<span className="hero-brand">
+          <h1>
 
-🌸 Knot & Bloom
+            Every Stitch
 
-</span>
+            Tells A Story.
 
-<h1>
+          </h1>
 
-Handmade treasures,
+          <p>
 
-stitched with love.
+            Discover handcrafted crochet creations made with
+            care, patience and creativity. From timeless flowers
+            to adorable plushies, every piece is designed to bring
+            warmth into someone's life.
 
-</h1>
+          </p>
 
-<p>
+          <div className="hero-features">
 
-Every crochet piece is handcrafted
-with patience, creativity and care—
-made to bring warmth to your home
-or become the perfect heartfelt gift.
+            <div>
 
-</p>
+              🌿 Handmade
 
-<Link
-to="/shop"
-className="hero-btn"
->
+            </div>
 
-Explore Collection
+            <div>
 
-</Link>
+              🚚 Fast Delivery
 
-</div>
+            </div>
 
-<div className="hero-image">
+            <div>
 
-<img
+              🎁 Perfect Gifts
 
-src={heroImage}
+            </div>
 
-alt="Crochet Bouquet"
+          </div>
 
-/>
+          <div className="hero-buttons">
 
-</div>
+            <Link
 
-</div>
+              to="/shop"
 
-<div className="scroll-down">
+              className="hero-btn"
 
-↓
+            >
 
-</div>
+              Shop Collection
 
-</section>
+            </Link>
+
+            <Link
+
+              to="/contact"
+
+              className="hero-btn secondary-btn"
+
+            >
+
+              Custom Orders
+
+            </Link>
+
+          </div>
+
+        </div>
+
+        <div className="hero-animation">
+
+          <div className="animation-placeholder">
+
+            🧶
+
+            <p>
+
+              Crochet Animation
+
+              Coming Soon
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div className="scroll-down">
+
+        ↓
+
+      </div>
+
+    </section>
 
   );
 
