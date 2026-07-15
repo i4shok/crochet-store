@@ -344,6 +344,12 @@
 
     overflow: hidden;
 
+    max-height: 850px;
+
+    display: flex;
+
+    flex-direction: column;
+
 }
 
 .review-panel h2 {
@@ -572,6 +578,22 @@
     transition: .25s;
 }
 
+.wishlist-btn:disabled {
+
+    background: #EEF5EF;
+
+    color: #5E7D62;
+
+    border: 1px solid rgba(122, 158, 126, .18);
+
+    cursor: default;
+
+    opacity: 1;
+
+    box-shadow: none;
+
+}
+
 .product-actions button:first-child {
     background: #7e5bef;
     color: #fff;
@@ -591,31 +613,31 @@
 
 .review-list {
 
+    margin-top: 20px;
+
     display: flex;
 
     flex-direction: column;
 
     gap: 18px;
 
-    margin-top: 25px;
-
     overflow-y: auto;
 
     flex: 1;
 
-    padding-right: 10px;
+    padding-right: 8px;
 
 }
 
 .review-list::-webkit-scrollbar {
 
-    width: 8px;
+    width: 7px;
 
 }
 
 .review-list::-webkit-scrollbar-thumb {
 
-    background: #d9d9d9;
+    background: #D6CEC3;
 
     border-radius: 999px;
 
@@ -640,6 +662,8 @@
     transition: .25s;
 
     box-shadow: 0 6px 18px rgba(0, 0, 0, .05);
+
+    flex-shrink: 0;
 
 }
 

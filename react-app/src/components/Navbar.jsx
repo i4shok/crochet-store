@@ -1,4 +1,7 @@
-import { NavLink } from "react-router-dom";
+import {
+  NavLink,
+  useNavigate,
+} from "react-router-dom";
 import {
   useContext,
   useEffect,
@@ -41,6 +44,8 @@ function Navbar() {
   } = useContext(
     AuthContext
   );
+
+  const navigate = useNavigate();
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -249,8 +254,14 @@ function Navbar() {
           ?
 
           <button
-            onClick={logout}
             className="logout-btn"
+            onClick={() => {
+
+              logout();
+
+              navigate("/login");
+
+            }}
           >
 
             <LogOut

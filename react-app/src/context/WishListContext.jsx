@@ -57,6 +57,18 @@ function WishlistProvider({
       if (!token)
         return;
 
+      const alreadyExists = wishlistItems.some(
+
+        (item) => item._id === product._id
+
+      );
+
+      if (alreadyExists) {
+
+        return false;
+
+      }
+
       await fetch(
         `${import.meta.env.VITE_API_URL}/wishlist/${product._id}`,
         {
@@ -96,6 +108,8 @@ function WishlistProvider({
         ];
 
       });
+
+      return true;
 
     };
 

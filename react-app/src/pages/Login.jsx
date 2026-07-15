@@ -1,4 +1,10 @@
-import { useState, useContext } from "react";
+import {
+  useState,
+  useContext,
+} from "react";
+import { Eye, EyeOff } from "lucide-react";
+import "../styles/Login.css";
+import { Link } from "react-router-dom";
 
 import {
   AuthContext,
@@ -14,6 +20,10 @@ function Login() {
   const [password,
     setPassword] =
     useState("");
+
+  const [showPassword,
+    setShowPassword] =
+    useState(false);
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -80,49 +90,179 @@ function Login() {
       }
     };
   return (
-    <div className="page">
+    <div className="login-page">
 
-      <h1>
-        Login
-      </h1>
+      <div className="login-layout">
 
-      <form
-        onSubmit={
-          handleSubmit
-        }
-      >
+        <div className="login-showcase">
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
-          }
-        />
+          <div className="showcase-content">
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) =>
-            setPassword(
-              e.target.value
-            )
-          }
-        />
+            <span>
 
-        <button
-          type="submit"
-          disabled={isLoggingIn}
-        >
-          {isLoggingIn ? "Logging In..." : "Login"}
-        </button>
+              🧶 Knot & Bloom
 
-      </form>
+            </span>
 
+            <h2>
+
+              Handmade treasures,
+              stitched with love.
+
+            </h2>
+
+            <p>
+
+              Every crochet creation is handcrafted
+              with care to make every gift memorable.
+
+            </p>
+
+          </div>
+
+        </div>
+
+        <div className="login-card">
+
+          <div className="login-header">
+
+            <h1>
+
+              Welcome Back 👋
+
+            </h1>
+
+            <p>
+
+              Sign in to continue shopping handcrafted creations.
+
+            </p>
+
+          </div>
+
+          <form
+            className="login-form"
+            onSubmit={handleSubmit}
+          >
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              required
+            />
+
+            <div className="password-field">
+
+              <input
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
+                placeholder="Password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(
+                    e.target.value
+                  )
+                }
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() =>
+                  setShowPassword(
+                    !showPassword
+                  )
+                }
+              >
+
+                {
+
+                  showPassword
+
+                    ?
+
+                    <EyeOff size={18} />
+
+                    :
+
+                    <Eye size={18} />
+
+                }
+
+              </button>
+
+            </div>
+
+            <div className="login-options">
+
+              <label>
+
+                <input type="checkbox" />
+
+                Remember Me
+
+              </label>
+
+              <span
+                className="forgot-password"
+                onClick={() =>
+                  toast.info(
+                    "Coming soon 🚀"
+                  )
+                }
+              >
+
+                Forgot Password?
+
+              </span>
+
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoggingIn}
+            >
+
+              {
+
+                isLoggingIn
+
+                  ?
+
+                  "Logging In..."
+
+                  :
+
+                  "Login"
+
+              }
+
+            </button>
+
+          </form>
+
+          <p className="register-link">
+
+            Don't have an account?
+
+            <a href="/register">
+
+              Create One
+
+            </a>
+
+          </p>
+
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,12 @@
-import { useState } from "react";
+import {
+  useState,
+  useContext,
+} from "react";
 import { toast } from "react-toastify";
 import StarRating from "./StarRating";
+import {
+  WishlistContext,
+} from "../context/WishListContext";
 
 function ProductInfo({
   product,
@@ -11,6 +17,17 @@ function ProductInfo({
 }) {
 
   const [quantity, setQuantity] = useState(1);
+
+  const {
+    wishlistItems,
+  } = useContext(
+    WishlistContext
+  );
+
+  const isWishlisted =
+    wishlistItems.some(
+      item => item._id === product._id
+    );
 
   return (
     <div className="product-info">
@@ -96,7 +113,9 @@ function ProductInfo({
         </div>
 
       </div>
+
       <div className="product-actions">
+
         <button
           className="cart-btn"
           disabled={product.stock <= 0}
@@ -109,8 +128,13 @@ function ProductInfo({
               );
 
             if (added) {
-              toast.success(`${product.name} added to cart!`);
+
+              toast.success(
+                `${product.name} added to cart!`
+              );
+
               setQuantity(1);
+
             }
 
           }}
@@ -124,13 +148,41 @@ function ProductInfo({
 
         <button
           className="wishlist-btn"
-          onClick={() =>
-            addToWishlist(product)
-          }
+          disabled={isWishlisted}
+          onClick={async () => {
+
+            const added =
+              await addToWishlist(product);
+
+            if (added) {
+
+              toast.success(
+                `${product.name} added to wishlist!`
+              );
+
+            }
+
+          }}
         >
-          ♡ Save to Wishlist
+
+          {
+
+            isWishlisted
+
+              ?
+
+              "♥ Wishlisted"
+
+              :
+
+              "♡ Save to Wishlist"
+
+          }
+
         </button>
+
       </div>
+
     </div>
   );
 }

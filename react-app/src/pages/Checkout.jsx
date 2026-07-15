@@ -58,7 +58,7 @@ function Checkout() {
           );
 
         console.log("Cart Items:", cartItems);
-        
+
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/orders`,
           {
@@ -120,7 +120,7 @@ function Checkout() {
 
           <h2>
 
-            Shipping Information
+            Contact Information
 
           </h2>
 
@@ -148,6 +148,14 @@ function Checkout() {
               required
             />
 
+            <hr className="checkout-divider" />
+
+            <h2>
+
+              Shipping Address
+
+            </h2>
+
             <textarea
               placeholder="Shipping Address"
               required
@@ -166,6 +174,92 @@ function Checkout() {
                 placeholder="Postal Code"
                 required
               />
+
+            </div>
+
+            <h2>
+
+              Payment Method
+
+            </h2>
+
+            <div className="payment-options">
+
+              <label className="payment-option">
+
+                <input
+                  type="radio"
+                  name="payment"
+                  defaultChecked
+                />
+
+                <div>
+
+                  <strong>
+
+                    UPI
+
+                  </strong>
+
+                  <small>
+
+                    Google Pay, PhonePe, Paytm
+
+                  </small>
+
+                </div>
+
+              </label>
+
+              <label className="payment-option">
+
+                <input
+                  type="radio"
+                  name="payment"
+                />
+
+                <div>
+
+                  <strong>
+
+                    Credit / Debit Card
+
+                  </strong>
+
+                  <small>
+
+                    Visa, Mastercard, RuPay
+
+                  </small>
+
+                </div>
+
+              </label>
+
+              <label className="payment-option">
+
+                <input
+                  type="radio"
+                  name="payment"
+                />
+
+                <div>
+
+                  <strong>
+
+                    Cash On Delivery
+
+                  </strong>
+
+                  <small>
+
+                    Pay when your order arrives
+
+                  </small>
+
+                </div>
+
+              </label>
 
             </div>
 
@@ -208,6 +302,38 @@ function Checkout() {
             ))
           }
 
+          <div className="summary-row">
+
+            <span>
+
+              Shipping
+
+            </span>
+
+            <span className="free">
+
+              FREE
+
+            </span>
+
+          </div>
+
+          <div className="summary-row">
+
+            <span>
+
+              Estimated Delivery
+
+            </span>
+
+            <span>
+
+              3–5 Days
+
+            </span>
+
+          </div>
+
           <hr />
 
           <div className="summary-total">
@@ -226,9 +352,25 @@ function Checkout() {
 
           </div>
 
-          <div className="secure-checkout">
+          <div className="checkout-info">
 
-            🔒 Secure Checkout
+            <div>
+
+              🔒 256-bit SSL Encrypted
+
+            </div>
+
+            <div>
+
+              🚚 Fast Delivery
+
+            </div>
+
+            <div>
+
+              🔄 Easy Returns
+
+            </div>
 
           </div>
 

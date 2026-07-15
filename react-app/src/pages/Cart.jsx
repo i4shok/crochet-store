@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,6 +12,9 @@ function Cart() {
     removeItem,
   } = useContext(CartContext);
 
+  const [couponCode, setCouponCode] =
+  useState("");
+
   if (cartItems.length === 0) {
     return <h2>Your cart is empty.</h2>;
   }
@@ -21,6 +24,28 @@ function Cart() {
       total + item.price * item.quantity,
     0
   );
+
+  const FREE_SHIPPING_THRESHOLD = 1000;
+
+  const remainingForFreeShipping =
+    Math.max(
+      FREE_SHIPPING_THRESHOLD - totalPrice,
+      0
+    );
+
+  const shippingProgress =
+    Math.min(
+      (totalPrice / FREE_SHIPPING_THRESHOLD) * 100,
+      100
+    );
+
+  const shippingCharge =
+    totalPrice >= FREE_SHIPPING_THRESHOLD
+      ? 0
+      : 49;
+
+  const finalTotal =
+    totalPrice + shippingCharge;
 
   return (
 
@@ -40,25 +65,25 @@ function Cart() {
 
       </div>
 
-<div className="cart-progress">
+      <div className="cart-progress">
 
-  <div className="progress-step active">
-    🛒 Cart
-  </div>
+        <div className="progress-step active">
+          🛒 Cart
+        </div>
 
-  <div className="progress-line"></div>
+        <div className="progress-line"></div>
 
-  <div className="progress-step">
-    💳 Checkout
-  </div>
+        <div className="progress-step">
+          💳 Checkout
+        </div>
 
-  <div className="progress-line"></div>
+        <div className="progress-line"></div>
 
-  <div className="progress-step">
-    📦 Order Complete
-  </div>
+        <div className="progress-step">
+          📦 Order Complete
+        </div>
 
-</div>
+      </div>
 
       <div className="cart-layout">
 
@@ -174,6 +199,87 @@ function Cart() {
 
           </h2>
 
+          <div className="shipping-progress">
+
+            <div className="shipping-progress-top">
+
+              <span>
+
+                Free Shipping Progress
+
+              </span>
+
+              <span>
+
+                ₹{Math.min(totalPrice, FREE_SHIPPING_THRESHOLD)}
+                /
+                ₹{FREE_SHIPPING_THRESHOLD}
+
+              </span>
+
+            </div>
+
+            <div className="shipping-progress-bar">
+
+              <div
+
+                className="shipping-progress-fill"
+
+                style={{
+
+                  width: `${shippingProgress}%`
+
+                }}
+
+              />
+
+            </div>
+
+            {
+
+              remainingForFreeShipping > 0
+
+                ?
+
+                <p className="shipping-message">
+
+                  🚚 Spend
+                  <strong>
+
+                    {" "}₹{remainingForFreeShipping}{" "}
+
+                  </strong>
+
+                  more to unlock
+
+                  <strong>
+
+                    FREE Shipping
+
+                  </strong>
+
+                </p>
+
+                :
+
+                <p className="shipping-message success">
+
+                  🎉 Congratulations!
+
+                  Your order qualifies for
+
+                  <strong>
+
+                    FREE Shipping!
+
+                  </strong>
+
+                </p>
+
+            }
+
+          </div>
+
           <div className="summary-row">
 
             <span>
@@ -196,21 +302,54 @@ function Cart() {
               Shipping
             </span>
 
-            <span className="free">
-              FREE
+            <span
+              className={
+                shippingCharge === 0
+                  ? "free"
+                  : ""
+              }
+            >
+
+              {
+
+                shippingCharge === 0
+
+                  ?
+
+                  "FREE"
+
+                  :
+
+                  `₹${shippingCharge}`
+
+              }
+
             </span>
 
           </div>
 
-          <div className="summary-row">
+          <div className="coupon-box">
 
-            <span>
-              Discount
-            </span>
+            <input
+              type="text"
+              placeholder="Coupon Code"
+              value={couponCode}
+              onChange={(e) =>
+                setCouponCode(e.target.value)
+              }
+            />
 
-            <span className="discount">
-              ₹0
-            </span>
+            <button
+              onClick={() =>
+                toast.info(
+                  "Coupon system coming soon 🚀"
+                )
+              }
+            >
+
+              Apply
+
+            </button>
 
           </div>
 
@@ -242,7 +381,7 @@ function Cart() {
 
             <span>
 
-              ₹{totalPrice}
+              ₹{finalTotal}
 
             </span>
 
@@ -250,8 +389,47 @@ function Cart() {
 
           <div className="cart-banner">
 
-            🎉 Your order qualifies for
-            <strong> FREE Shipping</strong>
+            {
+
+              shippingCharge === 0
+
+                ?
+
+                <>
+
+                  🎉 Your order qualifies for
+
+                  <strong>
+
+                    {" "}FREE Shipping
+
+                  </strong>
+
+                </>
+
+                :
+
+                <>
+
+                  🚚 Add
+
+                  <strong>
+
+                    {" "}₹{remainingForFreeShipping}{" "}
+
+                  </strong>
+
+                  more for
+
+                  <strong>
+
+                    FREE Shipping
+
+                  </strong>
+
+                </>
+
+            }
 
           </div>
 

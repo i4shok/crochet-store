@@ -495,3 +495,137 @@ width:70px;
 background:#ddd;
 
 }  
+.shipping-progress{
+
+margin:22px 0;
+
+padding:18px;
+
+background:#faf8f5;
+
+border-radius:18px;
+
+border:1px solid rgba(0,0,0,.05);
+
+}
+.shipping-progress-top{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+font-weight:600;
+
+margin-bottom:12px;
+
+}
+.shipping-progress-bar{
+
+height:10px;
+
+background:#e7e7e7;
+
+border-radius:999px;
+
+overflow:hidden;
+
+}
+.shipping-progress-fill{
+
+height:100%;
+
+background:linear-gradient(
+90deg,
+#7A9E7E,
+#5E7D62
+);
+
+border-radius:999px;
+
+transition:.4s ease;
+
+}
+.shipping-message{
+
+margin-top:14px;
+
+font-size:.92rem;
+
+line-height:1.6;
+
+color:#555;
+
+}
+.shipping-message strong{
+
+color:#5E7D62;
+
+}
+.shipping-message.success{
+
+color:#2E7D32;
+
+font-weight:700;
+
+}
+.coupon-box{
+
+display:flex;
+
+gap:12px;
+
+margin:22px 0;
+
+}
+.coupon-box input{
+
+flex:1;
+
+padding:14px 16px;
+
+border-radius:14px;
+
+border:1px solid #ddd;
+
+font-size:15px;
+
+outline:none;
+
+transition:.25s;
+
+}
+.coupon-box input:focus{
+
+border-color:#7A9E7E;
+
+box-shadow:0 0 0 4px rgba(122,158,126,.12);
+
+}
+.coupon-box button{
+
+padding:14px 22px;
+
+border:none;
+
+border-radius:14px;
+
+background:#7A9E7E;
+
+color:white;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+.coupon-box button:hover{
+
+transform:translateY(-2px);
+
+background:#5E7D62;
+
+}
