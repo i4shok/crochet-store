@@ -456,14 +456,13 @@ app.post(
 
     } catch (error) {
 
-  console.error("REGISTER ERROR:");
-  console.error(error);
-
-  res.status(500).json({
-    message: error.message,
-  });
-
-}
+      res
+        .status(500)
+        .json({
+          message:
+            error.message,
+        });
+    }
   }
 );
 
