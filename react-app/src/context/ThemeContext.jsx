@@ -21,6 +21,13 @@ function ThemeProvider({ children }) {
       "theme",
       darkMode ? "dark" : "light"
     );
+
+    document.documentElement.dataset.theme =
+      darkMode ? "dark" : "light";
+    document.body.dataset.theme =
+      darkMode ? "dark" : "light";
+    document.documentElement.style.colorScheme =
+      darkMode ? "dark" : "light";
   }, [darkMode]);
 
   const toggleTheme = () => {

@@ -113,26 +113,7 @@ function Shop() {
     <section className="shop-page">
 
       <div className="shop-header">
-
-        <span className="section-tag">
-
-          ✨ Handmade Collection
-
-        </span>
-
-        <h1>
-
-          Our Collection
-
-        </h1>
-
-        <p>
-
-          Explore handcrafted crochet creations
-          made with love, care and creativity.
-
-        </p>
-
+        <h1>Our Collection</h1>
       </div>
       <div className="shop-toolbar">
         <input

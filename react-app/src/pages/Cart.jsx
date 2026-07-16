@@ -1,6 +1,7 @@
 import { useContext, useState, } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import EmptyState from "../components/EmptyState";
 import { toast } from "react-toastify";
 import "../styles/Cart.css";
 
@@ -13,10 +14,28 @@ function Cart() {
   } = useContext(CartContext);
 
   const [couponCode, setCouponCode] =
-  useState("");
+    useState("");
 
   if (cartItems.length === 0) {
-    return <h2>Your cart is empty.</h2>;
+
+    return (
+
+      <EmptyState
+
+        icon="🛒"
+
+        title="Your cart is empty"
+
+        description="Looks like you haven't added any handmade treasures yet."
+
+        buttonText="Continue Shopping"
+
+        buttonLink="/shop"
+
+      />
+
+    );
+
   }
 
   const totalPrice = cartItems.reduce(

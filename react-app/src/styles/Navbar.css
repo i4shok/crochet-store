@@ -184,7 +184,7 @@
 
 .icon-btn,
 
-.logout-btn,
+.nav-logout-btn,
 
 .login-btn,
 
@@ -216,7 +216,7 @@
 
 .icon-btn:hover,
 
-.logout-btn:hover,
+.nav-logout-btn:hover,
 
 .login-btn:hover,
 
@@ -430,10 +430,50 @@
 
 .navbar-scrolled .icon-btn,
 
-.navbar-scrolled .logout-btn {
+.navbar-scrolled .nav-logout-btn {
 
     width: 42px;
 
     height: 42px;
 
+}
+
+.admin-dashboard-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 18px;
+    border-radius: 14px;
+    background: #F4F1EB;
+    color: #4A3F35 !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+
+.admin-dashboard-link:hover {
+    background: #EEF5EF;
+    color: #5E7D62 !important;
+    transform: translateY(-2px);
+}
+
+.nav-logout-btn {
+    min-width: 88px;
+    height: 46px;
+    padding: 0 16px;
+    border-radius: 14px;
+    background: #302b47;
+    color: white;
+}
+
+.navbar-scrolled :is(.nav-icon, .icon-badge, .icon-btn) {
+    width: 46px;
+    height: 46px;
+}
+
+.navbar-scrolled .nav-logout-btn {
+    width: auto;
+    min-width: 88px;
+    height: 46px;
 }

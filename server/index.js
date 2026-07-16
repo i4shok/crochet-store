@@ -322,6 +322,7 @@ app.post(
         user: req.user.id,
         items: mappedItems,
         total: req.body.total,
+        deliveryAddress: req.body.deliveryAddress,
       });
 
       console.log(

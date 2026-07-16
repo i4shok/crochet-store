@@ -12,6 +12,8 @@ import {
 
 import { toast } from "react-toastify";
 
+import EmptyState from "../components/EmptyState";
+
 import "../styles/Wishlist.css";
 
 function Wishlist() {
@@ -52,21 +54,19 @@ function Wishlist() {
 
           (
 
-            <div className="empty-wishlist">
+            <EmptyState
 
-              <h2>
+              icon="❤️"
 
-                Your wishlist is empty
+              title="Your wishlist is empty"
 
-              </h2>
+              description="Save your favourite handmade crochet products here so you can find them later."
 
-              <p>
+              buttonText="Browse Products"
 
-                Start exploring beautiful crochet creations.
+              buttonLink="/shop"
 
-              </p>
-
-            </div>
+            />
 
           )
 

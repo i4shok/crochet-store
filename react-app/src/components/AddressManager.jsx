@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import "../styles/AddressManager.css"; ``
+import "../styles/AddressManager.css"; 
+import EmptyState from "./EmptyState";
 function AddressManager() {
 
   const [addresses, setAddresses] = useState([]);

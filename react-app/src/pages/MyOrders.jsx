@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 
 import "../styles/MyOrders.css";
 
+import EmptyState from "../components/EmptyState";
+
 function MyOrders() {
 
   const [orders,
@@ -67,21 +69,19 @@ function MyOrders() {
 
           (
 
-            <div className="empty-orders">
+            <EmptyState
 
-              <h2>
+              icon="📦"
 
-                No Orders Yet
+              title="No Orders Yet"
 
-              </h2>
+              description="When you place your first handmade order, it will appear here."
 
-              <p>
+              buttonText="Start Shopping"
 
-                Looks like you haven't placed an order yet.
+              buttonLink="/shop"
 
-              </p>
-
-            </div>
+            />
 
           )
 

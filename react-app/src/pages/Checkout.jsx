@@ -1,5 +1,6 @@
 import {
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -32,6 +33,53 @@ function Checkout() {
     setIsPlacingOrder,
   ] = useState(false);
 
+  const [
+    addresses,
+    setAddresses,
+  ] = useState([]);
+
+  const [
+    selectedAddress,
+    setSelectedAddress,
+  ] = useState(null);
+
+  useEffect(() => {
+
+    const token =
+      localStorage.getItem("token");
+
+    fetch(
+      `${import.meta.env.VITE_API_URL}/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then(res => res.json())
+      .then(data => {
+
+        setAddresses(
+          data.addresses || []
+        );
+
+        const defaultAddress =
+          data.addresses?.find(
+            a => a.isDefault
+          );
+
+        if (defaultAddress) {
+
+          setSelectedAddress(
+            defaultAddress
+          );
+
+        }
+
+      });
+
+  }, []);
+
   const totalPrice =
     cartItems.reduce(
       (total, item) =>
@@ -59,6 +107,16 @@ function Checkout() {
 
         console.log("Cart Items:", cartItems);
 
+        if (!selectedAddress) {
+
+          toast.error(
+            "Please select a delivery address."
+          );
+
+          return;
+
+        }
+
         const res = await fetch(
           `${import.meta.env.VITE_API_URL}/orders`,
           {
@@ -70,6 +128,7 @@ function Checkout() {
             body: JSON.stringify({
               items: cartItems,
               total: totalPrice,
+              deliveryAddress: selectedAddress,
             }),
           }
         );
@@ -174,6 +233,111 @@ function Checkout() {
                 placeholder="Postal Code"
                 required
               />
+
+            </div>
+
+            <div className="checkout-address-section">
+
+              <h2>
+
+                Select Delivery Address
+
+              </h2>
+
+              {
+
+                addresses.length === 0
+
+                  ?
+
+                  (
+
+                    <p>
+
+                      No saved addresses.
+
+                    </p>
+
+                  )
+
+                  :
+
+                  addresses.map(address => (
+
+                    <div
+
+                      key={address._id}
+
+                      className={
+
+                        `checkout-address-card ${selectedAddress?._id === address._id
+                          ? "selected"
+                          : ""
+                        }`
+
+                      }
+
+                      onClick={() =>
+                        setSelectedAddress(address)
+                      }
+
+                    >
+
+                      <strong>
+
+                        {address.label}
+
+                      </strong>
+
+                      <p>
+
+                        {address.fullName}
+
+                      </p>
+
+                      <p>
+
+                        {address.phone}
+
+                      </p>
+
+                      <p>
+
+                        {address.addressLine}
+
+                      </p>
+
+                      <p>
+
+                        {address.city}, {address.state}
+
+                      </p>
+
+                      <p>
+
+                        {address.postalCode}
+
+                      </p>
+
+                      {
+
+                        address.isDefault && (
+
+                          <span className="default-badge">
+
+                            Default
+
+                          </span>
+
+                        )
+
+                      }
+
+                    </div>
+
+                  ))
+
+              }
 
             </div>
 

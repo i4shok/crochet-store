@@ -1,6 +1,3 @@
-/* ===========================
-   CHECKOUT PAGE
-=========================== */
 
 .checkout-page {
 
@@ -20,9 +17,6 @@
 
 }
 
-/* ===========================
-   LAYOUT
-=========================== */
 
 .checkout-layout {
 
@@ -36,9 +30,6 @@
 
 }
 
-/* ===========================
-   LEFT PANEL
-=========================== */
 
 .checkout-left {
 
@@ -64,9 +55,6 @@
 
 }
 
-/* ===========================
-   FORM
-=========================== */
 
 .checkout-form {
     display: flex;
@@ -124,9 +112,6 @@
 
 }
 
-/* ===========================
-   SUMMARY
-=========================== */
 
 .checkout-summary {
 
@@ -212,9 +197,6 @@
 
 }
 
-/* ===========================
-   MOBILE
-=========================== */
 
 @media(max-width:1000px) {
 
@@ -369,5 +351,76 @@
     height: 1px;
 
     background: #ECECEC;
+
+}
+.checkout-address-section{
+
+margin:40px 0;
+
+}
+
+.checkout-address-section h2{
+
+margin-bottom:20px;
+
+}
+
+.checkout-address-card{
+
+padding:18px;
+
+margin-bottom:18px;
+
+border:2px solid #ECECEC;
+
+border-radius:18px;
+
+cursor:pointer;
+
+transition:.25s;
+
+background:white;
+
+position:relative;
+
+}
+
+.checkout-address-card:hover{
+
+border-color:#7A9E7E;
+
+transform:translateY(-2px);
+
+}
+
+.checkout-address-card.selected{
+
+border-color:#7A9E7E;
+
+background:#F7FBF7;
+
+box-shadow:0 8px 20px rgba(122,158,126,.18);
+
+}
+
+.default-badge{
+
+position:absolute;
+
+top:18px;
+
+right:18px;
+
+padding:5px 12px;
+
+border-radius:20px;
+
+background:#7A9E7E;
+
+color:white;
+
+font-size:.75rem;
+
+font-weight:600;
 
 }

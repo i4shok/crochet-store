@@ -180,7 +180,10 @@ function Navbar() {
 
         {role === "admin" && (
 
-          <NavLink to="/admin">
+          <NavLink
+            to="/admin"
+            className="admin-dashboard-link"
+          >
             Admin Dashboard
           </NavLink>
 
@@ -193,6 +196,16 @@ function Navbar() {
         <button
           onClick={toggleTheme}
           className="icon-btn"
+          aria-label={
+            darkMode
+              ? "Switch to light theme"
+              : "Switch to dark theme"
+          }
+          title={
+            darkMode
+              ? "Switch to light theme"
+              : "Switch to dark theme"
+          }
         >
 
           {darkMode
@@ -254,7 +267,7 @@ function Navbar() {
           ?
 
           <button
-            className="logout-btn"
+            className="nav-logout-btn"
             onClick={() => {
 
               logout();

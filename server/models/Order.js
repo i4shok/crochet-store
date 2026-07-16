@@ -53,6 +53,25 @@ const orderSchema =
 
       default: Date.now,
     },
+
+    deliveryAddress: {
+
+      label: String,
+
+      fullName: String,
+
+      phone: String,
+
+      addressLine: String,
+
+      city: String,
+
+      state: String,
+
+      postalCode: String,
+
+    },
+
   });
 
 module.exports =

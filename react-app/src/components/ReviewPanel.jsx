@@ -19,8 +19,6 @@ function ReviewPanel({
   return (
     <aside className="review-panel">
 
-      {/* Rating Summary */}
-
       <div className="rating-summary">
 
         <div className="rating-score">
