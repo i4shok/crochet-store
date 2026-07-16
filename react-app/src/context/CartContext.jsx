@@ -39,23 +39,24 @@ function CartProvider({ children }) {
       `${import.meta.env.VITE_API_URL}/cart`,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
 
     const data = await res.json();
 
-    setCartItems(
+if (!Array.isArray(data)) {
+  console.error("Unexpected cart response:", data);
+  setCartItems([]);
+  return;
+}
 
+setCartItems(
   data.map(item => ({
-
     ...item.product,
-
     quantity: item.quantity,
-
   }))
-
 );
 
   } catch (err) {
@@ -95,8 +96,7 @@ function CartProvider({ children }) {
             "Content-Type":
               "application/json",
 
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
 
           },
 
@@ -166,7 +166,7 @@ const removeItem = async (id) => {
           method: "DELETE",
 
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -220,8 +220,7 @@ const removeItem = async (id) => {
           method: "DELETE",
 
           headers: {
-            Authorization:
-              token,
+          Authorization: `Bearer ${token}`,
           },
 
         }
@@ -287,8 +286,7 @@ const removeItem = async (id) => {
             "Content-Type":
               "application/json",
 
-            Authorization:
-              token,
+              Authorization: `Bearer ${token}`,
 
           },
 
@@ -344,6 +342,8 @@ const removeItem = async (id) => {
 
   try {
 
+    console.log("Cart Token:", token);
+
     const res =
       await fetch(
         `${import.meta.env.VITE_API_URL}/cart/${id}`,
@@ -356,8 +356,7 @@ const removeItem = async (id) => {
             "Content-Type":
               "application/json",
 
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
 
           },
 

@@ -120,8 +120,7 @@ function AdminDashboard() {
       `${import.meta.env.VITE_API_URL}/admin/stats`,
       {
         headers: {
-          Authorization:
-            token,
+          Authorization: `Bearer ${token}`,
         },
       }
     )
@@ -136,8 +135,7 @@ function AdminDashboard() {
       `${import.meta.env.VITE_API_URL}/admin/orders`,
       {
         headers: {
-          Authorization:
-            token,
+          Authorization: `Bearer ${token}`,
         },
       }
     )
@@ -160,7 +158,7 @@ function AdminDashboard() {
       `${import.meta.env.VITE_API_URL}/admin/best-selling`,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     )
@@ -197,8 +195,7 @@ function AdminDashboard() {
             "Content-Type":
               "application/json",
 
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
           },
 
           body: JSON.stringify({
@@ -237,8 +234,7 @@ function AdminDashboard() {
               "Content-Type":
                 "application/json",
 
-              Authorization:
-                token,
+              Authorization: `Bearer ${token}`,
             },
 
             body:
@@ -292,8 +288,7 @@ function AdminDashboard() {
             "DELETE",
 
           headers: {
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -343,7 +338,7 @@ function AdminDashboard() {
       {
         method: "POST",
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       }
@@ -425,8 +420,7 @@ function AdminDashboard() {
               "Content-Type":
                 "application/json",
 
-              Authorization:
-                token,
+              Authorization: `Bearer ${token}`,
             },
 
             body: JSON.stringify({

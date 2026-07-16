@@ -569,6 +569,294 @@ app.get(
   }
 );
 
+app.put(
+  "/me",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const {
+
+        name,
+
+        email,
+
+        phone,
+
+      } = req.body;
+
+      const user =
+        await User.findById(
+          req.user.id
+        );
+
+      if (!user) {
+
+        return res.status(404).json({
+
+          message:
+            "User not found",
+
+        });
+
+      }
+
+      user.name =
+        name;
+
+      user.email =
+        email;
+
+      user.phone =
+        phone;
+
+      await user.save();
+
+      res.json({
+
+        message:
+          "Profile updated successfully.",
+
+        user,
+
+      });
+
+    }
+
+    catch (error) {
+
+      res.status(500).json({
+
+        message:
+          error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.get(
+  "/me/addresses",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(req.user.id);
+
+      res.json(user.addresses);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+
+  }
+);
+
+app.post(
+  "/me/addresses",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(req.user.id);
+
+      const newAddress = {
+
+        label:
+          req.body.label,
+
+        fullName:
+          req.body.fullName,
+
+        phone:
+          req.body.phone,
+
+        addressLine:
+          req.body.addressLine,
+
+        city:
+          req.body.city,
+
+        state:
+          req.body.state,
+
+        postalCode:
+          req.body.postalCode,
+
+        isDefault:
+          req.body.isDefault || false,
+
+      };
+
+      if (newAddress.isDefault) {
+
+        user.addresses.forEach(address => {
+
+          address.isDefault = false;
+
+        });
+
+      }
+
+      user.addresses.push(
+        newAddress
+      );
+
+      await user.save();
+
+      res.status(201).json(
+        user.addresses
+      );
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message:
+          error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.put(
+  "/me/addresses/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(req.user.id);
+
+      const address =
+        user.addresses.id(req.params.id);
+
+      if (!address) {
+
+        return res.status(404).json({
+
+          message: "Address not found",
+
+        });
+
+      }
+
+      address.label =
+        req.body.label;
+
+      address.fullName =
+        req.body.fullName;
+
+      address.phone =
+        req.body.phone;
+
+      address.addressLine =
+        req.body.addressLine;
+
+      address.city =
+        req.body.city;
+
+      address.state =
+        req.body.state;
+
+      address.postalCode =
+        req.body.postalCode;
+
+      if (req.body.isDefault) {
+
+        user.addresses.forEach(a => {
+
+          a.isDefault = false;
+
+        });
+
+        address.isDefault = true;
+
+      }
+
+      await user.save();
+
+      res.json(user.addresses);
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.delete(
+  "/me/addresses/:id",
+  auth,
+  async (req, res) => {
+
+    try {
+
+      const user =
+        await User.findById(req.user.id);
+
+      const address =
+        user.addresses.id(req.params.id);
+
+      if (!address) {
+
+        return res.status(404).json({
+
+          message: "Address not found",
+
+        });
+
+      }
+
+      address.deleteOne();
+
+      if (
+        user.addresses.length > 0 &&
+        !user.addresses.some(a => a.isDefault)
+      ) {
+
+        user.addresses[0].isDefault = true;
+
+      }
+
+      await user.save();
+
+      res.json(user.addresses);
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
+
+    }
+
+  }
+);
+
 app.get(
   "/my-orders",
   auth,

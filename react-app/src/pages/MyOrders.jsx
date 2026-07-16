@@ -28,8 +28,7 @@ function MyOrders() {
       `${import.meta.env.VITE_API_URL}/my-orders`,
       {
         headers: {
-          Authorization:
-            token,
+          Authorization: `Bearer ${token}`,
         },
       }
     )

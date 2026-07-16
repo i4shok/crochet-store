@@ -10,6 +10,22 @@ const userSchema = new mongoose.Schema({
 
   password: String,
 
+  phone: {
+
+    type: String,
+
+    default: "",
+
+  },
+
+  avatar: {
+
+    type: String,
+
+    default: "",
+
+  },
+
   role: {
     type: String,
     default: "user",
@@ -34,6 +50,42 @@ const userSchema = new mongoose.Schema({
         default: 1,
       },
     },
+  ],
+
+  addresses: [
+
+    {
+
+      label: {
+
+        type: String,
+
+        default: "Home",
+
+      },
+
+      fullName: String,
+
+      phone: String,
+
+      addressLine: String,
+
+      city: String,
+
+      state: String,
+
+      postalCode: String,
+
+      isDefault: {
+
+        type: Boolean,
+
+        default: false,
+
+      },
+
+    },
+
   ],
 
 });

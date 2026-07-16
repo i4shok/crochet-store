@@ -32,13 +32,12 @@ function WishlistProvider({
       return;
 
     }
-
+console.log("Wishlist Token:", token);
     fetch(
       `${import.meta.env.VITE_API_URL}/wishlist`,
       {
         headers: {
-          Authorization:
-            token,
+          Authorization: `Bearer ${token}`,
         },
       }
     )
@@ -75,8 +74,7 @@ function WishlistProvider({
           method: "POST",
 
           headers: {
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -125,8 +123,7 @@ function WishlistProvider({
           method: "DELETE",
 
           headers: {
-            Authorization:
-              token,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

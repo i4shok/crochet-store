@@ -174,7 +174,7 @@ function ProductDetails() {
 
             "Content-Type": "application/json",
 
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
 
           },
 
@@ -234,7 +234,7 @@ function ProductDetails() {
 
           headers: {
 
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
 
           },
 
