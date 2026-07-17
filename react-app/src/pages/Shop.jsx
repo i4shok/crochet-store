@@ -4,7 +4,7 @@ import {
 } from "react";
 
 import ProductQuickView from "../components/ProductQuickView";
-
+import "../styles/Shop.css";
 import ProductCard from "../components/ProductCard";
 import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 
