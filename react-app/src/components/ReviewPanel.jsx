@@ -110,7 +110,7 @@ function ReviewPanel({
 
       </div>
 
-      <h2>Reviews</h2>``
+      <h2>Reviews</h2>
 
       <select
         value={sortReviews}
@@ -260,84 +260,65 @@ function ReviewPanel({
               {
 
                 review.user?._id ===
-
                 localStorage.getItem("userId")
 
                 &&
 
-                <button
+                <div className="review-actions">
 
-                  className="edit-review-btn"
+                  <button
 
-                  onClick={() => {
+                    type="button"
 
-                    setEditingReview(
+                    className="edit-review-btn"
 
-                      review._id
+                    onClick={() => {
 
-                    );
+                      setEditingReview(review._id);
 
-                    setRating(
+                      setRating(review.rating);
 
-                      review.rating
+                      setReviewText(review.text);
 
-                    );
+                    }}
 
-                    setReviewText(
+                  >
 
-                      review.text
+                    ✏️ Edit
 
-                    );
+                  </button>
 
-                  }}
+                  <button
 
-                >
+                    type="button"
 
-                  Edit Review
+                    className="delete-review-btn"
 
-                </button>
+                    onClick={() => {
 
-              }
+                      if (
 
-              {
+                        window.confirm(
 
-                review.user?._id ===
+                          "Delete this review?"
 
-                localStorage.getItem("userId")
+                        )
 
-                &&
+                      ) {
 
-                <button
+                        handleDeleteReview(review._id);
 
-                  className="delete-review-btn"
+                      }
 
-                  onClick={() => {
+                    }}
 
-                    if (
+                  >
 
-                      window.confirm(
+                    🗑 Delete
 
-                        "Delete this review?"
+                  </button>
 
-                      )
-
-                    ) {
-
-                      handleDeleteReview(
-
-                        review._id
-
-                      );
-
-                    }
-
-                  }}
-
-                >
-
-                  Delete
-
-                </button>
+                </div>
 
               }
 

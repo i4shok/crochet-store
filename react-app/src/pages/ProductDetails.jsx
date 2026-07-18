@@ -206,15 +206,47 @@ function ProductDetails() {
     }
 
     toast.success(
-      "Review Added"
+
+      editingReview
+
+        ? "Review updated."
+
+        : "Review added."
+
     );
 
-    setReviews([
-      ...reviews,
-      newReview,
-    ]);
+    if (editingReview) {
 
-    setReviewName("");
+      setReviews(
+
+        reviews.map(review =>
+
+          review._id === editingReview
+
+            ? newReview
+
+            : review
+
+        )
+
+      );
+
+    } else {
+
+      setReviews([
+
+        ...reviews,
+
+        newReview,
+
+      ]);
+
+    }
+
+    setEditingReview(null);
+
+    setRating(5);
+
     setReviewText("");
   };
 
@@ -315,7 +347,7 @@ function ProductDetails() {
           editingReview={editingReview}
           setEditingReview={setEditingReview}
           handleDeleteReview={handleDeleteReview}
-          
+
         />
 
       </section>

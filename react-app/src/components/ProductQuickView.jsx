@@ -211,46 +211,17 @@ function ProductQuickView({
 
                         <button
 
-                            onClick={() => {
+                            onClick={async () => {
 
-                                let added = true;
+                                const success = await addToCart(
+                                    product,
+                                    quantity
+                                );
 
-                                for (
-
-                                    let i = 0;
-
-                                    i < quantity;
-
-                                    i++
-
-                                ) {
-
-                                    const success = addToCart(product);
-
-                                    if (!success) {
-
-                                        added = false;
-
-                                        break;
-
-                                    }
-
-                                }
-
-                                if (added) {
+                                if (success) {
 
                                     toast.success(
-
-                                        `${quantity} ${product.name} added to cart`
-
-                                    );
-
-                                }
-
-                                if (added) {
-
-                                    toast.success(
-                                        `${product.name} added to cart`
+                                        `${quantity} × ${product.name} added to cart`
                                     );
 
                                 }

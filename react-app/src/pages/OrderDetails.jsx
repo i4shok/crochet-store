@@ -5,6 +5,7 @@ import {
 
 import {
     useParams,
+    useNavigate,
 } from "react-router-dom";
 
 import StatusBadge from "../components/StatusBadge";
@@ -17,6 +18,8 @@ function OrderDetails() {
 
     const { id } =
         useParams();
+
+    const navigate = useNavigate();
 
     const [order, setOrder] =
         useState(null);
@@ -179,13 +182,31 @@ function OrderDetails() {
 
             <div className="order-action-panel">
 
-                <button className="primary-action">
+                <button
+                    className="primary-action"
+                    onClick={() => {
+
+                        document
+                            .querySelector(".timeline")
+                            ?.scrollIntoView({
+
+                                behavior: "smooth",
+
+                            });
+
+                    }}
+                >
 
                     📍 Track Order
 
                 </button>
 
-                <button className="secondary-action">
+                <button
+                    className="secondary-action"
+                    onClick={() =>
+                        navigate("/shop")
+                    }
+                >
 
                     🛍 Continue Shopping
 
@@ -229,14 +250,26 @@ function OrderDetails() {
 
                             <div className="order-actions">
 
-                                <button>
+                                <button
+                                    onClick={() =>
+                                        navigate(
+                                            `/product/${item.product._id}`
+                                        )
+                                    }
+                                >
 
                                     View Product
 
                                 </button>
 
 
-                                <button>
+                                <button
+                                    onClick={() =>
+                                        navigate(
+                                            `/product/${item.product._id}`
+                                        )
+                                    }
+                                >
 
                                     Review Product
 

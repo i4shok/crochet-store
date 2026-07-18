@@ -43,36 +43,55 @@ function Checkout() {
     setSelectedAddress,
   ] = useState(null);
 
+  const [
+    checkoutForm,
+    setCheckoutForm,
+  ] = useState({
+
+    fullName: "",
+
+    email: "",
+
+    phone: "",
+
+    addressLine: "",
+
+    city: "",
+
+    postalCode: "",
+
+  });
+
   useEffect(() => {
 
     const token =
       localStorage.getItem("token");
 
     fetch(
-      `${import.meta.env.VITE_API_URL}/me`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `${import.meta.env.VITE_API_URL}/me/addresses`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
     )
       .then(res => res.json())
       .then(data => {
 
-        setAddresses(
-          data.addresses || []
-        );
+        setCheckoutForm(prev => ({
+          ...prev,
+          email: data.email || "",
+        }));
+
+        setAddresses(data);
 
         const defaultAddress =
-          data.addresses?.find(
+          data.find(
             a => a.isDefault
           );
 
         if (defaultAddress) {
 
-          setSelectedAddress(
-            defaultAddress
-          );
+          setSelectedAddress(defaultAddress);
 
         }
 
@@ -192,18 +211,44 @@ function Checkout() {
             <input
               type="text"
               placeholder="Full Name"
+              value={checkoutForm.fullName}
+              onChange={(e) =>
+
+                setCheckoutForm({
+
+                  ...checkoutForm,
+
+                  fullName: e.target.value,
+
+                })
+
+              }
               required
             />
 
             <input
               type="email"
               placeholder="Email Address"
+              value={checkoutForm.email}
+              onChange={(e) =>
+                setCheckoutForm({
+                  ...checkoutForm,
+                  email: e.target.value,
+                })
+              }
               required
             />
 
             <input
               type="text"
               placeholder="Phone Number"
+              value={checkoutForm.phone}
+              onChange={(e) =>
+                setCheckoutForm({
+                  ...checkoutForm,
+                  phone: e.target.value,
+                })
+              }
               required
             />
 
@@ -217,6 +262,13 @@ function Checkout() {
 
             <textarea
               placeholder="Shipping Address"
+              value={checkoutForm.addressLine}
+              onChange={(e) =>
+                setCheckoutForm({
+                  ...checkoutForm,
+                  addressLine: e.target.value,
+                })
+              }
               required
             />
 
@@ -225,12 +277,26 @@ function Checkout() {
               <input
                 type="text"
                 placeholder="City"
+                value={checkoutForm.city}
+                onChange={(e) =>
+                  setCheckoutForm({
+                    ...checkoutForm,
+                    city: e.target.value,
+                  })
+                }
                 required
               />
 
               <input
                 type="text"
                 placeholder="Postal Code"
+                value={checkoutForm.postalCode}
+                onChange={(e) =>
+                  setCheckoutForm({
+                    ...checkoutForm,
+                    postalCode: e.target.value,
+                  })
+                }
                 required
               />
 
@@ -277,9 +343,27 @@ function Checkout() {
 
                       }
 
-                      onClick={() =>
-                        setSelectedAddress(address)
-                      }
+                      onClick={() => {
+
+                        setSelectedAddress(address);
+
+                        setCheckoutForm({
+
+                          fullName: address.fullName,
+
+                          email: "",
+
+                          phone: address.phone,
+
+                          addressLine: address.addressLine,
+
+                          city: address.city,
+
+                          postalCode: address.postalCode,
+
+                        });
+
+                      }}
 
                     >
 
