@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 import "../styles/Hero.css";
 
+import FullLogo from "../assets/branding/logo-full.png";
+
 function Hero() {
 
   return (

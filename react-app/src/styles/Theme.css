@@ -204,8 +204,15 @@ body[data-theme="dark"] { background: #111312; }
   border-radius: 18px;
   padding: 18px;
 }
-.app.dark :is(.order-info h2, .order-heading, .product-list p, .order-date, .product-category) {
-  color: var(--night-text);
+.app.dark :is(
+.order-info h2,
+.order-heading,
+.product-list,
+.product-list p,
+.order-date,
+.product-category
+){
+    color: var(--night-text);
 }
 
 .app.dark :is(.cart-quantity button, .cart-features span, .progress-step,

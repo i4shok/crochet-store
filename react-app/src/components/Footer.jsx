@@ -8,6 +8,8 @@ import {
 
 import "../styles/Footer.css";
 
+import FullLogo from "../assets/branding/logo-full.png";
+
 function Footer() {
 
   return (

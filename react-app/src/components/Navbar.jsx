@@ -1,4 +1,5 @@
 import {
+  Link,
   NavLink,
   useNavigate,
 } from "react-router-dom";
@@ -8,7 +9,7 @@ import {
   useState,
 } from "react";
 import "../styles/Navbar.css";
-
+import HeaderLogo from "../assets/branding/HeaderLogo.png";
 import {
   ShoppingCart,
   Heart,
@@ -90,17 +91,15 @@ function Navbar() {
 
       >
 
-        <div className="logo-placeholder">
+        <Link to="/" className="navbar-brand">
 
-          KB
+          <img
+            src={HeaderLogo}
+            alt="Knot & Bloom"
+            className="navbar-logo"
+          />
 
-        </div>
-
-        <span>
-
-          Knot & Bloom
-
-        </span>
+        </Link>
 
       </NavLink>
 
