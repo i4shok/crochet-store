@@ -1,118 +1,36 @@
 import { Link } from "react-router-dom";
-
 import "../styles/Hero.css";
 
-import FullLogo from "../assets/branding/logo-full.png";
-
 function Hero() {
-
   return (
-
     <section className="hero">
-
       <div className="hero-content">
-
+        
         <div className="hero-text">
-
-          <h1>
-
-            Every Stitch
-
-            Tells A Story.
-
-          </h1>
-
+          <h1>Every Stitch Tells A Story.</h1>
           <p>
-
-            Discover handcrafted crochet creations made with
-            care, patience and creativity. From timeless flowers
-            to adorable plushies, every piece is designed to bring
-            warmth into someone's life.
-
+            Discover handcrafted crochet creations made with care, patience and creativity. From timeless flowers to adorable plushies, every piece is designed to bring warmth into someone's life.
           </p>
-
+          
           <div className="hero-features">
-
-            <div>
-
-              🌿 Handmade
-
-            </div>
-
-            <div>
-
-              🚚 Fast Delivery
-
-            </div>
-
-            <div>
-
-              🎁 Perfect Gifts
-
-            </div>
-
+            <div>🌿 Handmade</div>
+            <div>🚚 Fast Delivery</div>
+            <div>🎁 Perfect Gifts</div>
           </div>
-
+          
           <div className="hero-buttons">
-
-            <Link
-
-              to="/shop"
-
-              className="hero-btn"
-
-            >
-
+            <Link to="/shop" className="hero-btn">
               Shop Collection
-
             </Link>
-
-            <Link
-
-              to="/contact"
-
-              className="hero-btn secondary-btn"
-
-            >
-
+            <Link to="/contact" className="hero-btn secondary-btn">
               Custom Orders
-
             </Link>
-
           </div>
-
-        </div>
-
-        <div className="hero-animation">
-
-          <div className="animation-placeholder">
-
-            🧶
-
-            <p>
-
-              Crochet Animation
-
-              Coming Soon
-
-            </p>
-
-          </div>
-
         </div>
 
       </div>
-
-      <div className="scroll-down">
-
-        ↓
-
-      </div>
-
     </section>
-
   );
-
 }
 
 export default Hero;

@@ -20,117 +20,123 @@ function Footer() {
 
         <div className="footer-brand">
 
-          <div className="footer-logo">
+          <div className="footer-brand-header">
 
-            🧶
+            <img
+              src={FullLogo}
+              alt="Knot & Bloom"
+              className="footer-brand-logo"
+            />
+
+            <div className="footer-divider" />
+
+            <div className="footer-brand-text">
+
+              <h2>
+                Knot & Bloom
+              </h2>
+
+              <p>
+
+                Handcrafted crochet creations made with love,
+                patience and creativity.
+
+              </p>
+
+            </div>
 
           </div>
-
-          <h2>
-
-            Knot & Bloom
-
-          </h2>
-
-          <p>
-
-            Handcrafted crochet creations made with love,
-            patience and creativity.
-
-          </p>
 
           <div className="footer-socials">
 
             <a href="#">
-
               <FaInstagram size={18} />
-
             </a>
 
             <a href="#">
-
               <FaLinkedin size={18} />
-
             </a>
 
             <a href="#">
-
               <FaGithub size={18} />
-
             </a>
 
           </div>
 
         </div>
 
-        <div className="footer-links">
+        <div className="footer-links-wrapper">
 
-          <h3>
+          <div className="footer-links">
 
-            Explore
+            <h3>
 
-          </h3>
+              Explore
 
-          <Link to="/">
+            </h3>
 
-            Home
+            <Link to="/">
 
-          </Link>
+              Home
 
-          <Link to="/shop">
+            </Link>
 
-            Shop
+            <Link to="/shop">
 
-          </Link>
+              Shop
 
-          <Link to="/wishlist">
+            </Link>
 
-            Wishlist
+            <Link to="/wishlist">
 
-          </Link>
+              Wishlist
 
-          <Link to="/my-orders">
+            </Link>
 
-            Orders
+            <Link to="/my-orders">
 
-          </Link>
+              Orders
+
+            </Link>
+
+          </div>
+
+          <div className="footer-links">
+
+            <h3>
+
+              Support
+
+            </h3>
+
+            <Link to="/contact">
+
+              Contact
+
+            </Link>
+
+            <a href="#">
+
+              Shipping
+
+            </a>
+
+            <a href="#">
+
+              Returns
+
+            </a>
+
+            <a href="#">
+
+              FAQ
+
+            </a>
+
+          </div>
 
         </div>
-
-        <div className="footer-links">
-
-          <h3>
-
-            Support
-
-          </h3>
-
-          <Link to="/contact">
-
-            Contact
-
-          </Link>
-
-          <a href="#">
-
-            Shipping
-
-          </a>
-
-          <a href="#">
-
-            Returns
-
-          </a>
-
-          <a href="#">
-
-            FAQ
-
-          </a>
-
-        </div>
-
+        
       </div>
 
       <div className="footer-bottom">

@@ -28,3 +28,8 @@ flex-wrap:wrap;
   max-width: 800px;
   margin: auto;
 }
+.home-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
