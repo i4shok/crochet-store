@@ -1,308 +1,133 @@
 import { useParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import {
-  useContext,
-  useState,
-  useEffect,
-} from "react";
-
+import { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-
-import {
-  WishlistContext,
-} from "../context/WishListContext";
-
+import { WishlistContext } from "../context/WishListContext";
 import ProductGallery from "../components/ProductGallery";
 import ProductInfo from "../components/ProductInfo";
 import ReviewPanel from "../components/ReviewPanel";
 import RelatedProducts from "../components/RelatedProducts";
-
 import StarRating from "../components/StarRating";
-
 import "../styles/ProductDetails.css";
 
 function ProductDetails() {
-
-  const { id } =
-    useParams();
-
-  const [product,
-    setProduct] =
-    useState(null);
-
-  const [reviews,
-    setReviews] =
-    useState([]);
-
-  const [relatedProducts,
-    setRelatedProducts] =
-    useState([]);
-
-  const [selectedImage, setSelectedImage] =
-    useState("");
-
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
-
-  const [reviewText,
-    setReviewText] =
-    useState("");
-
-  const [searchReview,
-    setSearchReview] =
-    useState("");
-
-  const [sortReviews,
-    setSortReviews] =
-    useState("newest");
-
-  const [rating,
-    setRating] =
-    useState(5);
-
-  const [editingReview,
-    setEditingReview] =
-    useState(null);
+  const [reviewText, setReviewText] = useState("");
+  const [searchReview, setSearchReview] = useState("");
+  const [sortReviews, setSortReviews] = useState("newest");
+  const [rating, setRating] = useState(5);
+  const [editingReview, setEditingReview] = useState(null);
 
   const averageRating =
     reviews.length > 0
       ? (
-        reviews.reduce(
-          (sum, review) =>
-            sum +
-            review.rating,
-          0
-        ) / reviews.length
-      ).toFixed(1)
+          reviews.reduce((sum, review) => sum + review.rating, 0) /
+          reviews.length
+        ).toFixed(1)
       : 0;
 
   useEffect(() => {
-
-    fetch(
-      `${import.meta.env.VITE_API_URL}/products/${id}`
-    )
-      .then((res) =>
-        res.json()
-      )
+    fetch(`${import.meta.env.VITE_API_URL}/products/${id}`)
+      .then((res) => res.json())
       .then((data) => {
-
-        console.log(data);
-
         setProduct(data);
-
         setSelectedImage(data.image);
-
       });
   }, [id]);
-  useEffect(() => {
 
-    fetch(
-      `${import.meta.env.VITE_API_URL}/products/${id}/related`
-    )
-      .then((res) =>
-        res.json()
-      )
-      .then((data) =>
-        setRelatedProducts(
-          data
-        )
-      );
-
-  }, [id]);
   useEffect(() => {
-    fetch(
-      `${import.meta.env.VITE_API_URL}/reviews/${id}`
-    )
-      .then((res) =>
-        res.json()
-      )
-      .then((data) =>
-        setReviews(data)
-      );
+    fetch(`${import.meta.env.VITE_API_URL}/products/${id}/related`)
+      .then((res) => res.json())
+      .then((data) => setRelatedProducts(data));
   }, [id]);
 
-  const { addToCart } =
-    useContext(CartContext);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/reviews/${id}`)
+      .then((res) => res.json())
+      .then((data) => setReviews(data));
+  }, [id]);
 
-  const {
-    addToWishlist,
-  } = useContext(
-    WishlistContext
-  );
+  const { addToCart } = useContext(CartContext);
+  const { addToWishlist } = useContext(WishlistContext);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-
-    const token =
-      localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     if (!token) {
-
-      toast.error(
-
-        "Please login to leave a review."
-
-      );
-
+      toast.error("Please login to leave a review.");
       return;
-
     }
 
-    const endpoint =
-      editingReview
+    const endpoint = editingReview
+      ? `${import.meta.env.VITE_API_URL}/reviews/${editingReview}`
+      : `${import.meta.env.VITE_API_URL}/reviews`;
 
-        ? `${import.meta.env.VITE_API_URL}/reviews/${editingReview}`
+    const method = editingReview ? "PUT" : "POST";
 
-        : `${import.meta.env.VITE_API_URL}/reviews`;
+    const res = await fetch(endpoint, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        product: id,
+        text: reviewText,
+        rating,
+      }),
+    });
 
-    const method =
-      editingReview
-
-        ? "PUT"
-
-        : "POST";
-
-    const res =
-      await fetch(
-
-        endpoint,
-
-        {
-
-          method,
-
-          headers: {
-
-            "Content-Type": "application/json",
-
-            Authorization: `Bearer ${token}`,
-
-          },
-
-          body: JSON.stringify({
-
-            product: id,
-
-            text: reviewText,
-
-            rating,
-
-          }),
-
-        }
-
-      );
-
-    const newReview =
-      await res.json();
+    const newReview = await res.json();
 
     if (!res.ok) {
-
-      toast.error(
-        newReview.message
-      );
-
+      toast.error(newReview.message);
       return;
-
     }
 
-    toast.success(
-
-      editingReview
-
-        ? "Review updated."
-
-        : "Review added."
-
-    );
+    toast.success(editingReview ? "Review updated." : "Review added.");
 
     if (editingReview) {
-
       setReviews(
-
-        reviews.map(review =>
-
-          review._id === editingReview
-
-            ? newReview
-
-            : review
-
+        reviews.map((review) =>
+          review._id === editingReview ? newReview : review
         )
-
       );
-
     } else {
-
-      setReviews([
-
-        ...reviews,
-
-        newReview,
-
-      ]);
-
+      setReviews([...reviews, newReview]);
     }
 
     setEditingReview(null);
-
     setRating(5);
-
     setReviewText("");
   };
 
   const handleDeleteReview = async (reviewId) => {
+    const token = localStorage.getItem("token");
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/reviews/${reviewId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    const token =
-      localStorage.getItem("token");
-
-    const res =
-      await fetch(
-
-        `${import.meta.env.VITE_API_URL}/reviews/${reviewId}`,
-
-        {
-
-          method: "DELETE",
-
-          headers: {
-
-            Authorization: `Bearer ${token}`,
-
-          },
-
-        }
-
-      );
-
-    const data =
-      await res.json();
+    const data = await res.json();
 
     if (!res.ok) {
-
       toast.error(data.message);
-
       return;
-
     }
 
-    setReviews(
-
-      reviews.filter(
-
-        review =>
-
-          review._id !== reviewId
-
-      )
-
-    );
-
-    toast.success(
-
-      "Review deleted."
-
-    );
-
+    setReviews(reviews.filter((review) => review._id !== reviewId));
+    toast.success("Review deleted.");
   };
 
   if (!product) {
@@ -310,17 +135,10 @@ function ProductDetails() {
   }
 
   return (
-
     <div className="product-page">
-
-      <section className="product-main">
-
+      <section className="product-details-section">
         <div className="product-details-card">
-
-          <ProductGallery
-            product={product}
-          />
-
+          <ProductGallery product={product} />
           <ProductInfo
             product={product}
             averageRating={averageRating}
@@ -328,11 +146,11 @@ function ProductDetails() {
             addToCart={addToCart}
             addToWishlist={addToWishlist}
           />
-
         </div>
+      </section>
 
+      <section className="product-reviews-section">
         <ReviewPanel
-
           averageRating={averageRating}
           reviews={reviews}
           searchReview={searchReview}
@@ -347,19 +165,17 @@ function ProductDetails() {
           editingReview={editingReview}
           setEditingReview={setEditingReview}
           handleDeleteReview={handleDeleteReview}
-
         />
-
       </section>
 
-      <RelatedProducts
-        relatedProducts={relatedProducts}
-        addToCart={addToCart}
-        addToWishlist={addToWishlist}
-      />
-
+      <section className="related-products-section">
+        <RelatedProducts
+          relatedProducts={relatedProducts}
+          addToCart={addToCart}
+          addToWishlist={addToWishlist}
+        />
+      </section>
     </div>
-
   );
 }
 
