@@ -486,3 +486,15 @@
         padding-bottom: 6px;
     }
 }
+@media (min-width: 1300px) {
+
+    .order-product-image,
+    .image-collage {
+        width: 210px;
+        height: 210px;
+    }
+
+    .order-card {
+        padding: 36px;
+    }
+}

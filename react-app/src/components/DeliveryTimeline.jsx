@@ -9,68 +9,46 @@ const LABELS = {
 };
 
 function DeliveryTimeline({ status }) {
+    const normalizedStatus = status?.toLowerCase();
 
-    if (status === "cancelled") {
-
+    if (normalizedStatus === "cancelled") {
         return (
-
             <div className="timeline timeline-cancelled">
-
                 <span>This order was cancelled</span>
-
             </div>
-
         );
-
     }
 
-    const currentIndex = STEPS.indexOf(status);
+    const currentIndex = STEPS.indexOf(normalizedStatus);
+    const isDelivered = normalizedStatus === "delivered";
 
     return (
-
         <div className="timeline">
+            {STEPS.map((step, index) => {
+                const isCompleted = index < currentIndex || (isDelivered && index === currentIndex);
+                const isCurrent = index === currentIndex && !isDelivered;
 
-            {
-
-                STEPS.map((step, index) => (
-
+                return (
                     <div
                         key={step}
-                        className={`timeline-item ${index === currentIndex ? "current" : "faded"}`}
+                        className={`timeline-item ${isCompleted ? "completed" : ""} ${isCurrent ? "current" : ""} ${!isCompleted && !isCurrent ? "faded" : ""}`}
                     >
-
                         <div className="timeline-node">
-
-                            <div className={`timeline-circle ${index === currentIndex ? "active" : ""}`}>
-
-                                {index < currentIndex ? "✓" : index + 1}
-
+                            <div className={`timeline-circle ${isCompleted ? "completed" : ""} ${isCurrent ? "active" : ""}`}>
+                                {isCompleted ? "✓" : index + 1}
                             </div>
 
-                            {
-
-                                index !== STEPS.length - 1 && (
-
-                                    <div className="timeline-line" />
-
-                                )
-
-                            }
-
+                            {index !== STEPS.length - 1 && (
+                                <div className={`timeline-line ${isCompleted ? "filled" : ""}`} />
+                            )}
                         </div>
 
                         <span>{LABELS[step]}</span>
-
                     </div>
-
-                ))
-
-            }
-
+                );
+            })}
         </div>
-
     );
-
 }
 
 export default DeliveryTimeline;
