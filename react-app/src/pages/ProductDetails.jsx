@@ -136,37 +136,41 @@ function ProductDetails() {
 
   return (
     <div className="product-page">
-      <section className="product-details-section">
-        <div className="product-details-card">
-          <ProductGallery product={product} />
-          <ProductInfo
-            product={product}
+      <div className="product-top-section">
+        <section className="product-details-section">
+          <div className="product-details-card">
+            <ProductGallery product={product} />
+            <div className="product-info-card">
+              <ProductInfo
+                product={product}
+                averageRating={averageRating}
+                reviews={reviews}
+                addToCart={addToCart}
+                addToWishlist={addToWishlist}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="product-reviews-section">
+          <ReviewPanel
             averageRating={averageRating}
             reviews={reviews}
-            addToCart={addToCart}
-            addToWishlist={addToWishlist}
+            searchReview={searchReview}
+            setSearchReview={setSearchReview}
+            sortReviews={sortReviews}
+            setSortReviews={setSortReviews}
+            rating={rating}
+            setRating={setRating}
+            reviewText={reviewText}
+            setReviewText={setReviewText}
+            handleReviewSubmit={handleReviewSubmit}
+            editingReview={editingReview}
+            setEditingReview={setEditingReview}
+            handleDeleteReview={handleDeleteReview}
           />
-        </div>
-      </section>
-
-      <section className="product-reviews-section">
-        <ReviewPanel
-          averageRating={averageRating}
-          reviews={reviews}
-          searchReview={searchReview}
-          setSearchReview={setSearchReview}
-          sortReviews={sortReviews}
-          setSortReviews={setSortReviews}
-          rating={rating}
-          setRating={setRating}
-          reviewText={reviewText}
-          setReviewText={setReviewText}
-          handleReviewSubmit={handleReviewSubmit}
-          editingReview={editingReview}
-          setEditingReview={setEditingReview}
-          handleDeleteReview={handleDeleteReview}
-        />
-      </section>
+        </section>
+      </div>
 
       <section className="related-products-section">
         <RelatedProducts

@@ -1,5 +1,7 @@
 .home-page {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 .featured {
   padding: 60px 20px;
@@ -17,19 +19,10 @@
   gap: 20px;
   justify-content: center;
   margin-top: 20px;
-}
-.categories-grid{
-
-flex-wrap:wrap;
-
+  flex-wrap: wrap;
 }
 .about-section {
   text-align: center;
   max-width: 800px;
   margin: auto;
-}
-.home-page {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
 }

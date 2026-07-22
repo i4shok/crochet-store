@@ -17,12 +17,21 @@ function Navbar() {
 
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
       setIsScrolled(currentScrollY > 60);
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+        setIsHidden(true);
+      } else if (currentScrollY < lastScrollY.current) {
+        setIsHidden(false);
+      }
+
       lastScrollY.current = currentScrollY;
     };
 
@@ -32,14 +41,15 @@ function Navbar() {
 
   return (
     <>
-      <header className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
-        
-        {/* Top Left: Logo (Always Visible) */}
+      <header
+        className={`navbar ${isScrolled ? "navbar-scrolled" : ""} ${
+          isHidden ? "navbar-hidden" : ""
+        }`}
+      >
         <NavLink to="/" className={({ isActive }) => `navbar-brand ${isActive ? "active" : ""}`}>
           <img src={HeaderLogo} alt="Knot & Bloom" className="navbar-logo" />
         </NavLink>
 
-        {/* --- DESKTOP ONLY: Center Links --- */}
         <div className="nav-center desktop-only">
           <NavLink to="/" className="nav-icon"><House size={20} /></NavLink>
           <NavLink to="/shop" className={({ isActive }) => (isActive ? "nav-icon active" : "nav-icon")}><Store size={20} /></NavLink>
@@ -53,7 +63,6 @@ function Navbar() {
           {role === "admin" && <NavLink to="/admin" className="admin-dashboard-link">Admin Dashboard</NavLink>}
         </div>
 
-        {/* --- DESKTOP ONLY: Right Actions --- */}
         <div className="nav-actions desktop-only">
           <button onClick={toggleTheme} className="icon-btn">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
@@ -74,7 +83,6 @@ function Navbar() {
           )}
         </div>
 
-        {/* --- MOBILE ONLY: Top Right Actions --- */}
         <div className="mobile-top-actions mobile-only">
           {role === "admin" && <NavLink to="/admin" className="icon-btn"><Package size={20} /></NavLink>}
           <button onClick={toggleTheme} className="icon-btn">
@@ -90,8 +98,7 @@ function Navbar() {
         </div>
       </header>
 
-      {/* --- MOBILE ONLY: Bottom App Dock --- */}
-      <nav className="mobile-bottom-dock mobile-only">
+      <nav className={`mobile-bottom-dock mobile-only ${isHidden ? "dock-hidden" : ""}`}>
         <NavLink to="/" className={({ isActive }) => `dock-item ${isActive ? "active" : ""}`}>
           <House size={22} />
         </NavLink>

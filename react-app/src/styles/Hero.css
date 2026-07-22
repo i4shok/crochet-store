@@ -18,28 +18,6 @@
 
 }
 
-.hero-animation-section {
-
-    min-height: 100vh;
-
-}
-
-.hero-content-section {
-
-    min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 70px 24px;
-
-    background: #FAF7F2;
-
-}
-
 .hero::before {
 
     content: "";
@@ -184,9 +162,27 @@
 
 }
 
+.hero-buttons {
+
+    display: flex;
+
+    gap: 20px;
+
+    margin-top: 20px;
+
+    flex-wrap: wrap;
+
+}
+
 .hero-btn {
 
-    display: inline-block;
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex: 1 1 220px;
 
     padding: 16px 34px;
 
@@ -200,19 +196,9 @@
 
     font-weight: 700;
 
+    text-align: center;
+
     transition: .3s;
-
-}
-
-.hero-buttons {
-
-    display: flex;
-
-    gap: 20px;
-
-    margin-top: 20px;
-
-    flex-wrap: wrap;
 
 }
 
@@ -239,110 +225,6 @@
     transform: translateY(-5px);
 
     box-shadow: 0 18px 36px rgba(122, 158, 126, .28);
-
-}
-
-.hero-animation {
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-}
-
-.animation-placeholder {
-
-    width: 320px;
-
-    height: 320px;
-
-    border-radius: 32px;
-
-    background:
-        radial-gradient(circle at top, #ffffff, #f3ece3);
-
-    border: 1px solid rgba(122, 158, 126, .15);
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    position: relative;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 24px 60px rgba(0, 0, 0, .08);
-
-}
-
-.animation-placeholder::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 620px;
-
-    height: 620px;
-
-    border-radius: 50%;
-
-    border: 2px dashed rgba(122, 158, 126, .18);
-
-    animation: rotateRing 35s linear infinite;
-
-}
-
-.animation-placeholder::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 420px;
-
-    height: 420px;
-
-    border-radius: 50%;
-
-    border: 2px dashed rgba(126, 91, 239, .15);
-
-    animation: rotateRingReverse 28s linear infinite;
-
-}
-
-.animation-placeholder {
-
-    font-size: 6rem;
-
-    z-index: 2;
-
-}
-
-.animation-placeholder p {
-
-    margin-top: 20px;
-
-    font-size: 1.15rem;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-
-    color: #6b5d52;
-
-    text-align: center;
-
-    z-index: 2;
 
 }
 
@@ -405,18 +287,18 @@
 
 @media(max-width:900px) {
     .hero {
-        padding: 40px 22px 60px; /* Gives nice breathing room top and bottom */
+        padding: 40px 22px 60px;
         min-height: auto;
         display: block;
     }
-    
+
     .hero-content {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
     }
-    
+
     .hero-text {
         width: 100%;
         max-width: 380px;
@@ -425,7 +307,7 @@
         align-items: center;
         margin-top: 10px;
     }
-    
+
     .hero-text h1 {
         font-size: 2.3rem;
         line-height: 1.1;
@@ -433,7 +315,7 @@
         text-align: center;
         width: 100%;
     }
-    
+
     .hero-text p {
         font-size: 1rem;
         line-height: 1.6;
@@ -441,7 +323,7 @@
         margin: 0 0 24px;
         max-width: 340px;
     }
-    
+
     .hero-features {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -449,7 +331,7 @@
         width: 100%;
         margin: 0 0 28px;
     }
-    
+
     .hero-features div {
         padding: 10px 4px;
         font-size: .75rem;
@@ -460,52 +342,20 @@
         border-radius: 14px;
         background: rgba(0,0,0,0.02);
     }
-    
+
     .hero-buttons {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 16px;
     }
-    
+
     .hero-btn {
         width: 100%;
+        flex: none;
         padding: 16px;
-        text-align: center;
         box-sizing: border-box;
     }
-}
-
-@keyframes rotateRing {
-
-    from {
-
-        transform: rotate(0deg);
-
-    }
-
-    to {
-
-        transform: rotate(360deg);
-
-    }
-
-}
-
-@keyframes rotateRingReverse {
-
-    from {
-
-        transform: rotate(360deg);
-
-    }
-
-    to {
-
-        transform: rotate(0deg);
-
-    }
-
 }
 
 @keyframes blobMove1 {
@@ -549,21 +399,5 @@
         transform: translate(0, 0);
 
     }
-
-}
-
-.hero-logo {
-
-    width: 340px;
-
-    max-width: 90%;
-
-    margin-bottom: 32px;
-
-}
-
-.hero-lottie {
-
-    overflow: hidden;
 
 }
