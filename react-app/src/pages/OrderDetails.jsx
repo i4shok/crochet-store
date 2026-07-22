@@ -216,23 +216,23 @@ function OrderDetails() {
 
             {
 
-                order.items.map((item) => (
+                order.items.map((item, index) => (
 
                     <div
-                        key={item._id}
+                        key={item._id || index}
                         className="product-order-card"
                     >
 
                         <img
-                            src={item.product.image}
-                            alt={item.product.name}
+                            src={item.product?.image}
+                            alt={item.product?.name || "Product no longer available"}
                         />
 
                         <div className="product-order-info">
 
                             <h2>
 
-                                {item.product.name}
+                                {item.product?.name || "Product no longer available"}
 
                             </h2>
 
@@ -244,38 +244,46 @@ function OrderDetails() {
 
                             <p>
 
-                                Price : ₹{item.product.price}
+                                Price : ₹{item.product?.price ?? "—"}
 
                             </p>
 
-                            <div className="order-actions">
+                            {
 
-                                <button
-                                    onClick={() =>
-                                        navigate(
-                                            `/product/${item.product._id}`
-                                        )
-                                    }
-                                >
+                                item.product?._id && (
 
-                                    View Product
+                                    <div className="order-actions">
 
-                                </button>
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    `/product/${item.product._id}`
+                                                )
+                                            }
+                                        >
+
+                                            View Product
+
+                                        </button>
 
 
-                                <button
-                                    onClick={() =>
-                                        navigate(
-                                            `/product/${item.product._id}`
-                                        )
-                                    }
-                                >
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    `/product/${item.product._id}`
+                                                )
+                                            }
+                                        >
 
-                                    Review Product
+                                            Review Product
 
-                                </button>
+                                        </button>
 
-                            </div>
+                                    </div>
+
+                                )
+
+                            }
 
                         </div>
                     </div>

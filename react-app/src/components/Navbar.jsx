@@ -88,6 +88,7 @@ function Navbar() {
           <button onClick={toggleTheme} className="icon-btn">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
+          <NavLink to="/profile" className="icon-btn"><User size={20} /></NavLink>
           {token ? (
             <button className="icon-btn logout-mobile" onClick={() => { logout(); navigate("/login"); }}>
               <LogOut size={20} />
@@ -117,8 +118,8 @@ function Navbar() {
             {wishlistItems.length > 0 && <span className="badge">{wishlistItems.length}</span>}
           </NavLink>
         )}
-        <NavLink to="/profile" className={({ isActive }) => `dock-item ${isActive ? "active" : ""}`}>
-          <User size={22} />
+        <NavLink to="/my-orders" className={({ isActive }) => `dock-item ${isActive ? "active" : ""}`}>
+          <Package size={22} />
         </NavLink>
       </nav>
     </>

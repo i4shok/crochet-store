@@ -1,21 +1,30 @@
+const STEPS = ["pending", "processing", "packed", "shipped", "delivered"];
+
+const LABELS = {
+    pending: "Pending",
+    processing: "Processing",
+    packed: "Packed",
+    shipped: "Shipped",
+    delivered: "Delivered",
+};
+
 function DeliveryTimeline({ status }) {
 
-    const steps = [
+    if (status === "cancelled") {
 
-        "Pending",
+        return (
 
-        "Processing",
+            <div className="timeline timeline-cancelled">
 
-        "Packed",
+                <span>This order was cancelled</span>
 
-        "Shipped",
+            </div>
 
-        "Delivered",
+        );
 
-    ];
+    }
 
-    const activeStep =
-        steps.indexOf(status);
+    const currentIndex = STEPS.indexOf(status);
 
     return (
 
@@ -23,44 +32,26 @@ function DeliveryTimeline({ status }) {
 
             {
 
-                steps.map((step, index) => (
+                STEPS.map((step, index) => (
 
                     <div
                         key={step}
-                        className="timeline-item"
+                        className={`timeline-item ${index === currentIndex ? "current" : "faded"}`}
                     >
 
                         <div className="timeline-node">
 
-                            <div
-                                className={`timeline-circle ${index <= activeStep
-                                        ? "active"
-                                        : ""
-                                    }`}
-                            >
+                            <div className={`timeline-circle ${index === currentIndex ? "active" : ""}`}>
 
-                                {
-
-                                    index <= activeStep
-
-                                        ? "✓"
-
-                                        : ""
-
-                                }
+                                {index < currentIndex ? "✓" : index + 1}
 
                             </div>
 
                             {
 
-                                index !== steps.length - 1 && (
+                                index !== STEPS.length - 1 && (
 
-                                    <div
-                                        className={`timeline-line ${index < activeStep
-                                                ? "active"
-                                                : ""
-                                            }`}
-                                    />
+                                    <div className="timeline-line" />
 
                                 )
 
@@ -68,11 +59,7 @@ function DeliveryTimeline({ status }) {
 
                         </div>
 
-                        <span>
-
-                            {step}
-
-                        </span>
+                        <span>{LABELS[step]}</span>
 
                     </div>
 
