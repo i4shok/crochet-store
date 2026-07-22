@@ -1,4 +1,3 @@
-
 .admin-product-form{
     width:100%;
 
@@ -19,17 +18,18 @@
 .form-group label{
     font-size:15px;
     font-weight:600;
-    color:#2b2b2b;
+    color:var(--text-primary, #2b2b2b);
 }
 
 .form-group input,
 .form-group textarea{
     width:100%;
     padding:16px 18px;
-    border:1px solid #e3e3e3;
+    border:1px solid var(--border-input, #e3e3e3);
     border-radius:16px;
     font-size:15px;
-    background:#fff;
+    background:var(--bg-input, #fff);
+    color:var(--text-primary, #2b2b2b);
     transition:.25s;
     box-sizing:border-box;
 }
@@ -37,8 +37,8 @@
 .form-group input:focus,
 .form-group textarea:focus{
     outline:none;
-    border-color:#7c5cff;
-    box-shadow:0 0 0 4px rgba(124,92,255,.12);
+    border-color:var(--accent, #7c5cff);
+    box-shadow:0 0 0 4px var(--accent-soft, rgba(124,92,255,.12));
 }
 
 .form-group textarea{
@@ -71,10 +71,92 @@
     width:100%;
 }
 
+.upload-hint{
+    margin:0 0 14px;
+    font-size:13px;
+    color:var(--text-secondary, #888);
+}
+
+/* Grid of already-selected (and already cropped-to-square) previews */
+
+.image-preview-grid{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
+    gap:14px;
+
+    margin-bottom:16px;
+
+}
+
+.image-preview-item{
+
+    position:relative;
+
+    width:100%;
+    aspect-ratio:1 / 1;
+
+    border-radius:16px;
+    overflow:hidden;
+
+    border:1px solid var(--border-color, #eee);
+
+}
+
+.image-preview-item img{
+
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+
+}
+
+.remove-image-btn{
+
+    position:absolute;
+    top:8px;
+    right:8px;
+
+    width:26px;
+    height:26px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(0,0,0,.6);
+    color:white;
+
+    cursor:pointer;
+
+}
+
+.cover-badge{
+
+    position:absolute;
+    bottom:8px;
+    left:8px;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:var(--accent, #7c5cff);
+    color:white;
+
+    font-size:11px;
+    font-weight:700;
+
+}
+
 .upload-box{
 
     width:100%;
-    min-height:280px;
+    min-height:200px;
 
     display:flex;
     justify-content:center;
@@ -84,23 +166,30 @@
     border:2px dashed #c8b7ff;
     border-radius:20px;
 
-    background:#faf8ff;
+    background:var(--bg-hover, #faf8ff);
 
     overflow:hidden;
 
     box-sizing:border-box;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    padding:24px;
+
 }
 
 .upload-box:hover{
 
-    border-color:#7c5cff;
-    background:#f6f1ff;
+    border-color:var(--accent, #7c5cff);
+    background:var(--accent-soft, #f6f1ff);
 
 }
 
 .upload-box svg{
 
-    color:#7c5cff;
+    color:var(--accent, #7c5cff);
     margin-bottom:18px;
 
 }
@@ -108,24 +197,16 @@
 .upload-box h3{
 
     margin:0;
-    font-size:28px;
-    color:#222;
+    font-size:22px;
+    color:var(--text-primary, #222);
 
 }
 
 .upload-box p{
 
     margin-top:10px;
-    color:#777;
-    font-size:16px;
-
-}
-
-.preview-image{
-
-    display:block;
-    width:100%;
-    height:auto;
+    color:var(--text-secondary, #777);
+    font-size:14px;
 
 }
 
@@ -169,5 +250,67 @@
 
     opacity:.6;
     cursor:not-allowed;
+
+}
+
+/* ==========================================================================
+   Mobile — every field (including the submit button) stacks vertically
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    .admin-product-form{
+
+        grid-template-columns:1fr;
+        gap:18px;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+        gap:18px;
+
+    }
+
+    .second-row{
+
+        grid-template-columns:1fr;
+        gap:18px;
+
+    }
+
+    .form-group textarea{
+
+        min-height:120px;
+
+    }
+
+    .image-preview-grid{
+
+        grid-template-columns:repeat(3, 1fr);
+        gap:10px;
+
+    }
+
+    .upload-box{
+
+        min-height:160px;
+        padding:18px;
+
+    }
+
+    .upload-box h3{
+
+        font-size:18px;
+
+    }
+
+    .submit-btn{
+
+        height:56px;
+        font-size:16px;
+
+    }
 
 }

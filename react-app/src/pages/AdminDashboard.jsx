@@ -2,20 +2,27 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardStats from "../components/admin/DashboardStats";
 import AddProductForm from "../components/admin/AddProductForm";
 import ProductManager from "../components/admin/ProductManager";
 import OrderManager from "../components/admin/OrderManager";
 import "../styles/AdminDashboard.css";
+import logoFull from "../assets/branding/logo-full.png";
 import {
   LayoutDashboard,
   Package,
   ShoppingCart,
-  PlusCircle,
+  Sun,
+  Moon,
+  Home,
+  LogOut,
 } from "lucide-react";
 import { toast } from "react-toastify";
 
 function AdminDashboard() {
+
+  const navigate = useNavigate();
 
   const [stats,
     setStats] =
@@ -61,13 +68,13 @@ function AdminDashboard() {
     setDescription] =
     useState("");
 
-  const [imageFile,
-    setImageFile] =
-    useState(null);
+  const [imageFiles,
+    setImageFiles] =
+    useState([]);
 
-  const [imagePreview,
-    setImagePreview] =
-    useState("");
+  const [imagePreviews,
+    setImagePreviews] =
+    useState([]);
 
   const [editingProduct,
     setEditingProduct] =
@@ -96,6 +103,38 @@ function AdminDashboard() {
 
   const [activeTab, setActiveTab] =
     useState("dashboard");
+
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("admin-theme");
+    if (saved) return saved;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("admin-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  const [navReady, setNavReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setNavReady(true), 50);
+    return () => clearTimeout(t);
+  }, []);
+
+  const goHome = () => {
+    navigate("/");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   const fetchProducts = async () => {
 
@@ -321,43 +360,37 @@ function AdminDashboard() {
 
   };
 
-  const uploadImage = async () => {
-
-    console.log("1 - uploadImage started");
+  const uploadImages = async () => {
 
     const token = localStorage.getItem("token");
+    const urls = [];
 
-    const formData = new FormData();
+    for (const file of imageFiles) {
 
-    formData.append("image", imageFile);
+      const formData = new FormData();
+      formData.append("image", file);
 
-    console.log("2 - sending upload request");
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/upload`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/upload`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      }
-    );
+      const data = await res.json();
+      urls.push(data.imageUrl);
+    }
 
-    console.log("3 - upload response", res.status);
-
-    const data = await res.json();
-
-    console.log("4 - upload data", data);
-
-    return data.imageUrl;
+    return urls;
   };
 
   const addProduct = async (e) => {
 
     e.preventDefault();
-
-    console.log("🔥 addProduct called");
 
     try {
 
@@ -393,9 +426,9 @@ function AdminDashboard() {
         return;
       }
 
-      if (!imageFile) {
+      if (imageFiles.length === 0) {
         toast.error(
-          "Please select an image"
+          "Please select at least one image"
         );
         return;
       }
@@ -407,8 +440,8 @@ function AdminDashboard() {
           "token"
         );
 
-      const imageUrl =
-        await uploadImage();
+      const imageUrls =
+        await uploadImages();
 
       const res =
         await fetch(
@@ -431,16 +464,13 @@ function AdminDashboard() {
               stock:
                 Number(stock),
               description,
-              image: imageUrl,
+              image: imageUrls[0],
+              images: imageUrls,
             }),
           }
         );
 
-      console.log("Status:", res.status);
-
       const product = await res.json();
-
-      console.log(product);
 
       if (!res.ok) {
 
@@ -463,8 +493,8 @@ function AdminDashboard() {
       setStock("");
       setDescription("");
 
-      setImageFile(null);
-      setImagePreview("");
+      setImageFiles([]);
+      setImagePreviews([]);
 
     } catch (err) {
 
@@ -481,38 +511,108 @@ function AdminDashboard() {
 
   };
 
+  const tabMeta = {
+    dashboard: { label: "Dashboard", sub: "Welcome back. Here's what's happening today." },
+    products: { label: "Products", sub: "Manage your crochet collection." },
+    orders: { label: "Orders", sub: "Manage customer orders." },
+  };
+
   return (
-    <div className="admin-page">
+    <div className="admin-page" data-theme={theme}>
 
       <aside className="admin-sidebar">
 
-        <div className="admin-logo">
+        <div className="admin-sidebar-inner">
 
-          <div className="admin-logo-icon">
+          <div className="admin-logo">
 
-            🧶
+            <img
+              src={logoFull}
+              alt="Knot & Bloom"
+              className="admin-logo-image"
+            />
+
+            <div>
+
+              <h2>
+
+                Knot & Bloom
+
+              </h2>
+
+              <span>
+
+                Admin Panel
+
+              </span>
+
+            </div>
 
           </div>
 
-          <div>
+          <nav>
 
-            <h2>
+            <button
 
-              Knot & Bloom
+              className={
+                activeTab === "dashboard"
+                  ? "sidebar-active"
+                  : ""
+              }
 
-            </h2>
+              onClick={() =>
+                setActiveTab("dashboard")
+              }
 
-            <span>
+            >
 
-              Admin Panel
+              <LayoutDashboard size={20} />
 
-            </span>
+              Dashboard
 
-          </div>
+            </button>
 
-        </div>
+            <button
 
-        <nav>
+              className={
+                activeTab === "products"
+                  ? "sidebar-active"
+                  : ""
+              }
+
+              onClick={() =>
+                setActiveTab("products")
+              }
+
+            >
+
+              <Package size={20} />
+
+              Products
+
+            </button>
+
+            <button
+
+              className={
+                activeTab === "orders"
+                  ? "sidebar-active"
+                  : ""
+              }
+
+              onClick={() =>
+                setActiveTab("orders")
+              }
+
+            >
+
+              <ShoppingCart size={20} />
+
+              Orders
+
+            </button>
+
+          </nav>
 
           <div className="admin-sidebar-footer">
 
@@ -543,8 +643,22 @@ function AdminDashboard() {
             </div>
 
             <button
-              className="logout-btn"
+              className="home-btn"
+              onClick={goHome}
             >
+
+              <Home size={18} />
+
+              Back to Site
+
+            </button>
+
+            <button
+              className="logout-btn"
+              onClick={handleLogout}
+            >
+
+              <LogOut size={18} />
 
               Logout
 
@@ -552,67 +666,7 @@ function AdminDashboard() {
 
           </div>
 
-          <button
-
-            className={
-              activeTab === "dashboard"
-                ? "sidebar-active"
-                : ""
-            }
-
-            onClick={() =>
-              setActiveTab("dashboard")
-            }
-
-          >
-
-            <LayoutDashboard size={20} />
-
-            Dashboard
-
-          </button>
-
-          <button
-
-            className={
-              activeTab === "products"
-                ? "sidebar-active"
-                : ""
-            }
-
-            onClick={() =>
-              setActiveTab("products")
-            }
-
-          >
-
-            <Package size={20} />
-
-            Products
-
-          </button>
-
-          <button
-
-            className={
-              activeTab === "orders"
-                ? "sidebar-active"
-                : ""
-            }
-
-            onClick={() =>
-              setActiveTab("orders")
-            }
-
-          >
-
-            <ShoppingCart size={20} />
-
-            Orders
-
-          </button>
-
-        </nav>
+        </div>
 
       </aside>
 
@@ -624,29 +678,35 @@ function AdminDashboard() {
 
             <h1>
 
-              {
-                activeTab === "dashboard"
-                  ? "Dashboard"
-                  : activeTab === "products"
-                    ? "Products"
-                    : "Orders"
-              }
+              {tabMeta[activeTab].label}
 
             </h1>
 
             <p>
 
-              {
-                activeTab === "dashboard"
-                  ? "Welcome back. Here's what's happening today."
-
-                  : activeTab === "products"
-                    ? "Manage your crochet collection."
-
-                    : "Manage customer orders."
-              }
+              {tabMeta[activeTab].sub}
 
             </p>
+
+          </div>
+
+          <div className="admin-header-actions">
+
+            <button
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label="Toggle dark mode"
+            >
+              {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+
+            <button
+              className="mobile-logout-btn"
+              onClick={handleLogout}
+              aria-label="Logout"
+            >
+              <LogOut size={18} />
+            </button>
 
           </div>
 
@@ -862,21 +922,21 @@ function AdminDashboard() {
 
                 <button
                   onClick={() =>
-                    setActiveTab("products")
-                  }
-                >
-
-                  🛍 Manage Products
-
-                </button>
-
-                <button
-                  onClick={() =>
                     setActiveTab("orders")
                   }
                 >
 
                   📦 Manage Orders
+
+                </button>
+
+                <button
+                  onClick={() =>
+                    setActiveTab("products")
+                  }
+                >
+
+                  🛍 Manage Products
 
                 </button>
 
@@ -903,10 +963,10 @@ function AdminDashboard() {
                 setStock={setStock}
                 description={description}
                 setDescription={setDescription}
-                imageFile={imageFile}
-                setImageFile={setImageFile}
-                imagePreview={imagePreview}
-                setImagePreview={setImagePreview}
+                imageFiles={imageFiles}
+                setImageFiles={setImageFiles}
+                imagePreviews={imagePreviews}
+                setImagePreviews={setImagePreviews}
                 addProduct={addProduct}
                 isAdding={isAdding}
               />
@@ -946,6 +1006,39 @@ function AdminDashboard() {
           </section>
         )}
       </main>
+
+      <nav className={`admin-mobile-navbar${navReady ? " is-in" : ""}`}>
+
+        <button
+          className={activeTab === "dashboard" ? "mobile-nav-active" : ""}
+          onClick={() => setActiveTab("dashboard")}
+        >
+          <LayoutDashboard size={22} />
+          <span>Dashboard</span>
+        </button>
+
+        <button
+          className={activeTab === "products" ? "mobile-nav-active" : ""}
+          onClick={() => setActiveTab("products")}
+        >
+          <Package size={22} />
+          <span>Products</span>
+        </button>
+
+        <button
+          className={activeTab === "orders" ? "mobile-nav-active" : ""}
+          onClick={() => setActiveTab("orders")}
+        >
+          <ShoppingCart size={22} />
+          <span>Orders</span>
+        </button>
+
+        <button onClick={goHome}>
+          <Home size={22} />
+          <span>Home</span>
+        </button>
+
+      </nav>
 
     </div>
   );

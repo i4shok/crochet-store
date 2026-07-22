@@ -186,7 +186,7 @@ function ProductManager({
 
                                     />
 
-                                    <div>
+                                    <div className="table-row-name">
 
                                         <strong>
 
@@ -214,7 +214,7 @@ function ProductManager({
                                                 />
                                             )
                                             : (
-                                                <span>
+                                                <span className="table-row-price">
                                                     ₹{product.price}
                                                 </span>
                                             )
