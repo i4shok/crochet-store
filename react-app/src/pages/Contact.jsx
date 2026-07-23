@@ -6,9 +6,11 @@ function Contact() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [category, setCategory] = useState("General Inquiry");
   const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
@@ -20,11 +22,66 @@ function Contact() {
 
     }
 
-    toast.success("Message sent! We'll get back to you soon 🌿");
+    setIsSending(true);
 
-    setName("");
-    setEmail("");
-    setMessage("");
+    try {
+
+      const res = await fetch(
+
+        `${import.meta.env.VITE_API_URL}/contact`,
+
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type": "application/json",
+
+          },
+
+          body: JSON.stringify({
+
+            name,
+
+            email,
+
+            category,
+
+            message,
+
+          }),
+
+        }
+
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+
+        toast.error(data.message);
+
+        return;
+
+      }
+
+      toast.success(data.message);
+
+      setName("");
+      setEmail("");
+      setCategory("General Inquiry");
+      setMessage("");
+
+    } catch {
+
+      toast.error("Failed to send message. Please try again.");
+
+    } finally {
+
+      setIsSending(false);
+
+    }
 
   };
 
@@ -59,7 +116,7 @@ function Contact() {
 
             <div>
               <h4>Studio Location</h4>
-              <p>Add your studio address here</p>
+              <p>Coming Soon</p>
             </div>
 
           </div>
@@ -70,7 +127,7 @@ function Contact() {
 
             <div>
               <h4>Email</h4>
-              <p>hello@knotandbloom.com</p>
+              <p>crochetknotandbloom@gmail.com</p>
             </div>
 
           </div>
@@ -81,7 +138,7 @@ function Contact() {
 
             <div>
               <h4>Phone</h4>
-              <p>+91 00000 00000</p>
+              <p>+91 82331 94979</p>
             </div>
 
           </div>
@@ -132,6 +189,21 @@ function Contact() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          <label>Request Type</label>
+
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Custom Order">Custom Order</option>
+            <option value="Shipping">Shipping</option>
+            <option value="Return">Return</option>
+            <option value="Other">Other</option>
+
+          </select>
+
           <label>Message</label>
 
           <textarea
@@ -141,8 +213,10 @@ function Contact() {
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <button type="submit">
-            Send Message →
+          <button type="submit" disabled={isSending}>
+
+            {isSending ? "Sending..." : "Send Message →"}
+
           </button>
 
         </form>

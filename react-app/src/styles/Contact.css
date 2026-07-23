@@ -249,3 +249,20 @@
     }
 
 }
+.contact-form-card select {
+    background: var(--page-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: .95rem;
+    margin-bottom: 18px;
+    outline: none;
+    transition: .25s;
+    font-family: inherit;
+}
+
+.contact-form-card select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(122, 158, 126, .15);
+}

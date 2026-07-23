@@ -7,6 +7,7 @@ import DashboardStats from "../components/admin/DashboardStats";
 import AddProductForm from "../components/admin/AddProductForm";
 import ProductManager from "../components/admin/ProductManager";
 import OrderManager from "../components/admin/OrderManager";
+import ContactRequestsManager from "../components/admin/ContactRequestsManager";
 import "../styles/AdminDashboard.css";
 import logoFull from "../assets/branding/logo-full.png";
 import {
@@ -17,6 +18,7 @@ import {
   Moon,
   Home,
   LogOut,
+  Mail,
 } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -100,6 +102,11 @@ function AdminDashboard() {
     bestSelling,
     setBestSelling,
   ] = useState([]);
+
+  const [contactRequests, setContactRequests] = useState([]);
+  const [contactCategoryFilter, setContactCategoryFilter] = useState("All");
+  const [contactStatusFilter, setContactStatusFilter] = useState("All");
+  const [contactSearch, setContactSearch] = useState("");
 
   const [activeTab, setActiveTab] =
     useState("dashboard");
@@ -208,6 +215,21 @@ function AdminDashboard() {
         setBestSelling(data)
       );
 
+    fetch(
+      `${import.meta.env.VITE_API_URL}/admin/contact-requests`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((res) =>
+        res.json()
+      )
+      .then((data) =>
+        setContactRequests(data)
+      );
+
   }, []);
 
   if (!stats) {
@@ -311,6 +333,46 @@ function AdminDashboard() {
       fetchProducts();
 
     };
+
+  const updateRequestStatus = async (id, status) => {
+
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+
+      `${import.meta.env.VITE_API_URL}/admin/contact-requests/${id}`,
+
+      {
+
+        method: "PUT",
+
+        headers: {
+
+          "Content-Type": "application/json",
+
+          Authorization: `Bearer ${token}`,
+
+        },
+
+        body: JSON.stringify({ status }),
+
+      }
+
+    );
+
+    const updated = await res.json();
+
+    setContactRequests(
+
+      contactRequests.map((r) =>
+
+        r._id === id ? updated : r
+
+      )
+
+    );
+
+  };
 
   const deleteProduct =
     async (id) => {
@@ -515,6 +577,7 @@ function AdminDashboard() {
     dashboard: { label: "Dashboard", sub: "Welcome back. Here's what's happening today." },
     products: { label: "Products", sub: "Manage your crochet collection." },
     orders: { label: "Orders", sub: "Manage customer orders." },
+    requests: { label: "Contact Requests", sub: "Review customer inquiries and requests." },
   };
 
   return (
@@ -609,6 +672,26 @@ function AdminDashboard() {
               <ShoppingCart size={20} />
 
               Orders
+
+            </button>
+
+            <button
+
+              className={
+                activeTab === "requests"
+                  ? "sidebar-active"
+                  : ""
+              }
+
+              onClick={() =>
+                setActiveTab("requests")
+              }
+
+            >
+
+              <Mail size={20} />
+
+              Contact Requests
 
             </button>
 
@@ -1005,6 +1088,20 @@ function AdminDashboard() {
             />
           </section>
         )}
+        {activeTab === "requests" && (
+          <section id="requests">
+            <ContactRequestsManager
+              requests={contactRequests}
+              categoryFilter={contactCategoryFilter}
+              setCategoryFilter={setContactCategoryFilter}
+              statusFilter={contactStatusFilter}
+              setStatusFilter={setContactStatusFilter}
+              requestSearch={contactSearch}
+              setRequestSearch={setContactSearch}
+              updateRequestStatus={updateRequestStatus}
+            />
+          </section>
+        )}
       </main>
 
       <nav className={`admin-mobile-navbar${navReady ? " is-in" : ""}`}>
@@ -1031,6 +1128,14 @@ function AdminDashboard() {
         >
           <ShoppingCart size={22} />
           <span>Orders</span>
+        </button>
+
+        <button
+          className={activeTab === "requests" ? "mobile-nav-active" : ""}
+          onClick={() => setActiveTab("requests")}
+        >
+          <Mail size={22} />
+          <span>Requests</span>
         </button>
 
         <button onClick={goHome}>

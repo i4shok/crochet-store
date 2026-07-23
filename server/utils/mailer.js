@@ -35,4 +35,33 @@ const sendResetCodeEmail = async (to, code) => {
   });
 };
 
-module.exports = { sendResetCodeEmail };
+const sendContactNotificationEmail = async ({ name, email, category, message }) => {
+
+  await transporter.sendMail({
+
+    from: `"Knot & Bloom Website" <${process.env.EMAIL_USER}>`,
+
+    to: process.env.EMAIL_USER,
+
+    subject: `New ${category} Request from ${name}`,
+
+    html: `
+      <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 480px; margin: auto; padding: 36px; background: #FAF7F2; border-radius: 24px;">
+        <p style="letter-spacing: 3px; text-transform: uppercase; font-weight: 700; color: #7A9E7E; font-size: 13px; margin-bottom: 6px;">
+          🧶 Knot & Bloom
+        </p>
+        <h2 style="color: #40352C; margin: 0 0 14px;">${category}</h2>
+        <p style="color: #666; font-size: 15px; line-height: 1.7;">
+          <strong>From:</strong> ${name} (${email})
+        </p>
+        <p style="color: #40352C; font-size: 15px; line-height: 1.7; background: #ffffff; padding: 18px; border-radius: 16px;">
+          ${message}
+        </p>
+      </div>
+    `,
+
+  });
+
+};
+
+module.exports = { sendResetCodeEmail, sendContactNotificationEmail };

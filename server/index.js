@@ -80,7 +80,9 @@ const Review =
   );
 
 const crypto = require("crypto");
-const { sendResetCodeEmail } = require("./utils/mailer");
+const { sendResetCodeEmail, sendContactNotificationEmail } = require("./utils/mailer");
+
+const ContactRequest = require("./models/ContactRequest");
 
 app.use(cors());
 
@@ -782,6 +784,161 @@ app.post(
           message:
             error.message,
         });
+
+    }
+
+  }
+);
+
+app.post(
+  "/contact",
+  async (req, res) => {
+
+    try {
+
+      const { name, email, category, message } = req.body;
+
+      if (!name || !email || !message) {
+
+        return res.status(400).json({
+
+          message: "Please fill in all fields.",
+
+        });
+
+      }
+
+      const request = await ContactRequest.create({
+
+        name,
+
+        email,
+
+        category,
+
+        message,
+
+      });
+
+      try {
+
+        await sendContactNotificationEmail({
+
+          name,
+
+          email,
+
+          category: request.category,
+
+          message,
+
+        });
+
+      } catch (mailError) {
+
+        console.log("Contact email failed:", mailError.message);
+
+      }
+
+      res.status(201).json({
+
+        message: "Message sent! We'll get back to you soon.",
+
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.get(
+  "/admin/contact-requests",
+  auth,
+  admin,
+  async (req, res) => {
+
+    try {
+
+      const filter = {};
+
+      if (req.query.category && req.query.category !== "All") {
+
+        filter.category = req.query.category;
+
+      }
+
+      if (req.query.status && req.query.status !== "All") {
+
+        filter.status = req.query.status;
+
+      }
+
+      const requests = await ContactRequest.find(filter).sort({
+
+        createdAt: -1,
+
+      });
+
+      res.json(requests);
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
+
+    }
+
+  }
+);
+
+app.put(
+  "/admin/contact-requests/:id",
+  auth,
+  admin,
+  async (req, res) => {
+
+    try {
+
+      const request = await ContactRequest.findByIdAndUpdate(
+
+        req.params.id,
+
+        { status: req.body.status },
+
+        { new: true }
+
+      );
+
+      if (!request) {
+
+        return res.status(404).json({
+
+          message: "Request not found",
+
+        });
+
+      }
+
+      res.json(request);
+
+    } catch (error) {
+
+      res.status(500).json({
+
+        message: error.message,
+
+      });
 
     }
 

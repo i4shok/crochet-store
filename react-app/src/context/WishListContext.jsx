@@ -32,7 +32,6 @@ function WishlistProvider({
       return;
 
     }
-console.log("Wishlist Token:", token);
     fetch(
       `${import.meta.env.VITE_API_URL}/wishlist`,
       {
