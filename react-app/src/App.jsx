@@ -3,6 +3,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -162,7 +163,7 @@ function App() {
       </Routes>
 
       {!isAdmin && <Footer />}
-
+      <Analytics />
     </div>
   );
 }
