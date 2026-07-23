@@ -79,6 +79,9 @@ const Review =
     "./models/Review"
   );
 
+const crypto = require("crypto");
+const { sendResetCodeEmail } = require("./utils/mailer");
+
 app.use(cors());
 
 app.use(express.json());
@@ -543,6 +546,245 @@ app.post(
             error.message,
         });
     }
+  }
+);
+
+app.post(
+  "/forgot-password",
+  async (req, res) => {
+
+    try {
+
+      const { email } = req.body;
+
+      const user =
+        await User.findOne({
+          email,
+        });
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({
+            message:
+              "No account found with that email.",
+          });
+      }
+
+      const code =
+        crypto
+          .randomInt(100000, 999999)
+          .toString();
+
+      user.resetPasswordCode =
+        await bcrypt.hash(code, 10);
+
+      user.resetPasswordExpires =
+        Date.now() + 10 * 60 * 1000;
+
+      await user.save();
+
+      await sendResetCodeEmail(
+        user.email,
+        code
+      );
+
+      res.json({
+        message:
+          "Verification code sent to your email.",
+      });
+
+    } catch (error) {
+
+      res
+        .status(500)
+        .json({
+          message:
+            error.message,
+        });
+
+    }
+
+  }
+);
+
+app.post(
+  "/verify-reset-code",
+  async (req, res) => {
+
+    try {
+
+      const { email, code } = req.body;
+
+      const user =
+        await User.findOne({
+          email,
+        });
+
+      if (
+
+        !user ||
+        !user.resetPasswordCode ||
+        !user.resetPasswordExpires
+
+      ) {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              "Invalid or expired code.",
+          });
+
+      }
+
+      if (
+        user.resetPasswordExpires < Date.now()
+      ) {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              "Code has expired. Please request a new one.",
+          });
+
+      }
+
+      const validCode =
+        await bcrypt.compare(
+          code,
+          user.resetPasswordCode
+        );
+
+      if (!validCode) {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              "Incorrect verification code.",
+          });
+
+      }
+
+      user.resetPasswordCode = undefined;
+      user.resetPasswordExpires = undefined;
+
+      await user.save();
+
+      const resetToken =
+        jwt.sign(
+          {
+            id: user._id,
+            purpose: "reset",
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "15m",
+          }
+        );
+
+      res.json({
+        resetToken,
+        message:
+          "Code verified successfully.",
+      });
+
+    } catch (error) {
+
+      res
+        .status(500)
+        .json({
+          message:
+            error.message,
+        });
+
+    }
+
+  }
+);
+
+app.post(
+  "/reset-password",
+  async (req, res) => {
+
+    try {
+
+      const { resetToken, password } = req.body;
+
+      let decoded;
+
+      try {
+
+        decoded =
+          jwt.verify(
+            resetToken,
+            process.env.JWT_SECRET
+          );
+
+      } catch {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              "Reset session expired. Please start over.",
+          });
+
+      }
+
+      if (decoded.purpose !== "reset") {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              "Invalid reset token.",
+          });
+
+      }
+
+      const user =
+        await User.findById(
+          decoded.id
+        );
+
+      if (!user) {
+
+        return res
+          .status(404)
+          .json({
+            message:
+              "User not found.",
+          });
+
+      }
+
+      user.password =
+        await bcrypt.hash(
+          password,
+          10
+        );
+
+      await user.save();
+
+      res.json({
+        message:
+          "Password reset successful.",
+      });
+
+    } catch (error) {
+
+      res
+        .status(500)
+        .json({
+          message:
+            error.message,
+        });
+
+    }
+
   }
 );
 

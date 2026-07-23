@@ -1,48 +1,103 @@
-import { useState, useContext } from "react";
+import {
+  useState,
+  useContext,
+} from "react";
 import { Eye, EyeOff } from "lucide-react";
 import "../styles/Login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+
+import {
+  AuthContext,
+} from "../context/AuthContext";
+
 import { toast } from "react-toastify";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [email, setEmail] =
+    useState("");
+
+  const [password,
+    setPassword] =
+    useState("");
+
+  const [showPassword,
+    setShowPassword] =
+    useState(false);
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const { login } = useContext(AuthContext);
+  const { login } =
+    useContext(
+      AuthContext
+    );
+
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname
+    ? location.state.from.pathname + (location.state.from.search || "")
+    : "/";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoggingIn(true);
+  const handleSubmit =
+    async (e) => {
+      e.preventDefault();
+      setIsLoggingIn(true);
 
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      try {
 
-      const data = await res.json();
+        const res =
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/login`,
+            {
+              method: "POST",
 
-      if (!res.ok) {
-        toast.error(data.message);
-        return;
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            }
+          );
+
+        const data =
+          await res.json();
+
+        if (!res.ok) {
+
+          toast.error(
+            data.message
+          );
+
+          return;
+
+        }
+
+        login(
+
+          data.token,
+
+          data.role,
+
+          data.userId
+
+        );
+
+        toast.success(
+          "Logged In!"
+        );
+
+        navigate(from, { replace: true });
+
+      } finally {
+
+        setIsLoggingIn(false);
       }
-
-      login(data.token, data.role, data.userId);
-      toast.success("Logged In!");
-      navigate(from, { replace: true });
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
-
+    };
   return (
     <div className="login-page">
 
@@ -165,18 +220,14 @@ function Login() {
 
               </label>
 
-              <span
+              <Link
+                to="/forgot-password"
                 className="forgot-password"
-                onClick={() =>
-                  toast.info(
-                    "Coming soon 🚀"
-                  )
-                }
               >
 
                 Forgot Password?
 
-              </span>
+              </Link>
 
             </div>
 

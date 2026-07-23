@@ -29,6 +29,7 @@ import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import OrderDetails from "./pages/OrderDetails";
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 function App() {
@@ -116,6 +117,10 @@ function App() {
         <Route
           path="/login"
           element={<Login />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
         />
         <Route
           path="/register"

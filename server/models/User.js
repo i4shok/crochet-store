@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
     default: "user",
   },
 
+  resetPasswordCode: String,
+
+  resetPasswordExpires: Date,
+
   wishlist: [
     {
       type: mongoose.Schema.Types.ObjectId,
