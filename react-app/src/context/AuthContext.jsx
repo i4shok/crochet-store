@@ -2,6 +2,7 @@ import {
   createContext,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 
 export const AuthContext =
   createContext();
@@ -86,6 +87,8 @@ function AuthProvider({
     setRole(
       null
     );
+
+    toast.info("Logged out successfully");
   };
 
   return (

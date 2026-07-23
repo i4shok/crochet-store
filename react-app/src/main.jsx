@@ -6,9 +6,11 @@ import ThemeProvider from "./context/ThemeContext";
 import CartProvider from "./context/CartContext";
 import {
   ToastContainer,
+  Slide,
 } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import "./styles/Toast.css";
 
 import WishlistProvider
 from "./context/WishListContext";
@@ -28,7 +30,14 @@ ReactDOM.createRoot(
           <WishlistProvider>
             <CartProvider>
               <App />
-              <ToastContainer />
+              <ToastContainer
+                position="top-right"
+                autoClose={2000}
+                newestOnTop
+                closeOnClick
+                pauseOnHover
+                transition={Slide}
+              />
             </CartProvider>
           </WishlistProvider>
         </ThemeProvider>
