@@ -5,19 +5,20 @@ function Hero() {
   return (
     <section className="hero">
       <div className="hero-content">
-        
         <div className="hero-text">
+          <span className="hero-eyebrow">Small batch · Made to order</span>
+
           <h1>Every Stitch Tells A Story.</h1>
           <p>
             Discover handcrafted crochet creations made with care, patience and creativity. From timeless flowers to adorable plushies, every piece is designed to bring warmth into someone's life.
           </p>
-          
+
           <div className="hero-features">
             <div>🌿 Handmade</div>
             <div>🚚 Fast Delivery</div>
             <div>🎁 Perfect Gifts</div>
           </div>
-          
+
           <div className="hero-buttons">
             <Link to="/shop" className="hero-btn">
               Shop Collection
@@ -27,7 +28,6 @@ function Hero() {
             </Link>
           </div>
         </div>
-
       </div>
     </section>
   );

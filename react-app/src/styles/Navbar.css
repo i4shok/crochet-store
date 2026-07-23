@@ -121,7 +121,6 @@
     cursor: pointer;
     color: var(--nav-text);
     font-weight: 600;
-    transition: .3s;
 }
 
 .icon-btn:hover,
@@ -141,7 +140,7 @@
     align-items: center;
     border-radius: 14px;
     color: var(--nav-text);
-    transition: all .3s ease;
+    transition: background-color .3s ease, color .3s ease, box-shadow .3s ease, transform .2s ease;
     flex-shrink: 0;
 }
 
@@ -155,7 +154,7 @@
     border-radius: 14px;
     text-decoration: none;
     color: var(--nav-text);
-    transition: .3s;
+    transition: background-color .3s ease, color .3s ease;
     overflow: visible;
     flex-shrink: 0;
 }

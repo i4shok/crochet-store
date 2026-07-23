@@ -1,5 +1,5 @@
 import {
-  HeartHandshake,
+  Sparkles,
   Gift,
   Truck,
   Leaf,
@@ -12,10 +12,10 @@ function WhyChooseUs() {
   const features = [
 
     {
-      icon: <HeartHandshake size={40} />,
-      title: "Handmade With Love",
+      icon: <Sparkles size={40} />,
+      title: "One Of A Kind",
       text:
-        "Every crochet piece is carefully handcrafted with patience, creativity and attention to detail.",
+        "No two pieces are identical. Small variations in every stitch are part of the charm, not a flaw.",
     },
 
     {

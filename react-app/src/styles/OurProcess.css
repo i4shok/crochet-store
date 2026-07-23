@@ -1,0 +1,205 @@
+.process-section {
+
+    padding: 90px 60px;
+
+    background: #FAF7F2;
+
+    text-align: center;
+
+}
+
+.process-header h2 {
+
+    font-family: "Poppins";
+
+    font-size: 2.6rem;
+
+    color: #4A3F35;
+
+    margin-bottom: 12px;
+
+}
+
+.process-header p {
+
+    font-family: "Nunito";
+
+    font-size: 1.1rem;
+
+    color: #6b5d52;
+
+    margin-bottom: 70px;
+
+}
+
+.process-row {
+
+    display: flex;
+
+    justify-content: center;
+
+    max-width: 1000px;
+
+    margin: auto;
+
+}
+
+.process-step {
+
+    flex: 1;
+
+    position: relative;
+
+    padding: 0 30px;
+
+}
+
+.process-number {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 64px;
+
+    height: 64px;
+
+    margin: 0 auto 24px;
+
+    border-radius: 50%;
+
+    background: #FAF7F2;
+
+    border: 2px dashed #7A9E7E;
+
+    color: #7A9E7E;
+
+    font-family: "Poppins";
+
+    font-weight: 700;
+
+    font-size: 1.15rem;
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+.process-step:not(:last-child)::after {
+
+    content: "";
+
+    position: absolute;
+
+    top: 32px;
+
+    left: calc(50% + 50px);
+
+    right: calc(-50% + 50px);
+
+    border-top: 2px dashed rgba(122, 158, 126, .4);
+
+    z-index: 1;
+
+}
+
+.process-step h3 {
+
+    font-family: "Poppins";
+
+    color: #4A3F35;
+
+    margin-bottom: 10px;
+
+}
+
+.process-step p {
+
+    font-family: "Nunito";
+
+    color: #6b5d52;
+
+    line-height: 1.7;
+
+    font-size: .95rem;
+
+}
+
+@media(max-width:900px) {
+
+    .process-section {
+
+        padding: 70px 25px;
+
+    }
+
+    .process-header p {
+
+        margin-bottom: 45px;
+
+    }
+
+    .process-row {
+
+        flex-direction: column;
+
+        gap: 46px;
+
+    }
+
+    .process-step:not(:last-child)::after {
+
+        display: none;
+
+    }
+
+}
+
+.app.dark .process-section {
+
+    background: transparent;
+
+}
+
+.app.dark .process-header h2 {
+
+    color: var(--night-text);
+
+}
+
+.app.dark .process-header p {
+
+    color: var(--night-muted);
+
+}
+
+.app.dark .process-number {
+
+    background: var(--night-2);
+
+    border-color: var(--night-sage);
+
+    color: var(--night-sage);
+
+}
+
+.app.dark .process-step:not(:last-child)::after {
+
+    border-top-color: rgba(168, 201, 165, .35);
+
+}
+
+.app.dark .process-step h3 {
+
+    color: var(--night-text);
+
+}
+
+.app.dark .process-step p {
+
+    color: var(--night-muted);
+
+}
