@@ -281,12 +281,6 @@ body[data-theme="dark"] { background: #111312; }
 .app.dark .footer-bottom { border-color: var(--night-border); color: var(--night-muted); }
 
 .app.dark .navbar :is(.icon-btn, .icon-badge) {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: rgba(255, 255, 255, .055);
   border: 1px solid transparent;
 }
