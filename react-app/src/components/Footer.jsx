@@ -49,15 +49,30 @@ function Footer() {
 
           <div className="footer-socials">
 
-            <a href="#">
+            <a
+              href="https://www.instagram.com/crochetknotandbloom/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
               <FaInstagram size={18} />
             </a>
 
-            <a href="#">
+            <a
+              href="https://www.linkedin.com/in/i4shok/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
               <FaLinkedin size={18} />
             </a>
 
-            <a href="#">
+            <a
+              href="https://github.com/i4shok"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+            >
               <FaGithub size={18} />
             </a>
 
