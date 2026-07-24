@@ -211,31 +211,19 @@
 }
 
 .hero-btn {
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
-    flex: 1 1 220px;
-
+    flex: 1 1 0;  
+    min-width: 0;      
     padding: 16px 34px;
-
     border-radius: 16px;
-
     background: #7A9E7E;
-
     color: white;
-
     text-decoration: none;
-
     font-weight: 700;
-
     text-align: center;
-
     transition: .3s;
-
 }
 
 .secondary-btn {
