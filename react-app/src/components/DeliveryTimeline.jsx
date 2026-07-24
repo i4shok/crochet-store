@@ -8,13 +8,25 @@ const LABELS = {
     delivered: "Delivered",
 };
 
-function DeliveryTimeline({ status }) {
+function DeliveryTimeline({ status, reason }) {
     const normalizedStatus = status?.toLowerCase();
 
     if (normalizedStatus === "cancelled") {
         return (
-            <div className="timeline timeline-cancelled">
-                <span>This order was cancelled</span>
+            <div className="timeline-cancelled-wrapper">
+                <div className="timeline timeline-cancelled-journey">
+                    <div className="timeline-item">
+                        <div className="timeline-node">
+                            <div className="timeline-circle cancelled-circle">
+                                ✕
+                            </div>
+                        </div>
+                        <span className="cancelled-label">Order Cancelled</span>
+                    </div>
+                </div>
+                {reason && (
+                    <p className="cancelled-reason-text">{reason}</p>
+                )}
             </div>
         );
     }

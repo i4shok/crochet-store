@@ -8,6 +8,7 @@
 .order-details-page {
     overflow-x: hidden;
 }
+
 .order-details-page {
     max-width: 1200px;
     margin: auto;
@@ -119,6 +120,7 @@
     font-weight: 700;
     color: var(--accent);
 }
+
 .timeline-item.completed .timeline-circle {
     opacity: 1;
     background: var(--accent);
@@ -141,18 +143,23 @@
     0% {
         transform: scale(.6);
     }
+
     60% {
         transform: scale(1.15);
     }
+
     100% {
         transform: scale(1);
     }
 }
 
 @keyframes pulseGlow {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 0 6px var(--accent-glow);
     }
+
     50% {
         box-shadow: 0 0 0 12px transparent;
     }
@@ -383,6 +390,7 @@
         text-align: center;
     }
 }
+
 @media (max-width: 900px) {
     .order-summary-card {
         padding: 20px;
@@ -427,4 +435,93 @@
     .timeline-line {
         flex: 0 0 14px;
     }
+}
+
+.timeline-cancelled-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 35px;
+}
+
+.timeline-cancelled-journey {
+    justify-content: center;
+}
+
+.timeline-circle.cancelled-circle {
+    opacity: 1;
+    background: #C4483A;
+    border-color: #C4483A;
+    color: white;
+}
+
+.cancelled-label {
+    margin-top: 12px;
+    font-weight: 700;
+    color: #C4483A;
+}
+
+.cancelled-reason-text {
+    color: var(--text-secondary);
+    font-size: .9rem;
+    text-align: center;
+    max-width: 420px;
+    margin: 0;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.status-badge.pending {
+    background: #FBF3DF;
+    color: #9C7A2E;
+}
+
+.status-badge.processing {
+    background: #EFF1EC;
+    color: #5C6B62;
+}
+
+.status-badge.packed {
+    background: #F1ECE6;
+    color: #7A6A57;
+}
+
+.status-badge.shipped {
+    background: #FBEADD;
+    color: #B5651D;
+}
+
+.status-badge.delivered {
+    background: #E9F5EC;
+    color: #5F7F62;
+}
+
+.status-badge.cancelled {
+    background: #F7E7E4;
+    color: #C4483A;
+}
+.cancel-order-action {
+    background: var(--card-bg);
+    border: 2px solid #C4483A;
+    color: #C4483A;
+    padding: 14px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .25s;
+}
+
+.cancel-order-action:hover {
+    background: #C4483A;
+    color: white;
 }

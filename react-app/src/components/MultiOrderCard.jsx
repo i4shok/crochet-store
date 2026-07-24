@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ImageCollage from "./ImageCollage";
 import StatusBadge from "./StatusBadge";
 
-function MultiOrderCard({ order }) {
+function MultiOrderCard({ order, onCancel, onReorder }) {
 
     const names =
         order.items.map(
@@ -99,6 +99,52 @@ function MultiOrderCard({ order }) {
                         <StatusBadge
                             status={order.status}
                         />
+
+                        {
+
+                            order.status === "Cancelled" ? (
+
+                                <button
+                                    type="button"
+                                    className="reorder-btn"
+                                    onClick={() => onReorder(order)}
+                                >
+
+                                    Order Again
+
+                                </button>
+
+                            ) : order.status !== "Delivered" && (
+
+                                <button
+                                    type="button"
+                                    className="cancel-user-order-btn"
+                                    onClick={() => {
+
+                                        if (
+
+                                            window.confirm(
+
+                                                "Are you sure you want to cancel this order?"
+
+                                            )
+
+                                        ) {
+
+                                            onCancel(order._id);
+
+                                        }
+
+                                    }}
+                                >
+
+                                    Cancel Order
+
+                                </button>
+
+                            )
+
+                        }
 
                         <Link
                             to={`/orders/${order._id}`}

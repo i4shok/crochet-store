@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import StatusBadge from "./StatusBadge";
 
-function SingleOrderCard({ order }) {
+function SingleOrderCard({ order, onCancel, onReorder }) {
 
     const item =
         order.items[0];
@@ -62,6 +62,52 @@ function SingleOrderCard({ order }) {
                         <StatusBadge
                             status={order.status}
                         />
+
+                        {
+
+                            order.status === "Cancelled" ? (
+
+                                <button
+                                    type="button"
+                                    className="reorder-btn"
+                                    onClick={() => onReorder(order)}
+                                >
+
+                                    Order Again
+
+                                </button>
+
+                            ) : order.status !== "Delivered" && (
+
+                                <button
+                                    type="button"
+                                    className="cancel-user-order-btn"
+                                    onClick={() => {
+
+                                        if (
+
+                                            window.confirm(
+
+                                                "Are you sure you want to cancel this order?"
+
+                                            )
+
+                                        ) {
+
+                                            onCancel(order._id);
+
+                                        }
+
+                                    }}
+                                >
+
+                                    Cancel Order
+
+                                </button>
+
+                            )
+
+                        }
 
                         <Link
                             to={`/orders/${order._id}`}

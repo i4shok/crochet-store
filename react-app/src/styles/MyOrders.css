@@ -29,7 +29,9 @@
     --status-cancelled-text: #C4483A;
 }
 
-.dark, [data-theme="dark"], body.dark-mode {
+.dark,
+[data-theme="dark"],
+body.dark-mode {
     --page-bg: #121212;
     --card-bg: #1E1E1E;
     --text-primary: #EAEAEA;
@@ -467,6 +469,12 @@
         justify-content: center;
     }
 
+    .cancel-user-order-btn,
+    .reorder-btn {
+        flex: 1;
+        text-align: center;
+    }
+
     .empty-orders {
         padding: 40px 20px;
     }
@@ -486,6 +494,7 @@
         padding-bottom: 6px;
     }
 }
+
 @media (min-width: 1300px) {
 
     .order-product-image,
@@ -497,4 +506,36 @@
     .order-card {
         padding: 36px;
     }
+}
+
+.cancel-user-order-btn,
+.reorder-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: .85rem;
+    transition: .25s;
+    white-space: nowrap;
+}
+
+.cancel-user-order-btn {
+    background: #ffe7e7;
+    color: #d64045;
+}
+
+.cancel-user-order-btn:hover {
+    transform: translateY(-2px);
+    background: #ffd6d6;
+}
+
+.reorder-btn {
+    background: var(--accent);
+    color: white;
+}
+
+.reorder-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--accent-glow);
 }

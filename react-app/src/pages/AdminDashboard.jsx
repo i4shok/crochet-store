@@ -247,34 +247,48 @@ function AdminDashboard() {
           "token"
         );
 
-      await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}`,
-        {
-          method: "PUT",
+      try {
 
-          headers: {
-            "Content-Type":
-              "application/json",
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}`,
+          {
+            method: "PUT",
 
-            Authorization: `Bearer ${token}`,
-          },
+            headers: {
+              "Content-Type": "application/json",
 
-          body: JSON.stringify({
-            status,
-          }),
-        }
-      );
-      fetch(
-        `${import.meta.env.VITE_API_URL}/products`
-      )
-        .then((res) =>
-          res.json()
-        )
-        .then((data) =>
-          setProducts(data)
+              Authorization: `Bearer ${token}`,
+            },
+
+            body: JSON.stringify({
+              status,
+            }),
+          }
         );
 
-      window.location.reload();
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.message);
+          return;
+        }
+
+        setOrders(
+
+          orders.map((o) =>
+            o._id === orderId ? { ...o, status: data.status } : o
+          )
+
+        );
+
+        toast.success("Order status updated");
+
+      } catch (err) {
+
+        toast.error("Failed to update order status");
+
+      }
+
     };
 
   const saveProduct =
@@ -334,6 +348,83 @@ function AdminDashboard() {
 
     };
 
+  const cancelOrder = async (orderId, reason) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}/cancel`,
+        {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({ reason }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setOrders(
+        orders.map((o) => (o._id === orderId ? { ...o, status: data.status, cancelReason: data.cancelReason } : o))
+      );
+
+      toast.success("Order cancelled and customer notified.");
+
+    } catch (err) {
+
+      toast.error("Failed to cancel order");
+
+    }
+
+  };
+
+  const deleteOrder = async (orderId) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/orders/${orderId}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setOrders(orders.filter((o) => o._id !== orderId));
+
+      toast.success("Order deleted.");
+
+    } catch (err) {
+
+      toast.error("Failed to delete order");
+
+    }
+
+  };
+
   const updateRequestStatus = async (id, status) => {
 
     const token = localStorage.getItem("token");
@@ -371,6 +462,86 @@ function AdminDashboard() {
       )
 
     );
+
+  };
+
+  const deleteContactRequest = async (id) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/contact-requests/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setContactRequests(
+        contactRequests.filter((r) => r._id !== id)
+      );
+
+      toast.success("Request deleted.");
+
+    } catch (err) {
+
+      toast.error("Failed to delete request");
+
+    }
+
+  };
+
+  const replyToContactRequest = async (id, message) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/contact-requests/${id}/reply`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({ message }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setContactRequests(
+
+        contactRequests.map((r) =>
+          r._id === id ? { ...r, status: data.status } : r
+        )
+
+      );
+
+      toast.success("Reply sent to customer.");
+
+    } catch (err) {
+
+      toast.error("Failed to send reply");
+
+    }
 
   };
 
@@ -1085,6 +1256,8 @@ function AdminDashboard() {
               setOrderSearch={setOrderSearch}
               updateStatus={updateStatus}
               setOrders={setOrders}
+              cancelOrder={cancelOrder}
+              deleteOrder={deleteOrder}
             />
           </section>
         )}
@@ -1099,6 +1272,8 @@ function AdminDashboard() {
               requestSearch={contactSearch}
               setRequestSearch={setContactSearch}
               updateRequestStatus={updateRequestStatus}
+              deleteRequest={deleteContactRequest}
+              replyToRequest={replyToContactRequest}
             />
           </section>
         )}

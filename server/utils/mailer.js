@@ -64,4 +64,59 @@ const sendContactNotificationEmail = async ({ name, email, category, message }) 
 
 };
 
-module.exports = { sendResetCodeEmail, sendContactNotificationEmail };
+const sendOrderCancelledEmail = async (to, { orderId, reason }) => {
+  await transporter.sendMail({
+    from: `"Knot & Bloom" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `Your Order #${orderId} Has Been Cancelled`,
+    html: `
+      <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 480px; margin: auto; padding: 36px; background: #FAF7F2; border-radius: 24px;">
+        <p style="letter-spacing: 3px; text-transform: uppercase; font-weight: 700; color: #7A9E7E; font-size: 13px; margin-bottom: 6px;">
+          🧶 Knot & Bloom
+        </p>
+        <h2 style="color: #40352C; margin: 0 0 14px;">Order Cancelled</h2>
+        <p style="color: #666; font-size: 15px; line-height: 1.7;">
+          Your order <strong>#${orderId}</strong> has been cancelled. Here's the reason our team provided:
+        </p>
+        <div style="margin: 24px 0; padding: 18px; background: #ffffff; border-radius: 16px; color: #40352C; font-size: 15px; line-height: 1.6;">
+          ${reason}
+        </div>
+        <p style="color: #999; font-size: 13px; line-height: 1.6;">
+          If you have any questions, feel free to reach out to us anytime.
+        </p>
+      </div>
+    `,
+  });
+};
+
+const sendContactReplyEmail = async (to, { name, originalMessage, reply }) => {
+  await transporter.sendMail({
+    from: `"Knot & Bloom" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `Re: Your message to Knot & Bloom`,
+    html: `
+      <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 480px; margin: auto; padding: 36px; background: #FAF7F2; border-radius: 24px;">
+        <p style="letter-spacing: 3px; text-transform: uppercase; font-weight: 700; color: #7A9E7E; font-size: 13px; margin-bottom: 6px;">
+          🧶 Knot & Bloom
+        </p>
+        <h2 style="color: #40352C; margin: 0 0 14px;">Hi ${name},</h2>
+        <p style="color: #666; font-size: 15px; line-height: 1.7;">
+          Thanks for reaching out. Here's our reply to your message:
+        </p>
+        <div style="margin: 20px 0; padding: 18px; background: #ffffff; border-radius: 16px; color: #40352C; font-size: 15px; line-height: 1.6;">
+          ${reply}
+        </div>
+        <p style="color: #999; font-size: 13px; line-height: 1.6; margin-top: 24px;">
+          Your original message: "${originalMessage}"
+        </p>
+      </div>
+    `,
+  });
+};
+
+module.exports = {
+  sendResetCodeEmail,
+  sendContactNotificationEmail,
+  sendOrderCancelledEmail,
+  sendContactReplyEmail,
+};

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function ContactRequestsManager({
 
     requests,
@@ -13,7 +15,14 @@ function ContactRequestsManager({
 
     updateRequestStatus,
 
+    deleteRequest,
+
+    replyToRequest,
+
 }) {
+
+    const [replyingId, setReplyingId] = useState(null);
+    const [replyText, setReplyText] = useState("");
 
     const filteredRequests = requests.filter(request => {
 
@@ -209,6 +218,24 @@ function ContactRequestsManager({
 
                                     <div className="contact-request-actions">
 
+                                        <button
+
+                                            className="reply-request-btn"
+
+                                            onClick={() => {
+
+                                                setReplyingId(request._id);
+
+                                                setReplyText("");
+
+                                            }}
+
+                                        >
+
+                                            ✉️ Reply
+
+                                        </button>
+
                                         {
 
                                             request.status !== "Reviewed" && (
@@ -281,9 +308,117 @@ function ContactRequestsManager({
 
                                         }
 
+                                        <button
+
+                                            className="delete-request-btn"
+
+                                            onClick={() => {
+
+                                                if (
+
+                                                    window.confirm(
+
+                                                        "Delete this contact request permanently?"
+
+                                                    )
+
+                                                ) {
+
+                                                    deleteRequest(request._id);
+
+                                                }
+
+                                            }}
+
+                                        >
+
+                                            🗑 Delete
+
+                                        </button>
+
                                     </div>
 
                                 </div>
+
+                                {
+
+                                    replyingId === request._id && (
+
+                                        <div className="contact-reply-form">
+
+                                            <label>
+
+                                                Reply to {request.email}
+
+                                            </label>
+
+                                            <textarea
+
+                                                placeholder="Write your reply..."
+
+                                                value={replyText}
+
+                                                onChange={(e) =>
+
+                                                    setReplyText(e.target.value)
+
+                                                }
+
+                                            />
+
+                                            <div className="contact-reply-form-actions">
+
+                                                <button
+
+                                                    type="button"
+
+                                                    className="contact-reply-form-cancel"
+
+                                                    onClick={() => {
+
+                                                        setReplyingId(null);
+
+                                                        setReplyText("");
+
+                                                    }}
+
+                                                >
+
+                                                    Cancel
+
+                                                </button>
+
+                                                <button
+
+                                                    type="button"
+
+                                                    className="contact-reply-form-send"
+
+                                                    disabled={!replyText.trim()}
+
+                                                    onClick={async () => {
+
+                                                        await replyToRequest(request._id, replyText);
+
+                                                        setReplyingId(null);
+
+                                                        setReplyText("");
+
+                                                    }}
+
+                                                >
+
+                                                    Send Reply
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    )
+
+                                }
 
                             </div>
 

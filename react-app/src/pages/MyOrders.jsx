@@ -3,6 +3,11 @@ import {
   useState,
 } from "react";
 
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
+
 import OrderCard from "../components/OrderCard";
 import OrderStatusFilter from "../components/OrderStatusFilter";
 
@@ -60,6 +65,68 @@ function MyOrders() {
     filterStatus === "all"
       ? orders
       : orders.filter((order) => order.status === filterStatus);
+
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
+
+  const cancelOrder = async (orderId) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/orders/${orderId}/cancel`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setOrders(
+
+        orders.map((o) =>
+          o._id === orderId
+            ? { ...o, status: data.status, cancelReason: data.cancelReason }
+            : o
+        )
+
+      );
+
+      toast.success("Order cancelled.");
+
+    } catch (err) {
+
+      toast.error("Failed to cancel order");
+
+    }
+
+  };
+
+  const reorder = async (order) => {
+
+    for (const item of order.items) {
+
+      if (!item.product) continue;
+
+      await addToCart(item.product, item.quantity);
+
+    }
+
+    toast.success("Order items added to cart!");
+
+    navigate("/checkout");
+
+  };
 
   return (
 
@@ -163,6 +230,10 @@ function MyOrders() {
                         key={order._id}
 
                         order={order}
+
+                        onCancel={cancelOrder}
+
+                        onReorder={reorder}
 
                       />
 

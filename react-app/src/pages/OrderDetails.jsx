@@ -3,6 +3,10 @@ import {
     useState,
 } from "react";
 
+import { useContext } from "react";
+import { toast } from "react-toastify";
+import { CartContext } from "../context/CartContext";
+
 import {
     useParams,
     useNavigate,
@@ -54,6 +58,67 @@ function OrderDetails() {
 
     }
 
+    const { addToCart } = useContext(CartContext);
+
+    const cancelOrder = async () => {
+
+        if (!window.confirm("Are you sure you want to cancel this order?")) {
+            return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        try {
+
+            const res = await fetch(
+                `${import.meta.env.VITE_API_URL}/orders/${id}/cancel`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.message);
+                return;
+            }
+
+            setOrder((prev) => ({
+                ...prev,
+                status: data.status,
+                cancelReason: data.cancelReason,
+            }));
+
+            toast.success("Order cancelled.");
+
+        } catch (err) {
+
+            toast.error("Failed to cancel order");
+
+        }
+
+    };
+
+    const reorder = async () => {
+
+        for (const item of order.items) {
+
+            if (!item.product) continue;
+
+            await addToCart(item.product, item.quantity);
+
+        }
+
+        toast.success("Order items added to cart!");
+
+        navigate("/checkout");
+
+    };
+
     return (
 
         <div className="order-details-page">
@@ -84,6 +149,7 @@ function OrderDetails() {
 
                 <DeliveryTimeline
                     status={order.status}
+                    reason={order.cancelReason}
                 />
 
                 <div className="summary-grid">
@@ -201,6 +267,34 @@ function OrderDetails() {
 
                 </button>
 
+                {
+
+                    order.status === "Cancelled" ? (
+
+                        <button
+                            className="primary-action"
+                            onClick={reorder}
+                        >
+
+                            🔁 Order Again
+
+                        </button>
+
+                    ) : order.status !== "Delivered" && (
+
+                        <button
+                            className="cancel-order-action"
+                            onClick={cancelOrder}
+                        >
+
+                            ✕ Cancel Order
+
+                        </button>
+
+                    )
+
+                }
+
                 <button
                     className="secondary-action"
                     onClick={() =>
@@ -266,18 +360,25 @@ function OrderDetails() {
 
                                         </button>
 
+                                        {
 
-                                        <button
-                                            onClick={() =>
-                                                navigate(
-                                                    `/product/${item.product._id}`
-                                                )
-                                            }
-                                        >
+                                            order.status !== "Cancelled" && (
 
-                                            Review Product
+                                                <button
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/product/${item.product._id}`
+                                                        )
+                                                    }
+                                                >
 
-                                        </button>
+                                                    Review Product
+
+                                                </button>
+
+                                            )
+
+                                        }
 
                                     </div>
 

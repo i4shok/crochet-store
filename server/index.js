@@ -80,8 +80,12 @@ const Review =
   );
 
 const crypto = require("crypto");
-const { sendResetCodeEmail, sendContactNotificationEmail } = require("./utils/mailer");
-
+const {
+  sendResetCodeEmail,
+  sendContactNotificationEmail,
+  sendOrderCancelledEmail,
+  sendContactReplyEmail,
+} = require("./utils/mailer");
 const ContactRequest = require("./models/ContactRequest");
 
 app.use(cors());
@@ -945,6 +949,92 @@ app.put(
   }
 );
 
+app.post(
+  "/admin/contact-requests/:id/reply",
+  auth,
+  admin,
+  async (req, res) => {
+    try {
+
+      const { message } = req.body;
+
+      if (!message || !message.trim()) {
+        return res.status(400).json({
+          message: "Please write a reply message.",
+        });
+      }
+
+      const request = await ContactRequest.findById(req.params.id);
+
+      if (!request) {
+        return res.status(404).json({
+          message: "Request not found",
+        });
+      }
+
+      try {
+
+        await sendContactReplyEmail(request.email, {
+          name: request.name,
+          originalMessage: request.message,
+          reply: message,
+        });
+
+      } catch (mailError) {
+
+        console.log("Reply email failed:", mailError.message);
+
+        return res.status(500).json({
+          message: "Failed to send reply email.",
+        });
+
+      }
+
+      request.status = "Reviewed";
+
+      await request.save();
+
+      res.json(request);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
+app.delete(
+  "/admin/contact-requests/:id",
+  auth,
+  admin,
+  async (req, res) => {
+    try {
+
+      const request = await ContactRequest.findByIdAndDelete(req.params.id);
+
+      if (!request) {
+        return res.status(404).json({
+          message: "Request not found",
+        });
+      }
+
+      res.json({
+        message: "Request deleted",
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
 app.get(
   "/me",
   auth,
@@ -1337,6 +1427,58 @@ app.get(
   }
 );
 
+app.put(
+  "/orders/:id/cancel",
+  auth,
+  async (req, res) => {
+    try {
+
+      const order = await Order.findOne({
+        _id: req.params.id,
+        user: req.user.id,
+      });
+
+      if (!order) {
+        return res.status(404).json({
+          message: "Order not found",
+        });
+      }
+
+      if (order.status === "Cancelled") {
+        return res.status(400).json({
+          message: "This order is already cancelled.",
+        });
+      }
+
+      if (order.status === "Delivered") {
+        return res.status(400).json({
+          message: "Delivered orders can't be cancelled.",
+        });
+      }
+
+      order.status = "Cancelled";
+      order.cancelReason = "Cancelled by the customer.";
+
+      await order.save();
+
+      for (const item of order.items) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity },
+        });
+      }
+
+      res.json(order);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
 app.get(
   "/admin/orders",
   auth,
@@ -1457,6 +1599,102 @@ app.put(
   }
 );
 
+app.put(
+  "/admin/orders/:id/cancel",
+  auth,
+  admin,
+  async (req, res) => {
+    try {
+
+      const { reason } = req.body;
+
+      if (!reason || !reason.trim()) {
+        return res.status(400).json({
+          message: "Please provide a reason for cancellation.",
+        });
+      }
+
+      const order = await Order.findById(req.params.id).populate(
+        "user",
+        "email"
+      );
+
+      if (!order) {
+        return res.status(404).json({
+          message: "Order not found",
+        });
+      }
+
+      order.status = "Cancelled";
+      order.cancelReason = reason;
+
+      await order.save();
+
+      // restock the cancelled items
+      for (const item of order.items) {
+        await Product.findByIdAndUpdate(item.product, {
+          $inc: { stock: item.quantity },
+        });
+      }
+
+      try {
+
+        if (order.user?.email) {
+
+          await sendOrderCancelledEmail(order.user.email, {
+            orderId: order._id.toString().slice(-8).toUpperCase(),
+            reason,
+          });
+
+        }
+
+      } catch (mailError) {
+
+        console.log("Cancellation email failed:", mailError.message);
+
+      }
+
+      res.json(order);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
+app.delete(
+  "/admin/orders/:id",
+  auth,
+  admin,
+  async (req, res) => {
+    try {
+
+      const order = await Order.findByIdAndDelete(req.params.id);
+
+      if (!order) {
+        return res.status(404).json({
+          message: "Order not found",
+        });
+      }
+
+      res.json({
+        message: "Order deleted",
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message: error.message,
+      });
+
+    }
+  }
+);
+
 app.post(
   "/seed-products",
   async (req, res) => {
@@ -1533,6 +1771,9 @@ app.post(
 
           image:
             req.body.image,
+
+          images:
+            req.body.images,
 
           stock:
             req.body.stock,

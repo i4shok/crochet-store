@@ -1,7 +1,7 @@
 import SingleOrderCard from "./SingleOrderCard";
 import MultiOrderCard from "./MultiOrderCard";
 
-function OrderCard({ order }) {
+function OrderCard({ order, onCancel, onReorder }) {
 
   if (order.items.length === 1) {
 
@@ -9,6 +9,8 @@ function OrderCard({ order }) {
 
       <SingleOrderCard
         order={order}
+        onCancel={onCancel}
+        onReorder={onReorder}
       />
 
     );
@@ -19,6 +21,8 @@ function OrderCard({ order }) {
 
     <MultiOrderCard
       order={order}
+      onCancel={onCancel}
+      onReorder={onReorder}
     />
 
   );

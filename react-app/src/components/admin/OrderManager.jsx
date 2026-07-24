@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function OrderManager({
 
     orders,
@@ -12,7 +14,14 @@ function OrderManager({
 
     setOrders,
 
+    cancelOrder,
+
+    deleteOrder,
+
 }) {
+
+    const [cancellingOrderId, setCancellingOrderId] = useState(null);
+    const [cancelReason, setCancelReason] = useState("");
 
     return (
 
@@ -41,16 +50,12 @@ function OrderManager({
             >
 
                 <option>All</option>
-
                 <option>Pending</option>
-
                 <option>Processing</option>
-
                 <option>Packed</option>
-
                 <option>Shipped</option>
-
                 <option>Delivered</option>
+                <option>Cancelled</option>
 
             </select>
 
@@ -96,9 +101,9 @@ function OrderManager({
 
                             statusFilter === "All"
 
-                            ||
+                                ? order.status !== "Cancelled"
 
-                            order.status === statusFilter;
+                                : order.status === statusFilter;
 
                         return matchesSearch && matchesStatus;
 
@@ -217,6 +222,20 @@ function OrderManager({
 
                             </div>
 
+                            {
+
+                                order.status === "Cancelled" && order.cancelReason && (
+
+                                    <div className="admin-order-cancel-reason">
+
+                                        <strong>Cancellation Reason:</strong> {order.cancelReason}
+
+                                    </div>
+
+                                )
+
+                            }
+
                             <div className="admin-order-footer">
 
                                 <select
@@ -231,11 +250,17 @@ function OrderManager({
 
                                                 ? "status-shipped"
 
-                                                : "status-pending"
+                                                : order.status === "Cancelled"
+
+                                                    ? "status-cancelled"
+
+                                                    : "status-pending"
 
                                     }
 
                                     value={order.status}
+
+                                    disabled={order.status === "Cancelled"}
 
                                     onChange={(e) =>
 
@@ -261,7 +286,149 @@ function OrderManager({
 
                                 </select>
 
+                                <div className="admin-order-actions">
+
+                                    {
+
+                                        order.status !== "Cancelled" && (
+
+                                            <button
+
+                                                type="button"
+
+                                                className="cancel-order-btn"
+
+                                                onClick={() => {
+
+                                                    setCancellingOrderId(order._id);
+
+                                                    setCancelReason("");
+
+                                                }}
+
+                                            >
+
+                                                Cancel Order
+
+                                            </button>
+
+                                        )
+
+                                    }
+
+                                    <button
+
+                                        type="button"
+
+                                        className="delete-order-btn"
+
+                                        onClick={() => {
+
+                                            if (
+
+                                                window.confirm(
+
+                                                    "Delete this order permanently? This cannot be undone."
+
+                                                )
+
+                                            ) {
+
+                                                deleteOrder(order._id);
+
+                                            }
+
+                                        }}
+
+                                    >
+
+                                        Delete Order
+
+                                    </button>
+
+                                </div>
+
                             </div>
+
+                            {
+
+                                cancellingOrderId === order._id && (
+
+                                    <div className="cancel-order-form">
+
+                                        <label>
+
+                                            Reason for cancellation (this will be emailed to the customer)
+
+                                        </label>
+
+                                        <textarea
+
+                                            placeholder="e.g. Item out of stock, unable to fulfil delivery address, etc."
+
+                                            value={cancelReason}
+
+                                            onChange={(e) =>
+
+                                                setCancelReason(e.target.value)
+
+                                            }
+
+                                        />
+
+                                        <div className="cancel-order-form-actions">
+
+                                            <button
+
+                                                type="button"
+
+                                                className="cancel-order-form-cancel"
+
+                                                onClick={() => {
+
+                                                    setCancellingOrderId(null);
+
+                                                    setCancelReason("");
+
+                                                }}
+
+                                            >
+
+                                                Back
+
+                                            </button>
+
+                                            <button
+
+                                                type="button"
+
+                                                className="cancel-order-form-confirm"
+
+                                                disabled={!cancelReason.trim()}
+
+                                                onClick={async () => {
+
+                                                    await cancelOrder(order._id, cancelReason);
+
+                                                    setCancellingOrderId(null);
+
+                                                    setCancelReason("");
+
+                                                }}
+
+                                            >
+
+                                                Confirm Cancellation
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                )
+
+                            }
 
                         </div>
 

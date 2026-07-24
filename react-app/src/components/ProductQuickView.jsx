@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import StarRating from "./StarRating";
 import "../styles/ProductQuickView.css";
 import { Link } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function ProductQuickView({
 
@@ -33,6 +34,14 @@ function ProductQuickView({
     } = useContext(WishlistContext);
 
     const [quantity, setQuantity] = useState(1);
+    const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+    const images =
+        product?.images?.length
+            ? product.images
+            : product
+                ? [product.image]
+                : [];
 
     useEffect(() => {
 
@@ -73,12 +82,29 @@ function ProductQuickView({
         if (product) {
 
             setQuantity(1);
+            setActiveImageIndex(0);
 
         }
 
     }, [product]);
 
     if (!isOpen || !product) return null;
+
+    const showPrevImage = () => {
+
+        setActiveImageIndex((prev) =>
+            prev === 0 ? images.length - 1 : prev - 1
+        );
+
+    };
+
+    const showNextImage = () => {
+
+        setActiveImageIndex((prev) =>
+            prev === images.length - 1 ? 0 : prev + 1
+        );
+
+    };
 
     return (
 
@@ -104,10 +130,86 @@ function ProductQuickView({
                 <div className="quickview-left">
 
                     <img
-                        src={product.image}
+                        src={images[activeImageIndex]}
                         alt={product.name}
                         draggable="false"
                     />
+
+                    {
+
+                        images.length > 1 && (
+
+                            <>
+
+                                <button
+
+                                    type="button"
+
+                                    className="quickview-nav-arrow quickview-nav-prev"
+
+                                    onClick={showPrevImage}
+
+                                    aria-label="Previous image"
+
+                                >
+
+                                    <ChevronLeft size={22} />
+
+                                </button>
+
+                                <button
+
+                                    type="button"
+
+                                    className="quickview-nav-arrow quickview-nav-next"
+
+                                    onClick={showNextImage}
+
+                                    aria-label="Next image"
+
+                                >
+
+                                    <ChevronRight size={22} />
+
+                                </button>
+
+                                <div className="quickview-image-dots">
+
+                                    {
+
+                                        images.map((_, index) => (
+
+                                            <span
+
+                                                key={index}
+
+                                                className={
+
+                                                    index === activeImageIndex
+
+                                                        ? "quickview-dot active"
+
+                                                        : "quickview-dot"
+
+                                                }
+
+                                                onClick={() =>
+                                                    setActiveImageIndex(index)
+                                                }
+
+                                            />
+
+                                        ))
+
+                                    }
+
+                                </div>
+
+                            </>
+
+                        )
+
+                    }
 
                 </div>
 

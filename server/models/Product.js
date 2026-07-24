@@ -27,6 +27,14 @@ const productSchema =
 
     image: String,
 
+    images: {
+
+      type: [String],
+
+      default: [],
+
+    },
+
     rating: {
 
       type: Number,
