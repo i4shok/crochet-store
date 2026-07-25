@@ -1,0 +1,72 @@
+.giveaway-float-btn {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    z-index: 900;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, #7e5bef, #9b7eff);
+    box-shadow: 0 14px 32px rgba(126, 91, 239, .38);
+
+    text-decoration: none;
+    color: white;
+
+    animation: giveawayFloat 2.6s ease-in-out infinite;
+    transition: transform .25s, box-shadow .25s;
+}
+
+.giveaway-float-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 18px 40px rgba(126, 91, 239, .48);
+}
+
+.giveaway-float-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.giveaway-float-label {
+    font-size: .62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+@keyframes giveawayFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@media (max-width: 768px) {
+    .giveaway-float-btn {
+        right: 16px;
+        bottom: 96px;
+        /* sits above the mobile bottom nav dock */
+        width: 62px;
+        height: 62px;
+    }
+
+    .giveaway-float-icon {
+        font-size: 1.3rem;
+    }
+
+    .giveaway-float-label {
+        font-size: .55rem;
+    }
+}

@@ -9,6 +9,7 @@ import ProductQuickView from "../components/ProductQuickView";
 import "../styles/Shop.css";
 import ProductCard from "../components/ProductCard";
 import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
+import GiveawayFloatingButton from "../components/GiveawayFloatingButton";
 
 const CATEGORIES = [
   { label: "All", icon: "✨" },

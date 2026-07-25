@@ -9,6 +9,8 @@ import ProductManager from "../components/admin/ProductManager";
 import OrderManager from "../components/admin/OrderManager";
 import ContactRequestsManager from "../components/admin/ContactRequestsManager";
 import "../styles/AdminDashboard.css";
+import GiveawayManager from "../components/admin/GiveawayManager";
+import "../styles/AdminGiveaway.css";
 import logoFull from "../assets/branding/logo-full.png";
 import {
   LayoutDashboard,
@@ -19,6 +21,7 @@ import {
   Home,
   LogOut,
   Mail,
+  Gift,
 } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -749,6 +752,7 @@ function AdminDashboard() {
     products: { label: "Products", sub: "Manage your crochet collection." },
     orders: { label: "Orders", sub: "Manage customer orders." },
     requests: { label: "Contact Requests", sub: "Review customer inquiries and requests." },
+    giveaway: { label: "Giveaway", sub: "Run this week's giveaway and announce winners." },
   };
 
   return (
@@ -864,6 +868,14 @@ function AdminDashboard() {
 
               Contact Requests
 
+            </button>
+
+            <button
+              className={activeTab === "giveaway" ? "sidebar-active" : ""}
+              onClick={() => setActiveTab("giveaway")}
+            >
+              <Gift size={20} />
+              Giveaway
             </button>
 
           </nav>
@@ -1277,6 +1289,11 @@ function AdminDashboard() {
             />
           </section>
         )}
+        {activeTab === "giveaway" && (
+          <section id="giveaway">
+            <GiveawayManager />
+          </section>
+        )}
       </main>
 
       <nav className={`admin-mobile-navbar${navReady ? " is-in" : ""}`}>
@@ -1311,6 +1328,14 @@ function AdminDashboard() {
         >
           <Mail size={22} />
           <span>Requests</span>
+        </button>
+
+        <button
+          className={activeTab === "giveaway" ? "sidebar-active" : ""}
+          onClick={() => setActiveTab("giveaway")}
+        >
+          <Gift size={20} />
+          Giveaway
         </button>
 
         <button onClick={goHome}>

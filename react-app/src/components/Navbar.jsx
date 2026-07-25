@@ -2,8 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState, useRef } from "react";
 import "../styles/Navbar.css";
 import HeaderLogo from "../assets/branding/HeaderLogo.png";
-import { ShoppingCart, Heart, User, Moon, Sun, LogOut, House, Store, Package } from "lucide-react";
-
+import { ShoppingCart, Heart, User, Moon, Sun, LogOut, House, Store, Package, Gift } from "lucide-react";
 import { CartContext } from "../context/CartContext";
 import { ThemeContext } from "../context/ThemeContext";
 import { WishlistContext } from "../context/WishListContext";
@@ -42,9 +41,8 @@ function Navbar() {
   return (
     <>
       <header
-        className={`navbar ${isScrolled ? "navbar-scrolled" : ""} ${
-          isHidden ? "navbar-hidden" : ""
-        }`}
+        className={`navbar ${isScrolled ? "navbar-scrolled" : ""} ${isHidden ? "navbar-hidden" : ""
+          }`}
       >
         <NavLink to="/" className={({ isActive }) => `navbar-brand ${isActive ? "active" : ""}`}>
           <img src={HeaderLogo} alt="Knot & Bloom" className="navbar-logo" />
@@ -59,6 +57,9 @@ function Navbar() {
               {wishlistItems.length > 0 && <span className="badge">{wishlistItems.length}</span>}
             </NavLink>
           )}
+          <NavLink to="/giveaway" className="nav-icon">
+            <Gift size={20} />
+          </NavLink>
           <NavLink to="/my-orders" className="nav-icon"><Package size={20} /></NavLink>
           {role === "admin" && <NavLink to="/admin" className="admin-dashboard-link">Admin Dashboard</NavLink>}
         </div>
@@ -118,6 +119,9 @@ function Navbar() {
             {wishlistItems.length > 0 && <span className="badge">{wishlistItems.length}</span>}
           </NavLink>
         )}
+        <NavLink to="/giveaway" className={({ isActive }) => `dock-item ${isActive ? "active" : ""}`}>
+          <Gift size={22} />
+        </NavLink>
         <NavLink to="/my-orders" className={({ isActive }) => `dock-item ${isActive ? "active" : ""}`}>
           <Package size={22} />
         </NavLink>

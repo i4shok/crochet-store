@@ -1,0 +1,302 @@
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+function GiveawayManager() {
+  const [products, setProducts] = useState([]);
+  const [giveaway, setGiveaway] = useState(null);
+  const [entries, setEntries] = useState([]);
+  const [winners, setWinners] = useState([]);
+
+  const [useExisting, setUseExisting] = useState(true);
+  const [existingProductId, setExistingProductId] = useState("");
+
+  const [newName, setNewName] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newImage, setNewImage] = useState("");
+
+  const [winnerName, setWinnerName] = useState("");
+  const [winnerComment, setWinnerComment] = useState("");
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isAnnouncing, setIsAnnouncing] = useState(false);
+
+  const token = localStorage.getItem("token");
+  const authHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+
+  const fetchAll = () => {
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
+      .then((res) => res.json())
+      .then(setProducts);
+
+    fetch(`${import.meta.env.VITE_API_URL}/admin/giveaway/entries`, {
+      headers: authHeaders,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setGiveaway(data.giveaway);
+        setEntries(data.entries);
+      });
+
+    fetch(`${import.meta.env.VITE_API_URL}/giveaway/winners`)
+      .then((res) => res.json())
+      .then(setWinners);
+  };
+
+  useEffect(() => {
+    fetchAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const startNewGiveaway = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+
+    try {
+      const body = useExisting
+        ? { existingProductId }
+        : { name: newName, description: newDescription, image: newImage };
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/giveaway`,
+        {
+          method: "POST",
+          headers: authHeaders,
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success("This week's giveaway is live!");
+
+      setNewName("");
+      setNewDescription("");
+      setNewImage("");
+      setExistingProductId("");
+
+      fetchAll();
+
+    } catch {
+
+      toast.error("Failed to start giveaway.");
+
+    } finally {
+
+      setIsSaving(false);
+
+    }
+  };
+
+  const announceWinner = async (e) => {
+    e.preventDefault();
+    setIsAnnouncing(true);
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/giveaway/announce-winner`,
+        {
+          method: "POST",
+          headers: authHeaders,
+          body: JSON.stringify({ name: winnerName, comment: winnerComment }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      toast.success("Winner announced! Set up next week's giveaway below.");
+
+      setWinnerName("");
+      setWinnerComment("");
+
+      fetchAll();
+
+    } catch {
+
+      toast.error("Failed to announce winner.");
+
+    } finally {
+
+      setIsAnnouncing(false);
+
+    }
+  };
+
+  return (
+    <section className="giveaway-manager">
+      <h2>Weekly Giveaway</h2>
+
+      <div className="giveaway-admin-grid">
+
+        <div className="giveaway-admin-card">
+          <h3>{giveaway ? "Current Giveaway" : "Start This Week's Giveaway"}</h3>
+
+          {giveaway ? (
+            <div className="giveaway-admin-current">
+              <img src={giveaway.product.image} alt={giveaway.product.name} />
+              <div>
+                <strong>{giveaway.product.name}</strong>
+                <p>
+                  Draw on{" "}
+                  {new Date(giveaway.weekEnd).toLocaleString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <p>{entries.length} entries so far</p>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={startNewGiveaway} className="giveaway-admin-form">
+
+              <div className="giveaway-admin-toggle">
+                <button
+                  type="button"
+                  className={useExisting ? "active" : ""}
+                  onClick={() => setUseExisting(true)}
+                >
+                  Existing Product
+                </button>
+                <button
+                  type="button"
+                  className={!useExisting ? "active" : ""}
+                  onClick={() => setUseExisting(false)}
+                >
+                  New Product
+                </button>
+              </div>
+
+              {useExisting ? (
+                <select
+                  value={existingProductId}
+                  onChange={(e) => setExistingProductId(e.target.value)}
+                  required
+                >
+                  <option value="">Select a product...</option>
+                  {products.map((product) => (
+                    <option key={product._id} value={product._id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Giveaway Product Name"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="text"
+                    placeholder="Image URL"
+                    value={newImage}
+                    onChange={(e) => setNewImage(e.target.value)}
+                    required
+                  />
+                  <textarea
+                    placeholder="Description"
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                  />
+                </>
+              )}
+
+              <button type="submit" disabled={isSaving}>
+                {isSaving ? "Starting..." : "Start Giveaway"}
+              </button>
+            </form>
+          )}
+        </div>
+
+        {giveaway && (
+          <div className="giveaway-admin-card">
+            <h3>Announce Winner</h3>
+
+            <form onSubmit={announceWinner} className="giveaway-admin-form">
+              <input
+                type="text"
+                placeholder="Winner Name"
+                value={winnerName}
+                onChange={(e) => setWinnerName(e.target.value)}
+                required
+              />
+              <textarea
+                placeholder="Winner comment (optional)"
+                value={winnerComment}
+                onChange={(e) => setWinnerComment(e.target.value)}
+              />
+              <button type="submit" disabled={isAnnouncing}>
+                {isAnnouncing ? "Announcing..." : "Announce Winner"}
+              </button>
+            </form>
+          </div>
+        )}
+
+      </div>
+
+      {giveaway && (
+        <div className="giveaway-admin-card">
+          <h3>This Week's Entries ({entries.length})</h3>
+
+          <div className="giveaway-entries-table">
+            {entries.length === 0 ? (
+              <p>No entries yet.</p>
+            ) : (
+              entries.map((entry) => (
+                <div key={entry._id} className="giveaway-entry-row">
+                  <strong>{entry.name}</strong>
+                  <span>{entry.email}</span>
+                  <span>{entry.phone}</span>
+                  <span>{entry.address}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="giveaway-admin-card">
+        <h3>Previous Winners</h3>
+
+        <div className="giveaway-entries-table">
+          {winners.length === 0 ? (
+            <p>No winners announced yet.</p>
+          ) : (
+            winners.map((winner) => (
+              <div key={winner._id} className="giveaway-entry-row">
+                <strong>{winner.name}</strong>
+                <span>{winner.productName}</span>
+                <span>
+                  {new Date(winner.announcedAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+    </section>
+  );
+}
+
+export default GiveawayManager;

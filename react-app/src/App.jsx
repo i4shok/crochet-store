@@ -14,6 +14,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import Giveaway from "./pages/Giveaway";
 import { useContext } from "react";
 
 import { ThemeContext } from "./context/ThemeContext";
@@ -154,6 +155,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/giveaway" element={<Giveaway />} />
         <Route
           path="/admin"
           element={

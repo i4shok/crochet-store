@@ -26,6 +26,7 @@ const User = require(
 const Order = require(
   "./models/Order"
 );
+const giveawayRoutes = require("./routes/giveaway");
 require("dotenv").config();
 
 cloudinary.config({
@@ -2548,6 +2549,8 @@ app.delete(
 
   }
 );
+
+app.use(giveawayRoutes);
 
 app.listen(
   5000,

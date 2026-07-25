@@ -1,0 +1,119 @@
+.giveaway-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.giveaway-admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
+}
+
+.giveaway-admin-card {
+    padding: 24px;
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+}
+
+.giveaway-admin-card h3 {
+    margin: 0 0 16px;
+    color: var(--text-primary);
+}
+
+.giveaway-admin-current {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.giveaway-admin-current img {
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.giveaway-admin-current p {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: .85rem;
+}
+
+.giveaway-admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.giveaway-admin-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.giveaway-admin-form button[type="submit"] {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: var(--accent);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.giveaway-admin-form button[type="submit"]:hover {
+    transform: translateY(-2px);
+}
+
+.giveaway-admin-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.giveaway-admin-toggle button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border-input);
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.giveaway-admin-toggle button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.giveaway-entries-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.giveaway-entry-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    align-items: center;
+    font-size: .88rem;
+    color: var(--text-secondary);
+}
+
+.giveaway-entry-row strong {
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .giveaway-entry-row {
+        grid-template-columns: 1fr;
+    }
+}

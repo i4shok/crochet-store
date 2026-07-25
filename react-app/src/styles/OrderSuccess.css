@@ -180,3 +180,18 @@ flex-direction:column;
 }
 
 }
+.giveaway-btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    text-align: center;
+    transition: .3s;
+    background: #7e5bef;
+    color: white;
+}
+
+.giveaway-btn:hover {
+    transform: translateY(-3px);
+}
