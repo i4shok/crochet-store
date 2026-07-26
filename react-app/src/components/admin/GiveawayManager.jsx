@@ -14,7 +14,7 @@ function GiveawayManager() {
   const [newDescription, setNewDescription] = useState("");
   const [newImage, setNewImage] = useState("");
 
-  const [winnerName, setWinnerName] = useState("");
+  const [winnerEntryId, setWinnerEntryId] = useState("");
   const [winnerComment, setWinnerComment] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
@@ -105,7 +105,10 @@ function GiveawayManager() {
         {
           method: "POST",
           headers: authHeaders,
-          body: JSON.stringify({ name: winnerName, comment: winnerComment }),
+          body: JSON.stringify({
+            entryId: winnerEntryId,
+            comment: winnerComment,
+          }),
         }
       );
 
@@ -116,9 +119,11 @@ function GiveawayManager() {
         return;
       }
 
-      toast.success("Winner announced! Set up next week's giveaway below.");
+      toast.success(
+        "Winner announced! Registered winners got the prize in My Orders, guests got an email. Set up next week's giveaway below."
+      );
 
-      setWinnerName("");
+      setWinnerEntryId("");
       setWinnerComment("");
 
       fetchAll();
@@ -229,18 +234,32 @@ function GiveawayManager() {
             <h3>Announce Winner</h3>
 
             <form onSubmit={announceWinner} className="giveaway-admin-form">
-              <input
-                type="text"
-                placeholder="Winner Name"
-                value={winnerName}
-                onChange={(e) => setWinnerName(e.target.value)}
+              <select
+                value={winnerEntryId}
+                onChange={(e) => setWinnerEntryId(e.target.value)}
                 required
-              />
+              >
+                <option value="">Select the winning entry...</option>
+                {entries.map((entry) => (
+                  <option key={entry._id} value={entry._id}>
+                    {entry.name} — {entry.email}
+                    {entry.user ? " (registered)" : " (guest)"}
+                  </option>
+                ))}
+              </select>
+
               <textarea
                 placeholder="Winner comment (optional)"
                 value={winnerComment}
                 onChange={(e) => setWinnerComment(e.target.value)}
               />
+
+              <p className="giveaway-admin-hint">
+                Registered entrants get the prize added to their My Orders
+                automatically. Guest entrants get a congratulations email
+                instead.
+              </p>
+
               <button type="submit" disabled={isAnnouncing}>
                 {isAnnouncing ? "Announcing..." : "Announce Winner"}
               </button>
@@ -260,7 +279,10 @@ function GiveawayManager() {
             ) : (
               entries.map((entry) => (
                 <div key={entry._id} className="giveaway-entry-row">
-                  <strong>{entry.name}</strong>
+                  <strong>
+                    {entry.name}
+                    {entry.user ? " 👤" : ""}
+                  </strong>
                   <span>{entry.email}</span>
                   <span>{entry.phone}</span>
                   <span>{entry.address}</span>

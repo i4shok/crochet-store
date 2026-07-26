@@ -9,9 +9,8 @@ const Giveaway = require("../models/Giveaway");
 const GiveawayEntry = require("../models/GiveawayEntry");
 const GiveawayWinner = require("../models/GiveawayWinner");
 const Product = require("../models/Product");
-
-// Reads the token if present but never blocks the request — participation
-// is open to guests too, we just tag the entry with a user id when we can.
+const Order = require("../models/Order");
+const { sendGiveawayWinnerEmail } = require("../utils/mailer");
 function optionalAuth(req, res, next) {
   const authHeader = req.header("Authorization");
 
@@ -24,7 +23,6 @@ function optionalAuth(req, res, next) {
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
   } catch {
-    // ignore invalid/expired token for this route, treat as guest
   }
 
   next();
@@ -40,10 +38,6 @@ function nextSundayMidnight(from = new Date()) {
 
   return date;
 }
-
-// ---------- PUBLIC ----------
-
-// current active giveaway
 router.get("/giveaway/current", async (req, res) => {
   try {
     const giveaway = await Giveaway.findOne({ status: "active" }).sort({
@@ -56,7 +50,6 @@ router.get("/giveaway/current", async (req, res) => {
   }
 });
 
-// has this person (by token OR email) already entered the current giveaway?
 router.get("/giveaway/my-status", optionalAuth, async (req, res) => {
   try {
     const giveaway = await Giveaway.findOne({ status: "active" }).sort({
@@ -83,7 +76,6 @@ router.get("/giveaway/my-status", optionalAuth, async (req, res) => {
   }
 });
 
-// submit a participation
 router.post("/giveaway/participate", optionalAuth, async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
@@ -134,7 +126,6 @@ router.post("/giveaway/participate", optionalAuth, async (req, res) => {
   }
 });
 
-// winners list, most recent first (scrollable panel on the frontend)
 router.get("/giveaway/winners", async (req, res) => {
   try {
     const winners = await GiveawayWinner.find().sort({ announcedAt: -1 });
@@ -145,9 +136,6 @@ router.get("/giveaway/winners", async (req, res) => {
   }
 });
 
-// ---------- ADMIN ----------
-
-// create the giveaway product for the current/upcoming week
 router.post("/admin/giveaway", auth, admin, async (req, res) => {
   try {
     const { name, description, image, existingProductId } = req.body;
@@ -176,7 +164,6 @@ router.post("/admin/giveaway", auth, admin, async (req, res) => {
         .json({ message: "A product name and image are required." });
     }
 
-    // close out any still-active giveaway before starting a new one
     await Giveaway.updateMany({ status: "active" }, { status: "closed" });
 
     const weekStart = new Date();
@@ -195,7 +182,6 @@ router.post("/admin/giveaway", auth, admin, async (req, res) => {
   }
 });
 
-// entries for the current giveaway
 router.get("/admin/giveaway/entries", auth, admin, async (req, res) => {
   try {
     const giveaway = await Giveaway.findOne({ status: "active" }).sort({
@@ -214,17 +200,18 @@ router.get("/admin/giveaway/entries", auth, admin, async (req, res) => {
   }
 });
 
-// announce a winner for the current giveaway, then close it
 router.post(
   "/admin/giveaway/announce-winner",
   auth,
   admin,
   async (req, res) => {
     try {
-      const { name, comment } = req.body;
+      const { entryId, comment } = req.body;
 
-      if (!name || !name.trim()) {
-        return res.status(400).json({ message: "Winner name is required." });
+      if (!entryId) {
+        return res
+          .status(400)
+          .json({ message: "Please select the winning entry." });
       }
 
       const giveaway = await Giveaway.findOne({ status: "active" }).sort({
@@ -237,15 +224,60 @@ router.post(
           .json({ message: "There's no active giveaway to close out." });
       }
 
+      const entry = await GiveawayEntry.findOne({
+        _id: entryId,
+        giveaway: giveaway._id,
+      });
+
+      if (!entry) {
+        return res
+          .status(404)
+          .json({ message: "That entry couldn't be found." });
+      }
+
       const winner = await GiveawayWinner.create({
         giveaway: giveaway._id,
-        name,
+        name: entry.name,
         comment: comment || "",
         productName: giveaway.product.name,
         productImage: giveaway.product.image,
         weekStart: giveaway.weekStart,
         weekEnd: giveaway.weekEnd,
       });
+
+      if (entry.user) {
+        await Order.create({
+          user: entry.user,
+          items: [
+            {
+              product: giveaway.product.existingProductId || undefined,
+              quantity: 1,
+              isGiveaway: true,
+              giveawayName: giveaway.product.name,
+              giveawayImage: giveaway.product.image,
+            },
+          ],
+          total: 0,
+          status: "Processing",
+          isGiveaway: true,
+          deliveryAddress: {
+            label: "Giveaway Prize",
+            fullName: entry.name,
+            phone: entry.phone,
+            addressLine: entry.address,
+          },
+        });
+      } else {
+        try {
+          await sendGiveawayWinnerEmail(entry.email, {
+            name: entry.name,
+            productName: giveaway.product.name,
+            productImage: giveaway.product.image,
+          });
+        } catch (mailError) {
+          console.log("Giveaway winner email failed:", mailError.message);
+        }
+      }
 
       giveaway.status = "closed";
       await giveaway.save();

@@ -14,10 +14,15 @@ function SingleOrderCard({ order, onCancel, onReorder }) {
             <div className="single-order-card">
 
                 <img
-                    src={item.product?.image}
-                    alt={item.product?.name}
+                    src={item.product?.image || item.giveawayImage}
+                    alt={item.product?.name || item.giveawayName}
                     className="order-product-image"
                 />
+                ...
+                <h2>
+                    {item.product?.name || item.giveawayName}
+                </h2>
+                {item.isGiveaway && <span className="giveaway-order-badge">🎁 Giveaway</span>}
 
                 <div className="order-info">
 

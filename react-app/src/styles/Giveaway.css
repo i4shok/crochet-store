@@ -66,50 +66,71 @@ body.dark-mode .giveaway-page {
 
 .giveaway-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr 380px;
+    grid-template-columns: 1fr 380px;
     gap: 30px;
     align-items: start;
 }
 
-.giveaway-product-card {
+/* ---------- merged image + details card (used pre AND post entry) ---------- */
+
+.giveaway-product-merged {
     background: var(--gv-card-bg);
     border: 1px solid var(--gv-border);
     border-radius: 24px;
     box-shadow: var(--gv-shadow);
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
-.giveaway-product-card img {
+.giveaway-merged-image {
+    height: 100%;
+    min-height: 340px;
+}
+
+.giveaway-merged-image img {
     width: 100%;
-    height: 420px;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.giveaway-details-card {
-    background: var(--gv-card-bg);
-    border: 1px solid var(--gv-border);
-    border-radius: 24px;
-    box-shadow: var(--gv-shadow);
+.giveaway-merged-details {
     padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
 }
 
-.giveaway-details-card h2 {
+.giveaway-merged-tag {
+    width: max-content;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--gv-accent-soft);
+    color: var(--gv-accent);
+    font-weight: 700;
+    font-size: .78rem;
+}
+
+.giveaway-merged-details h2 {
     margin: 0;
     color: var(--gv-text-primary);
     font-size: 1.7rem;
 }
 
-.giveaway-details-card p {
+.giveaway-merged-details p {
     color: var(--gv-text-secondary);
     line-height: 1.7;
 }
 
-.giveaway-participate-btn {
+.giveaway-merged-actions {
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.giveaway-participate-btn {
     padding: 16px;
     border: none;
     border-radius: 14px;
@@ -235,28 +256,16 @@ body.dark-mode .giveaway-page {
     padding: 30px 10px;
 }
 
-/* ---------- after-participation (informative) layout ---------- */
+/* ---------- timer card: full-width banner, sits above everything else ---------- */
 
-.giveaway-after-layout {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 30px;
-    align-items: start;
-}
-
-.giveaway-info-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 26px;
-}
-
-.giveaway-info-card {
+.giveaway-timer-card {
     background: var(--gv-card-bg);
     border: 1px solid var(--gv-border);
     border-radius: 24px;
     box-shadow: var(--gv-shadow);
     padding: 40px;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .giveaway-info-icon {
@@ -264,13 +273,13 @@ body.dark-mode .giveaway-page {
     margin-bottom: 10px;
 }
 
-.giveaway-info-card h2 {
+.giveaway-timer-card h2 {
     margin: 0 0 8px;
     color: var(--gv-text-primary);
     font-size: 1.8rem;
 }
 
-.giveaway-info-card p {
+.giveaway-timer-card p {
     color: var(--gv-text-secondary);
     margin-bottom: 26px;
 }
@@ -309,6 +318,21 @@ body.dark-mode .giveaway-page {
     font-size: .92rem;
 }
 
+/* ---------- after-participation layout (below the timer) ---------- */
+
+.giveaway-after-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 30px;
+    align-items: start;
+}
+
+.giveaway-info-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+}
+
 .giveaway-lastweek-card {
     background: var(--gv-card-bg);
     border: 1px solid var(--gv-border);
@@ -344,15 +368,19 @@ body.dark-mode .giveaway-page {
 
 @media (max-width: 1150px) {
     .giveaway-layout {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .giveaway-winners-panel {
-        grid-column: 1 / -1;
+        grid-template-columns: 1fr;
     }
 
     .giveaway-after-layout {
         grid-template-columns: 1fr;
+    }
+
+    .giveaway-product-merged {
+        grid-template-columns: 1fr;
+    }
+
+    .giveaway-merged-image {
+        min-height: 280px;
     }
 }
 
@@ -365,16 +393,49 @@ body.dark-mode .giveaway-page {
         font-size: 1.9rem;
     }
 
-    .giveaway-layout {
-        grid-template-columns: 1fr;
+    .giveaway-merged-image {
+        height: 240px;
+        min-height: 0;
     }
 
-    .giveaway-product-card img {
-        height: 280px;
+    .giveaway-merged-details {
+        padding: 22px;
     }
 
     .giveaway-lastweek-card {
         flex-direction: column;
         text-align: center;
+    }
+
+    /* timer: two neat rows of 2 instead of a cramped 4-across strip */
+    .giveaway-timer-card {
+        padding: 26px 18px;
+    }
+
+    .giveaway-timer-card h2 {
+        font-size: 1.35rem;
+    }
+
+    .giveaway-countdown {
+        gap: 10px;
+    }
+
+    .giveaway-countdown-unit {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 0;
+        padding: 14px 8px;
+    }
+
+    .giveaway-countdown-unit strong {
+        font-size: 1.6rem;
+    }
+
+    .giveaway-countdown-unit span {
+        font-size: .68rem;
+    }
+
+    .giveaway-countdown-caption {
+        margin-top: 14px;
+        font-size: .82rem;
     }
 }

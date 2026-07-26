@@ -114,9 +114,37 @@ const sendContactReplyEmail = async (to, { name, originalMessage, reply }) => {
   });
 };
 
+const sendGiveawayWinnerEmail = async (to, { name, productName, productImage }) => {
+  await transporter.sendMail({
+    from: `"Knot & Bloom" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `🎉 You Won This Week's Giveaway!`,
+    html: `
+      <div style="font-family: 'Nunito', Arial, sans-serif; max-width: 480px; margin: auto; padding: 36px; background: #FAF7F2; border-radius: 24px;">
+        <p style="letter-spacing: 3px; text-transform: uppercase; font-weight: 700; color: #7A9E7E; font-size: 13px; margin-bottom: 6px;">
+          🧶 Knot & Bloom
+        </p>
+        <h2 style="color: #40352C; margin: 0 0 14px;">Congratulations, ${name}! 🎉</h2>
+        <p style="color: #666; font-size: 15px; line-height: 1.7;">
+          You're this week's giveaway winner! We'll be in touch shortly to arrange delivery of your prize.
+        </p>
+        <div style="margin: 28px 0; text-align:center; background: #ffffff; border-radius: 20px; padding: 24px;">
+          <img src="${productImage}" alt="${productName}" style="width: 220px; height: 220px; object-fit: cover; border-radius: 16px; display:block; margin: 0 auto 16px;" />
+          <p style="margin:0; font-weight:700; color:#40352C; font-size:16px;">${productName}</p>
+          <p style="margin: 10px 0 0; letter-spacing: 2px; text-transform: uppercase; font-weight: 800; color: #7e5bef; font-size: 22px;">GIVEAWAY</p>
+        </div>
+        <p style="color: #999; font-size: 13px; line-height: 1.6;">
+          Thank you for taking part — a new giveaway drops every week!
+        </p>
+      </div>
+    `,
+  });
+};
+
 module.exports = {
   sendResetCodeEmail,
   sendContactNotificationEmail,
   sendOrderCancelledEmail,
   sendContactReplyEmail,
+  sendGiveawayWinnerEmail,
 };

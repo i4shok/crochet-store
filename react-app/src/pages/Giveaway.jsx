@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import GiveawayForm from "../components/giveaway/GiveawayForm";
 import GiveawayCountdown from "../components/giveaway/GiveawayCountdown";
 import WinnersPanel from "../components/giveaway/WinnersPanel";
-import GiveawayShareCard from "../components/giveaway/GiveawayShareCard";
+import GiveawayProductCard from "../components/giveaway/GiveawayProductCard";
 import "../styles/Giveaway.css";
 
 function Giveaway() {
@@ -83,58 +83,52 @@ function Giveaway() {
       </div>
 
       {hasEntered ? (
-        <div className="giveaway-after-layout">
-          <div className="giveaway-info-stack">
-            <div className="giveaway-info-card">
-              <div className="giveaway-info-icon">✅</div>
-              <h2>Your Participation Has Been Submitted</h2>
-              <p>Sit tight — the draw happens every Sunday at midnight.</p>
+        <>
+          {/* Timer now sits above everything else on both desktop and mobile */}
+          <div className="giveaway-timer-card">
+            <div className="giveaway-info-icon">✅</div>
+            <h2>Your Participation Has Been Submitted</h2>
+            <p>Sit tight — the draw happens every Sunday at midnight.</p>
 
-              <GiveawayCountdown targetDate={giveaway.weekEnd} />
+            <GiveawayCountdown targetDate={giveaway.weekEnd} />
 
-              <p className="giveaway-countdown-caption">
-                Days · Hrs · Mins · Secs left until the draw
-              </p>
+            <p className="giveaway-countdown-caption">
+              Days · Hrs · Mins · Secs left until the draw
+            </p>
+          </div>
+
+          <div className="giveaway-after-layout">
+            <div className="giveaway-info-stack">
+              {/* Product card now shows here, share-only since entry is locked in */}
+              <GiveawayProductCard product={giveaway.product} mode="share" />
+
+              {lastWinner && (
+                <div className="giveaway-lastweek-card">
+                  <img src={lastWinner.productImage} alt={lastWinner.name} />
+                  <div>
+                    <h3>🏆 Last Week's Winner: {lastWinner.name}</h3>
+                    <p>
+                      Won {lastWinner.productName} ·{" "}
+                      {new Date(lastWinner.announcedAt).toLocaleDateString(
+                        "en-GB",
+                        { day: "numeric", month: "short", year: "numeric" }
+                      )}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {lastWinner && (
-              <div className="giveaway-lastweek-card">
-                <img src={lastWinner.productImage} alt={lastWinner.name} />
-                <div>
-                  <h3>🏆 Last Week's Winner: {lastWinner.name}</h3>
-                  <p>
-                    Won {lastWinner.productName} ·{" "}
-                    {new Date(lastWinner.announcedAt).toLocaleDateString(
-                      "en-GB",
-                      { day: "numeric", month: "short", year: "numeric" }
-                    )}
-                  </p>
-                </div>
-              </div>
-            )}
+            <WinnersPanel variant="wide" />
           </div>
-
-          <WinnersPanel variant="wide" />
-        </div>
+        </>
       ) : (
         <div className="giveaway-layout">
-          <div className="giveaway-product-card">
-            <img src={giveaway.product.image} alt={giveaway.product.name} />
-          </div>
-
-          <div className="giveaway-details-card">
-            <h2>{giveaway.product.name}</h2>
-            <p>{giveaway.product.description}</p>
-
-            <GiveawayShareCard product={giveaway.product} />
-
-            <button
-              className="giveaway-participate-btn"
-              onClick={() => setShowForm(true)}
-            >
-              Participate Now
-            </button>
-          </div>
+          <GiveawayProductCard
+            product={giveaway.product}
+            mode="participate"
+            onParticipate={() => setShowForm(true)}
+          />
 
           <WinnersPanel variant="compact" />
         </div>

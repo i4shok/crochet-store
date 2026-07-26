@@ -539,3 +539,15 @@ body.dark-mode {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px var(--accent-glow);
 }
+.giveaway-order-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: .75rem;
+    font-weight: 700;
+    width: max-content;
+}

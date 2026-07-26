@@ -1,4 +1,3 @@
-
 .success-page{
 
 min-height:75vh;
@@ -113,29 +112,47 @@ font-size:1.05rem;
 
 }
 
+/* Grid instead of flex so every button gets a strictly equal share of the
+   width regardless of label length ("View My Orders" vs "🎁 Giveaway") */
 .success-actions{
 
-display:flex;
+display:grid;
+
+grid-template-columns:repeat(3, 1fr);
 
 gap:18px;
-
-justify-content:center;
 
 }
 
 .success-btn,
 
-.secondary-btn{
+.secondary-btn,
 
-flex:1;
+.giveaway-btn{
 
-padding:16px;
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+min-width:0;
+
+padding:16px 10px;
 
 border-radius:14px;
 
 text-decoration:none;
 
 font-weight:700;
+
+text-align:center;
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
 
 transition:.3s;
 
@@ -157,9 +174,19 @@ color:#444;
 
 }
 
+.giveaway-btn{
+
+background:#7A9E7E;
+
+color:white;
+
+}
+
 .success-btn:hover,
 
-.secondary-btn:hover{
+.secondary-btn:hover,
+
+.giveaway-btn:hover{
 
 transform:translateY(-3px);
 
@@ -175,23 +202,108 @@ grid-template-columns:1fr;
 
 .success-actions{
 
-flex-direction:column;
+grid-template-columns:1fr;
 
 }
 
 }
-.giveaway-btn {
-    flex: 1;
-    padding: 16px;
-    border-radius: 14px;
-    text-decoration: none;
-    font-weight: 700;
-    text-align: center;
-    transition: .3s;
-    background: #7e5bef;
-    color: white;
+
+@media(max-width:600px){
+
+.success-page{
+
+padding:24px 14px;
+
+min-height:auto;
+
 }
 
-.giveaway-btn:hover {
-    transform: translateY(-3px);
+.success-card{
+
+padding:26px 20px;
+
+border-radius:22px;
+
+}
+
+.success-icon{
+
+width:64px;
+
+height:64px;
+
+margin-bottom:16px;
+
+font-size:1.9rem;
+
+}
+
+.success-card h1{
+
+margin-bottom:8px;
+
+font-size:1.5rem;
+
+}
+
+.success-message{
+
+font-size:.9rem;
+
+margin-bottom:20px;
+
+line-height:1.5;
+
+}
+
+.order-info{
+
+gap:10px;
+
+margin-bottom:22px;
+
+}
+
+.order-info div{
+
+padding:12px;
+
+border-radius:12px;
+
+}
+
+.order-info span{
+
+margin-bottom:4px;
+
+font-size:.75rem;
+
+}
+
+.order-info strong{
+
+font-size:.9rem;
+
+}
+
+.success-actions{
+
+gap:10px;
+
+}
+
+.success-btn,
+
+.secondary-btn,
+
+.giveaway-btn{
+
+padding:12px 8px;
+
+font-size:.85rem;
+
+border-radius:12px;
+
+}
+
 }

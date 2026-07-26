@@ -52,6 +52,13 @@
     resize: vertical;
 }
 
+.giveaway-admin-hint {
+    margin: 0;
+    font-size: .8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 .giveaway-admin-form button[type="submit"] {
     padding: 14px;
     border: none;

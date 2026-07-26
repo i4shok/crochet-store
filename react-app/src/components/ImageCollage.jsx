@@ -1,7 +1,7 @@
 function ImageCollage({ items }) {
 
   const validItems = (items || []).filter(
-    (item) => item.product
+    (item) => item.product || item.isGiveaway
   );
 
   const displayItems = validItems.slice(0, 4);

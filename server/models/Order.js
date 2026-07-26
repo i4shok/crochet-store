@@ -21,6 +21,14 @@ const orderSchema =
 
         quantity:
           Number,
+        isGiveaway: {
+          type: Boolean,
+          default: false,
+        },
+
+        giveawayName: String,
+
+        giveawayImage: String,
       },
     ],
 
@@ -42,6 +50,11 @@ const orderSchema =
     cancelReason: {
       type: String,
       default: "",
+    },
+
+    isGiveaway: {
+      type: Boolean,
+      default: false,
     },
 
     createdAt: {
