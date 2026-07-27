@@ -30,7 +30,7 @@ function optionalAuth(req, res, next) {
 
 function nextSundayMidnight(from = new Date()) {
   const date = new Date(from);
-  const day = date.getDay(); // 0 = Sunday
+  const day = date.getDay(); 
   const daysUntilSunday = day === 0 ? 7 : 7 - day;
 
   date.setDate(date.getDate() + daysUntilSunday);

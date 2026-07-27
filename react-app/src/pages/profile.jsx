@@ -450,7 +450,11 @@ function Profile() {
 
         isEditing && (
 
-          <Modal>
+          <Modal
+            onClose={() =>
+              setIsEditing(false)
+            }
+          >
 
             <div className="edit-profile-modal">
 

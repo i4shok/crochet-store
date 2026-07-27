@@ -7,7 +7,6 @@ const giveawayEntrySchema = new mongoose.Schema({
     required: true,
   },
 
-  // present if the person was logged in when they entered
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -21,7 +20,6 @@ const giveawayEntrySchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-// one entry per email per giveaway week
 giveawayEntrySchema.index({ giveaway: 1, email: 1 }, { unique: true });
 
 module.exports = mongoose.model("GiveawayEntry", giveawayEntrySchema);

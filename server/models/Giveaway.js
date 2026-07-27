@@ -14,7 +14,6 @@ const giveawaySchema = new mongoose.Schema({
 
   weekStart: { type: Date, default: Date.now },
 
-  // Sunday 00:00:00 following weekStart — the draw deadline
   weekEnd: { type: Date, required: true },
 
   status: {

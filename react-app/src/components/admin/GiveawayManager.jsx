@@ -13,6 +13,7 @@ function GiveawayManager() {
   const [newName, setNewName] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newImage, setNewImage] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const [winnerEntryId, setWinnerEntryId] = useState("");
   const [winnerComment, setWinnerComment] = useState("");
@@ -49,6 +50,79 @@ function GiveawayManager() {
     fetchAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleImageFileSelected = async (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    setIsUploadingImage(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error("Failed to upload image.");
+        return;
+      }
+
+      setNewImage(data.imageUrl);
+    } catch {
+      toast.error("Failed to upload image.");
+    } finally {
+      setIsUploadingImage(false);
+      e.target.value = "";
+    }
+  };
+
+  const downloadEntriesCsv = () => {
+    if (!entries.length) {
+      toast.info("There are no entries to download yet.");
+      return;
+    }
+
+    const header = ["Name", "Email", "Phone", "Address", "Account Type"];
+
+    const rows = entries.map((entry) => [
+      entry.name,
+      entry.email,
+      entry.phone,
+      entry.address,
+      entry.user ? "Registered" : "Guest",
+    ]);
+
+    const escapeCell = (value) =>
+      `"${String(value ?? "").replace(/"/g, '""')}"`;
+
+    const csv = [header, ...rows]
+      .map((row) => row.map(escapeCell).join(","))
+      .join("\r\n");
+
+    // Prefix with a UTF-8 BOM so Excel opens accented characters correctly.
+    const blob = new Blob(["\uFEFF" + csv], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `giveaway-entries-${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   const startNewGiveaway = async (e) => {
     e.preventDefault();
@@ -207,13 +281,30 @@ function GiveawayManager() {
                     onChange={(e) => setNewName(e.target.value)}
                     required
                   />
-                  <input
-                    type="text"
-                    placeholder="Image URL"
-                    value={newImage}
-                    onChange={(e) => setNewImage(e.target.value)}
-                    required
-                  />
+
+                  <label className="giveaway-image-upload">
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      hidden
+                      onChange={handleImageFileSelected}
+                    />
+
+                    {newImage
+                      ? "Change Image"
+                      : isUploadingImage
+                        ? "Uploading..."
+                        : "📷 Choose Image"}
+
+                  </label>
+
+                  {newImage && (
+                    <div className="giveaway-image-preview">
+                      <img src={newImage} alt="Giveaway prize preview" />
+                    </div>
+                  )}
+
                   <textarea
                     placeholder="Description"
                     value={newDescription}
@@ -222,7 +313,10 @@ function GiveawayManager() {
                 </>
               )}
 
-              <button type="submit" disabled={isSaving}>
+              <button
+                type="submit"
+                disabled={isSaving || isUploadingImage || (!useExisting && !newImage)}
+              >
                 {isSaving ? "Starting..." : "Start Giveaway"}
               </button>
             </form>
@@ -271,7 +365,18 @@ function GiveawayManager() {
 
       {giveaway && (
         <div className="giveaway-admin-card">
-          <h3>This Week's Entries ({entries.length})</h3>
+          <div className="giveaway-admin-card-header">
+            <h3>This Week's Entries ({entries.length})</h3>
+
+            <button
+              type="button"
+              className="giveaway-download-btn"
+              onClick={downloadEntriesCsv}
+              disabled={entries.length === 0}
+            >
+              ⬇ Download Entries
+            </button>
+          </div>
 
           <div className="giveaway-entries-table">
             {entries.length === 0 ? (

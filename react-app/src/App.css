@@ -17,24 +17,22 @@ footer {
   padding: 0;
 }
 
-html,
-body,
-#root {
-  min-height: 100%;
-}
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f9f8f6;
+}
+
+#root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-#root, .app {
+.app {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   flex: 1;
 }
 
@@ -49,14 +47,6 @@ footer {
 
 .shop-page h1 {
   text-align: center;
-}
-
-.shop-page input {
-  width: 100%;
-  max-width: 400px;
-  padding: 12px;
-  display: block;
-  margin: 20px auto;
 }
 
 .filters {
@@ -207,22 +197,6 @@ textarea {
   padding: 60px;
 
   text-align: center;
-}
-
-.success-btn {
-  display: inline-block;
-
-  margin-top: 20px;
-
-  padding: 12px 20px;
-
-  background: purple;
-
-  color: white;
-
-  text-decoration: none;
-
-  border-radius: 8px;
 }
 
 .related-products {

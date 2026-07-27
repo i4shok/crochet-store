@@ -31,6 +31,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminRoute from "./components/AdminRoute";
 import OrderDetails from "./pages/OrderDetails";
 import ForgotPassword from "./pages/ForgotPassword";
+import ScrollToTop from "./components/ScrollToTop";
+import GiveawayFloatingButton from "./components/GiveawayFloatingButton";
 
 
 function App() {
@@ -40,6 +42,10 @@ function App() {
 
   const isAdmin =
     location.pathname.startsWith("/admin");
+
+  const isGiveawayPage =
+    location.pathname.startsWith("/giveaway");
+
   return (
     <div
       className={
@@ -48,6 +54,8 @@ function App() {
           : "app"
       }
     >
+
+      <ScrollToTop />
 
       {!isAdmin && <Navbar />}
 
@@ -167,6 +175,8 @@ function App() {
           }
         />
       </Routes>
+
+      {!isAdmin && !isGiveawayPage && <GiveawayFloatingButton />}
 
       {!isAdmin && <Footer />}
 

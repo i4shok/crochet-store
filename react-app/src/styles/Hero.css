@@ -226,7 +226,7 @@
     transition: .3s;
 }
 
-.secondary-btn {
+.hero-btn.secondary-btn {
 
     background: white;
 
@@ -236,7 +236,7 @@
 
 }
 
-.secondary-btn:hover {
+.hero-btn.secondary-btn:hover {
 
     background: #7A9E7E;
 

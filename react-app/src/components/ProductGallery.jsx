@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ProductGallery({ product }) {
   const [selectedImage, setSelectedImage] = useState(product.image);
@@ -6,6 +6,14 @@ function ProductGallery({ product }) {
   const images = product.images?.length
     ? product.images
     : [product.image];
+
+  // When navigating from "You May Also Like" to a different product,
+  // this component instance stays mounted (same route, different :id),
+  // so selectedImage would otherwise keep pointing at the old product's
+  // image while the thumbnails below correctly show the new product's set.
+  useEffect(() => {
+    setSelectedImage(product.image);
+  }, [product._id, product.image]);
 
   return (
     <div className="product-gallery">

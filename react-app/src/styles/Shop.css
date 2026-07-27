@@ -103,7 +103,11 @@
 }
 
 .shop-search input {
+    box-sizing: border-box;
     width: 100%;
+    max-width: none;
+    margin: 0;
+    display: block;
     padding: 15px 18px 15px 48px;
     border-radius: 16px;
     border: 1px solid var(--shop-border);
@@ -136,8 +140,11 @@
     gap: 10px;
     align-items: center;
     overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
     padding-bottom: 2px;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .filters::-webkit-scrollbar {
@@ -157,6 +164,7 @@
     font-weight: 700;
     font-size: .92rem;
     white-space: nowrap;
+    flex: 0 0 auto;
     transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
 }
 
@@ -267,9 +275,19 @@
     }
 
     .shop-toolbar {
-        padding: 16px;
-        border-radius: 22px;
+        padding: 14px;
+        border-radius: 20px;
         gap: 14px;
+        overflow: hidden;
+    }
+
+    .shop-search input {
+        padding: 13px 16px 13px 44px;
+        font-size: 14px;
+    }
+
+    .shop-search svg {
+        left: 15px;
     }
 
     .shop-toolbar-row {
@@ -278,8 +296,14 @@
         gap: 12px;
     }
 
+    .shop-toolbar-row .filters {
+        margin: 0 -14px;
+        padding: 0 14px 4px;
+    }
+
     .shop-toolbar select {
         width: 100%;
+        box-sizing: border-box;
     }
 
     .shop-results-count {
@@ -293,8 +317,9 @@
     }
 
     .filters button {
-        padding: 9px 16px;
-        font-size: .82rem;
+        padding: 9px 14px;
+        font-size: .8rem;
+        gap: 5px;
     }
 
     .empty-search {

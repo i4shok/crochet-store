@@ -254,6 +254,8 @@
 
     background: #f3f3f3;
 
+    color: #40352C;
+
 }
 
 .quickview-buttons button:hover {
@@ -318,15 +320,96 @@
 
 @media(max-width:900px) {
 
+    .quickview-overlay {
+        padding: 16px;
+        align-items: flex-end;
+    }
+
     .quickview-modal {
 
         grid-template-columns: 1fr;
+        max-height: 88vh;
+        overflow-y: auto;
+        width: 100%;
+        border-radius: 22px;
 
     }
 
     .quickview-left {
 
-        height: 320px;
+        height: 220px;
+
+    }
+
+    .quickview-right {
+
+        padding: 20px 22px 24px;
+        gap: 10px;
+
+    }
+
+    .quickview-category {
+
+        padding: 6px 12px;
+        font-size: .8rem;
+
+    }
+
+    .quickview-right h2 {
+
+        font-size: 1.3rem;
+
+    }
+
+    .quickview-right h3 {
+
+        font-size: 1.4rem;
+
+    }
+
+    .quickview-right p {
+
+        font-size: .88rem;
+        line-height: 1.5;
+
+    }
+
+    .quickview-quantity {
+
+        margin: 8px 0;
+
+    }
+
+    .quantity-selector button {
+
+        width: 36px;
+        height: 36px;
+        font-size: 1.05rem;
+
+    }
+
+    .quickview-buttons button {
+
+        padding: 12px;
+        font-size: .92rem;
+
+    }
+
+    .view-full-btn {
+
+        margin-top: 8px;
+
+    }
+
+    .close-btn {
+
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        z-index: 5;
+        background: rgba(255, 255, 255, .92);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
 
     }
 

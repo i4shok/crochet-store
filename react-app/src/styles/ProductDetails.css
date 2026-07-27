@@ -616,7 +616,12 @@
 
     .product-page {
         padding: 6px;
+        padding-top: 24px;
         gap: 10px;
+    }
+
+    .product-top-section {
+        gap: 24px;
     }
 
     .product-details-card {

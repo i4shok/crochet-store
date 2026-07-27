@@ -1631,7 +1631,6 @@ app.put(
 
       await order.save();
 
-      // restock the cancelled items
       for (const item of order.items) {
         await Product.findByIdAndUpdate(item.product, {
           $inc: { stock: item.quantity },

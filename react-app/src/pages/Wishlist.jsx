@@ -126,13 +126,13 @@ function Wishlist() {
 
                         <button
                           className="wishlist-cart-btn"
-                          onClick={() => {
+                          onClick={async () => {
 
-                            const added = addToCart(item);
+                            const added = await addToCart(item);
 
                             if (added) {
 
-                              removeFromWishlist(item._id);
+                              await removeFromWishlist(item._id);
 
                               toast.success(
                                 `${item.name} moved to cart!`
@@ -147,9 +147,15 @@ function Wishlist() {
 
                         <button
                           className="wishlist-remove-btn"
-                          onClick={() =>
-                            removeFromWishlist(item._id)
-                          }
+                          onClick={async () => {
+
+                            await removeFromWishlist(item._id);
+
+                            toast.info(
+                              `${item.name} removed from wishlist`
+                            );
+
+                          }}
                         >
                           Remove
                         </button>
