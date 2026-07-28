@@ -43,14 +43,12 @@
 }
 
 .cart-page {
-    max-width: 1500px;
-    margin: auto;
+    max-width: 1600px; 
     padding: 50px 6%;
-    background: var(--page-bg);
 }
 
 .cart-header {
-    margin-bottom: 35px;
+    margin-bottom: 40px;
 }
 
 .cart-header h1 {

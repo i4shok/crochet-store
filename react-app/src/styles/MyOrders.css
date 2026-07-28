@@ -64,9 +64,7 @@ body.dark-mode {
 
 .orders-page {
     max-width: 1600px;
-    margin: auto;
-    padding: 50px 5%;
-    background: var(--page-bg);
+    padding: 50px 6%;    
 }
 
 .orders-header {
@@ -90,7 +88,7 @@ body.dark-mode {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    padding: 60px 0;
+    padding: 50px 6%;
     background: var(--card-bg);
     border: 1px solid var(--border-light);
     border-radius: 28px;

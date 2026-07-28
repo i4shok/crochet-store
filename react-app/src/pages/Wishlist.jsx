@@ -32,22 +32,6 @@ function Wishlist() {
 
     <div className="wishlist-page">
 
-      <div className="wishlist-header">
-
-        <h1>
-
-          My Wishlist
-
-        </h1>
-
-        <p>
-
-          Save your favorite handmade creations for later ❤️
-
-        </p>
-
-      </div>
-
       {
 
         wishlistItems.length === 0 ?

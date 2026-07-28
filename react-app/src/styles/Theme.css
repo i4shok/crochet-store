@@ -48,6 +48,7 @@ body[data-theme="dark"] { background: #111312; }
   border-color: var(--night-border) !important;
   color: var(--night-text);
   box-shadow: 0 16px 36px rgba(0, 0, 0, .24);
+  border-radius: 32px;
 }
 
 .app.dark :is(.product-card, .cart-card, .wishlist-item, .address-card,

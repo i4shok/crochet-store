@@ -132,29 +132,7 @@ function MyOrders() {
 
     <div className="orders-page">
 
-      <div className="orders-header">
 
-        <h1>
-
-          My Orders
-
-        </h1>
-
-        <p>
-
-          {
-
-            !loading && orders.length > 0
-
-              ? `Track all your handmade purchases in one place — ${orders.length} order${orders.length > 1 ? "s" : ""} so far.`
-
-              : "Track all your handmade purchases in one place."
-
-          }
-
-        </p>
-
-      </div>
 
       {
 
@@ -173,83 +151,84 @@ function MyOrders() {
 
           </div>
 
-        ) : orders.length === 0 ? (
+        ) :
+          orders.length === 0 ? (
 
-          <EmptyState
+            <EmptyState
 
-            icon="📦"
+              icon="📦"
 
-            title="No Orders Yet"
+              title="No Orders Yet"
 
-            description="When you place your first handmade order, it will appear here."
+              description="When you place your first handmade order, it will appear here."
 
-            buttonText="Start Shopping"
+              buttonText="Start Shopping"
 
-            buttonLink="/shop"
+              buttonLink="/shop"
 
-          />
-
-        ) : (
-
-          <>
-
-            <OrderStatusFilter
-              activeStatus={filterStatus}
-              onChange={setFilterStatus}
-              orders={orders}
             />
 
-            {
+          ) : (
 
-              filteredOrders.length === 0 ? (
+            <>
 
-                <EmptyState
+              <OrderStatusFilter
+                activeStatus={filterStatus}
+                onChange={setFilterStatus}
+                orders={orders}
+              />
 
-                  icon="🔍"
+              {
 
-                  title="No Orders Here"
+                filteredOrders.length === 0 ? (
 
-                  description="Nothing matches this filter yet, try another status."
+                  <EmptyState
 
-                  buttonText="View All Orders"
+                    icon="🔍"
 
-                  buttonLink="#"
+                    title="No Orders Here"
 
-                />
+                    description="Nothing matches this filter yet, try another status."
 
-              ) : (
+                    buttonText="View All Orders"
 
-                <div className="orders-list">
+                    buttonLink="#"
 
-                  {
+                  />
 
-                    filteredOrders.map((order) => (
+                ) : (
 
-                      <OrderCard
+                  <div className="orders-list">
 
-                        key={order._id}
+                    {
 
-                        order={order}
+                      filteredOrders.map((order) => (
 
-                        onCancel={cancelOrder}
+                        <OrderCard
 
-                        onReorder={reorder}
+                          key={order._id}
 
-                      />
+                          order={order}
 
-                    ))
+                          onCancel={cancelOrder}
 
-                  }
+                          onReorder={reorder}
 
-                </div>
+                        />
 
-              )
+                      ))
 
-            }
+                    }
 
-          </>
+                  </div>
 
-        )
+                )
+
+              }
+
+            </>
+
+          )
 
       }
 
