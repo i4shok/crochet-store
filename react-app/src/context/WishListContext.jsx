@@ -21,6 +21,11 @@ function WishlistProvider({
     setWishlistItems,
   ] = useState([]);
 
+  const [
+    wishlistLoading,
+    setWishlistLoading,
+  ] = useState(true);
+
   const { token } = useContext(AuthContext);
 
   useEffect(() => {
@@ -28,10 +33,14 @@ function WishlistProvider({
     if (!token) {
 
       setWishlistItems([]);
+      setWishlistLoading(false);
 
       return;
 
     }
+
+    setWishlistLoading(true);
+
     fetch(
       `${import.meta.env.VITE_API_URL}/wishlist`,
       {
@@ -45,6 +54,10 @@ function WishlistProvider({
       )
       .then((data) =>
         setWishlistItems(data)
+      )
+      .catch(() => {})
+      .finally(() =>
+        setWishlistLoading(false)
       );
 
   }, [token]);
@@ -141,6 +154,7 @@ function WishlistProvider({
     <WishlistContext.Provider
       value={{
         wishlistItems,
+        wishlistLoading,
         addToWishlist,
         removeFromWishlist,
       }}

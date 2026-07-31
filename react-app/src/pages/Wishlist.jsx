@@ -14,11 +14,16 @@ import { toast } from "react-toastify";
 
 import EmptyState from "../components/EmptyState";
 
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+import wishlistLottie from "../assets/wishlistK&B.lottie";
+
 import "../styles/Wishlist.css";
 
 function Wishlist() {
   const {
     wishlistItems,
+    wishlistLoading,
     removeFromWishlist,
   } = useContext(
     WishlistContext
@@ -32,9 +37,40 @@ function Wishlist() {
 
     <div className="wishlist-page">
 
+      <div className="wishlist-header">
+
+        <h1>
+
+          My Wishlist
+
+        </h1>
+
+        <p>
+
+          Save your favorite handmade creations for later ❤️
+
+        </p>
+
+      </div>
+
       {
 
-        wishlistItems.length === 0 ?
+        wishlistLoading ? (
+
+          <div className="wishlist-loading">
+
+            <DotLottieReact
+              src={wishlistLottie}
+              loop
+              autoplay
+              className="wishlist-loading-lottie"
+            />
+
+            <p>Fetching your wishlist...</p>
+
+          </div>
+
+        ) : wishlistItems.length === 0 ?
 
           (
 
@@ -110,13 +146,13 @@ function Wishlist() {
 
                         <button
                           className="wishlist-cart-btn"
-                          onClick={async () => {
+                          onClick={() => {
 
-                            const added = await addToCart(item);
+                            const added = addToCart(item);
 
                             if (added) {
 
-                              await removeFromWishlist(item._id);
+                              removeFromWishlist(item._id);
 
                               toast.success(
                                 `${item.name} moved to cart!`
@@ -131,15 +167,9 @@ function Wishlist() {
 
                         <button
                           className="wishlist-remove-btn"
-                          onClick={async () => {
-
-                            await removeFromWishlist(item._id);
-
-                            toast.info(
-                              `${item.name} removed from wishlist`
-                            );
-
-                          }}
+                          onClick={() =>
+                            removeFromWishlist(item._id)
+                          }
                         >
                           Remove
                         </button>

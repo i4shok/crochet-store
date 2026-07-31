@@ -668,3 +668,24 @@
     }
 
 }
+.profile-loading {
+    min-height: calc(100vh - 90px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 60px 20px;
+    background: #FAF7F2;
+}
+
+.profile-loading-lottie {
+    width: 220px;
+    height: 220px;
+}
+
+.profile-loading p {
+    color: #666;
+    font-size: 1rem;
+    margin-top: 4px;
+}

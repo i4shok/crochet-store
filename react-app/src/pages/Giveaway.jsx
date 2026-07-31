@@ -4,6 +4,8 @@ import GiveawayForm from "../components/giveaway/GiveawayForm";
 import GiveawayCountdown from "../components/giveaway/GiveawayCountdown";
 import WinnersPanel from "../components/giveaway/WinnersPanel";
 import GiveawayProductCard from "../components/giveaway/GiveawayProductCard";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import giveawayLottie from "../assets/giveawayK&B.lottie";
 import "../styles/Giveaway.css";
 
 function Giveaway() {
@@ -54,7 +56,17 @@ function Giveaway() {
   };
 
   if (loading) {
-    return <h2 className="page">Loading...</h2>;
+    return (
+      <div className="giveaway-loading">
+        <DotLottieReact
+          src={giveawayLottie}
+          loop
+          autoplay
+          className="giveaway-loading-lottie"
+        />
+        <p>Loading this week's giveaway...</p>
+      </div>
+    );
   }
 
   if (!giveaway) {
@@ -84,7 +96,6 @@ function Giveaway() {
 
       {hasEntered ? (
         <>
-          {/* Timer now sits above everything else on both desktop and mobile */}
           <div className="giveaway-timer-card">
             <div className="giveaway-info-icon">✅</div>
             <h2>Your Participation Has Been Submitted</h2>
@@ -99,7 +110,6 @@ function Giveaway() {
 
           <div className="giveaway-after-layout">
             <div className="giveaway-info-stack">
-              {/* Product card now shows here, share-only since entry is locked in */}
               <GiveawayProductCard product={giveaway.product} mode="share" />
 
               {lastWinner && (

@@ -36,6 +36,10 @@ import {
 
 import AddressManager from "../components/AddressManager";
 
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+import profileLottie from "../assets/profileK&B.lottie";
+
 function Profile() {
 
   const [user,
@@ -144,7 +148,24 @@ function Profile() {
   }, []);
 
   if (!user) {
-    return <h2>Loading...</h2>;
+
+    return (
+
+      <div className="profile-loading">
+
+        <DotLottieReact
+          src={profileLottie}
+          loop
+          autoplay
+          className="profile-loading-lottie"
+        />
+
+        <p>Loading your profile...</p>
+
+      </div>
+
+    );
+
   }
 
   const saveProfile =
@@ -450,11 +471,7 @@ function Profile() {
 
         isEditing && (
 
-          <Modal
-            onClose={() =>
-              setIsEditing(false)
-            }
-          >
+          <Modal>
 
             <div className="edit-profile-modal">
 

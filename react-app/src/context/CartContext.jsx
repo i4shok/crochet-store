@@ -18,6 +18,7 @@ export const CartContext = createContext();
 
 function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
+  const [cartLoading, setCartLoading] = useState(true);
 
   const {
   token,
@@ -29,6 +30,7 @@ function CartProvider({ children }) {
   if (!token) {
 
     setCartItems([]);
+    setCartLoading(false);
     return;
 
   }
@@ -62,6 +64,10 @@ setCartItems(
   } catch (err) {
 
     console.error(err);
+
+  } finally {
+
+    setCartLoading(false);
 
   }
 
@@ -403,6 +409,7 @@ const removeItem = async (id) => {
     <CartContext.Provider
       value={{
         cartItems,
+        cartLoading,
         addToCart,
         removeItem,
         clearCart,
