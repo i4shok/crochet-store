@@ -439,7 +439,13 @@ body.dark-mode .giveaway-page {
         font-size: .82rem;
     }
 }
+
 .giveaway-loading {
+    --gv-card-bg: #FCFAF6;
+    --gv-border: #E8E1D8;
+    --gv-text-secondary: #666666;
+    --gv-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -448,10 +454,10 @@ body.dark-mode .giveaway-page {
     max-width: 1400px;
     margin: 50px auto;
     padding: 60px 0;
-    background: var(--gv-card-bg, #FCFAF6);
-    border: 1px solid var(--gv-border, #E8E1D8);
+    background: var(--gv-card-bg);
+    border: 1px solid var(--gv-border);
     border-radius: 28px;
-    box-shadow: var(--gv-shadow, 0 10px 30px rgba(0, 0, 0, .08));
+    box-shadow: var(--gv-shadow);
 }
 
 .giveaway-loading-lottie {
@@ -460,9 +466,18 @@ body.dark-mode .giveaway-page {
 }
 
 .giveaway-loading p {
-    color: var(--gv-text-secondary, #666666);
+    color: var(--gv-text-secondary);
     font-size: 1rem;
     margin-top: 4px;
+}
+
+[data-theme="dark"] .giveaway-loading,
+.dark .giveaway-loading,
+body.dark-mode .giveaway-loading {
+    --gv-card-bg: #1E1E1E;
+    --gv-border: #333333;
+    --gv-text-secondary: #A0A0A0;
+    --gv-shadow: 0 12px 32px rgba(0, 0, 0, .4);
 }
 
 @media (max-width: 780px) {

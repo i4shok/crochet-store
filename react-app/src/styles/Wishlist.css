@@ -255,7 +255,8 @@ width:100%;
     justify-content:center;
     gap:4px;
     padding:60px 0;
-    background:#fff;
+    background:#FCFAF6;
+    border:1px solid #E8E1D8;
     border-radius:28px;
     box-shadow:0 10px 35px rgba(0,0,0,.08);
 }
@@ -266,9 +267,23 @@ width:100%;
 }
 
 .wishlist-loading p{
-    color:#666;
+    color:#666666;
     font-size:1rem;
     margin-top:4px;
+}
+
+[data-theme="dark"] .wishlist-loading,
+.dark .wishlist-loading,
+body.dark-mode .wishlist-loading{
+    background:#1E1E1E;
+    border-color:#333333;
+    box-shadow:0 10px 35px rgba(0,0,0,.4);
+}
+
+[data-theme="dark"] .wishlist-loading p,
+.dark .wishlist-loading p,
+body.dark-mode .wishlist-loading p{
+    color:#A0A0A0;
 }
 
 @media(max-width:900px){

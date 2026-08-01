@@ -685,7 +685,32 @@
 }
 
 .profile-loading p {
-    color: #666;
+    color: #666666;
     font-size: 1rem;
     margin-top: 4px;
+}
+
+[data-theme="dark"] .profile-loading,
+.dark .profile-loading,
+body.dark-mode .profile-loading {
+    background: #121212;
+}
+
+[data-theme="dark"] .profile-loading p,
+.dark .profile-loading p,
+body.dark-mode .profile-loading p {
+    color: #A0A0A0;
+}
+
+@media (max-width: 600px) {
+
+    .profile-loading {
+        padding: 40px 16px;
+    }
+
+    .profile-loading-lottie {
+        width: 160px;
+        height: 160px;
+    }
+
 }
